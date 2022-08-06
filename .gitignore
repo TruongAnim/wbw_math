@@ -1,3 +1,10 @@
+# pycharm temp folder
+.idea
+
+# manim temp folder
+media/
+output/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
