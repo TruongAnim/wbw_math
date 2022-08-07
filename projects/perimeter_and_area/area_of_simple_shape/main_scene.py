@@ -1,7 +1,7 @@
 from manim import *
 
-list_scene = ("Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[2]
+list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
+SCENE_NAME = list_scene[5]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -178,4 +178,92 @@ class Scene4(Scene):
         square = Square(side_length=3)
         brace1 = Brace(square, LEFT)
         brace2 = Brace(square, UP)
-        t = brace1.get_tex()
+        t1 = brace1.get_tex("3")
+        t2 = brace2.get_tex("3")
+
+        self.play(*[
+            Write(i) for i in (square, brace1, brace2, t1, t2)
+        ])
+
+        unit_square = VGroup(*[
+            Square(side_length=1, fill_color=YELLOW, fill_opacity=0.5, stroke_width=0.5) for i in range(9)
+        ]).arrange_in_grid(3,3, buff=0)
+        self.play(LaggedStart(*[FadeIn(i) for i in unit_square]
+                              , lag_ratio=0.5), run_time=3)
+        self.wait()
+
+        result = MathTex(r"3 \times 3 = 9", r"\text{ square units}").next_to(square, DOWN, buff=MED_LARGE_BUFF)
+        self.play((Write(result)))
+
+
+class Scene5(Scene):
+    def construct(self):
+        rec = Rectangle(width=3, height=2)
+        brace1 = Brace(rec, LEFT)
+        brace2 = Brace(rec, UP)
+        t1 = brace1.get_tex("3")
+        t2 = brace2.get_tex("2")
+
+        self.play(*[
+            Write(i) for i in (rec, brace1, brace2, t1, t2)
+        ])
+
+        unit_square = VGroup(*[
+            Square(side_length=1, fill_color=YELLOW, fill_opacity=0.5, stroke_width=0.5) for i in range(6)
+        ]).arrange_in_grid(cols=3,rows=2, buff=0)
+        self.play(LaggedStart(*[FadeIn(i) for i in unit_square]
+                              , lag_ratio=0.5), run_time=3)
+        self.wait()
+
+        result = MathTex(r"3 \times 2 = 6", r"\text{ square units}").next_to(rec, DOWN, buff=MED_LARGE_BUFF)
+        self.play((Write(result)))
+
+
+class Scene6(Scene):
+    def setup(self):
+        import numpy as np
+    def construct(self):
+        A = np.array([0, 3, 0])
+        B = np.array([-1.5, 0, 0])
+        C = np.array([2.5, 0, 0])
+        D = np.array([0, 0, 0])
+        E = np.array([-1.5,3,0])
+        F = np.array([2.5,3,0])
+        triangle = VMobject().set_points_as_corners(
+            [A, B, C, A]
+        )
+        h_line = Line(A, D)
+
+        h = MathTex("h=3").scale(0.8).next_to(h_line, RIGHT, buff=SMALL_BUFF)
+        a = MathTex("a=4").scale(0.8).next_to(triangle, DOWN, buff=SMALL_BUFF)
+
+        self.play(Create(triangle))
+        self.play(Create(h_line), Write(h))
+        self.play(Write(a))
+
+        rectangle = VMobject().set_points_as_corners([E, F, C, B, E])
+        self.play(Create(rectangle))
+        tri1 = VMobject(fill_color=YELLOW, fill_opacity=0.5, stroke_width=0).set_points_as_corners([A,D,B,A])
+        tri2 = VMobject(fill_color=RED, fill_opacity=0.5, stroke_width=0).set_points_as_corners([A,D,C,A])
+        self.play(Create(tri1), Create(tri2))
+
+        self.play(Rotate(tri1.copy(), PI, about_point=(A+B)/2))
+        self.play(Rotate(tri2.copy(), PI, about_point=(A+C)/2))
+
+        rectangle.generate_target()
+        self.play(rectangle.target.animate.shift(LEFT*4))
+        unit_squares = VGroup(*[Square(
+            side_length=1, stroke_width=0.5, fill_color=YELLOW, fill_opacity=0.5
+        ) for i in range(6)]).arrange_in_grid(cols=3, rows=2).move_to(rectangle.target)
+        self.play(LaggedStart(*[Write(i) for i in unit_squares]))
+
+
+        # unit_square = VGroup(*[
+        #     Square(side_length=1, fill_color=YELLOW, fill_opacity=0.5, stroke_width=0.5) for i in range(6)
+        # ]).arrange_in_grid(cols=3,rows=2, buff=0)
+        # self.play(LaggedStart(*[FadeIn(i) for i in unit_square]
+        #                       , lag_ratio=0.5), run_time=3)
+        # self.wait()
+        #
+        # result = MathTex(r"3 \times 2 = 6", r"\text{ square units}").next_to(rec, DOWN, buff=MED_LARGE_BUFF)
+        # self.play((Write(result)))
