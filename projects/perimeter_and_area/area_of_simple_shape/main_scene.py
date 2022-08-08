@@ -251,19 +251,34 @@ class Scene6(Scene):
         self.play(Rotate(tri2.copy(), PI, about_point=(A+C)/2))
 
         rectangle.generate_target()
-        self.play(rectangle.target.animate.shift(LEFT*4))
+        self.play(rectangle.target.animate.shift(LEFT*5))
         unit_squares = VGroup(*[Square(
             side_length=1, stroke_width=0.5, fill_color=YELLOW, fill_opacity=0.5
-        ) for i in range(6)]).arrange_in_grid(cols=3, rows=2).move_to(rectangle.target)
+        ) for i in range(12)]).arrange_in_grid(cols=4, rows=3, buff=0).move_to(rectangle.target)
         self.play(LaggedStart(*[Write(i) for i in unit_squares]))
 
+        order = (0,1,4,5,8,9)
 
-        # unit_square = VGroup(*[
-        #     Square(side_length=1, fill_color=YELLOW, fill_opacity=0.5, stroke_width=0.5) for i in range(6)
-        # ]).arrange_in_grid(cols=3,rows=2, buff=0)
-        # self.play(LaggedStart(*[FadeIn(i) for i in unit_square]
-        #                       , lag_ratio=0.5), run_time=3)
-        # self.wait()
-        #
-        # result = MathTex(r"3 \times 2 = 6", r"\text{ square units}").next_to(rec, DOWN, buff=MED_LARGE_BUFF)
-        # self.play((Write(result)))
+        self.play(*[
+            unit_squares[i].animate.shift(DOWN*3.5) for i in order
+        ],*[
+            i.animate.shift(DOWN*3.5) for i in (tri1, tri2)
+        ])
+        equal = MathTex("=").scale(2).next_to(tri1, LEFT *3)
+        result = MathTex(r"= \text{ 6 square units}").next_to(tri2, RIGHT)
+        self.play(Write(equal), Write(result))
+
+
+        red_rec =  VGroup(*[Square(
+            side_length=1, stroke_width=0.5, fill_color=RED, fill_opacity=0.7
+        ) for i in range(6)]).arrange_in_grid(cols=3, rows=2, buff=0).align_to(tri1, DL)
+
+        order2 = (0,1,3,2,4,5)
+
+        self.play(*[
+            Transform(unit_squares[i].copy(), red_rec[j])
+            for i, j in zip(order, order2)
+        ],*[
+            i.animate.set_fill(BLUE)
+            for i in (tri1, tri2)
+        ], run_time=3)
