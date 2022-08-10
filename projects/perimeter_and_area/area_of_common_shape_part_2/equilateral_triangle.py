@@ -6,7 +6,7 @@ CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
-    command = f"manim --disable_caching -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -53,10 +53,6 @@ class Scene1(ProofScene):
         }
         main_tri = VMobject().set_points_as_corners([A, B, C, A])
         line = Line(start=A, end=H, stroke_width=2)
-        sub_left = VMobject(fill_color=YELLOW, **kwargs).set_points_as_corners([A, B, H, A])
-        sub_right = VMobject(fill_color=RED, **kwargs).set_points_as_corners([A, H, C, A])
-
-        rectangle = Rectangle(width=2, height=3.464).align_to(main_tri, DL)
 
         brace_ab = BraceBetweenPoints(A, B)
         text_ab = brace_ab.get_text("$$a$$")
@@ -92,21 +88,47 @@ class Scene1(ProofScene):
         pytago5 = MathTex(r"h = {{\sqrt{3}a} \over 2}").next_to(text_using, DOWN)
 
         self.play(Write(text_using), *[
-            Write(pytago1[0][i]) for i in set([i for i in range(12)]) - set([0, 3, 6,7,8,9,10])
+            Write(pytago1[0][i]) for i in set([i for i in range(12)]) - set([0, 3, 6, 7, 8, 9, 10])
         ])
         self.play(*[
-            ReplacementTransform(i.copy(),pytago1[0][j])
-            for i, j in zip([text_ab, text_h],[0,3])
+            ReplacementTransform(i.copy(), pytago1[0][j])
+            for i, j in zip([text_ab, text_h], [0, 3])
         ], FadeTransformPieces(text_bh.copy(), pytago1[0][7:10]),
-        FadeIn(pytago1[0][6]), FadeIn(pytago1[0][10]))
+                  FadeIn(pytago1[0][6]), FadeIn(pytago1[0][10]))
 
-        # self.remove(sub_left, sub_right)
-        # self.add(sub_left_1, sub_left_2, sub_right_1, sub_right_2)
-        # self.play(Create(rectangle), Write(brace_rec), Write(text_rec))
-        # self.play(Rotate(sub_left_1, PI, about_point=E),
-        #           Rotate(sub_right_1, -PI, about_point=F))
-        #
-        # self.creat_formula(r"S = {{h \times b} \over 2}")
-        # self.play(FadeTransform(text_h.copy(), self.formula[0][2]),
-        #           FadeTransform(text_b.copy(), self.formula[0][4]))
-        # self.draw_formula((0, 1, 3, 5, 6))
+        self.play(*[
+            ReplacementTransform(pytago1[0][i], pytago2[0][j])
+            for i, j in zip([2, 5, 6, 7, 8, 9, 10, 11], [2, 5, 6, 7, 8, 9, 10, 11])
+        ], *[ReplacementTransform(pytago1[0][i], pytago2[0][j], path_arc=PI)
+             for i, j in zip([0, 1, 3, 4], [3, 4, 0, 1])])
+
+        self.play(*[
+            ReplacementTransform(pytago2[0][i], pytago3[0][j])
+            for i, j in zip([0, 1, 2, 3, 4, 5, 7, 8, 9, 11], [0, 1, 2, 3, 4, 5, 6, 8, 9, 7])
+        ], *[FadeOut(pytago2[0][i]) for i in (6, 10)])
+
+        self.play(*[
+            ReplacementTransform(pytago3[0][i], pytago4[0][j])
+            for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 4, 5, 6, 4, 5, 6, 7])
+        ], FadeIn(pytago4[0][3]))
+
+        self.play(*[
+            ReplacementTransform(pytago4[0][i], pytago5[0][j])
+            for i, j in zip([0, 1, 2, 3, 4, 5, 6, 7], [0, 2, 1, 4, 5, 3, 6, 7])
+        ])
+
+        self.play(*[
+            Indicate(pytago5)
+        ])
+
+        self.creat_formula(r"S = {a \over 2} \times {{\sqrt{3}a} \over 2}")
+        self.play(FadeTransform(text_bh.copy(), self.formula[0][2:5]),
+                  FadeTransform(pytago5[0][2:].copy(), self.formula[0][6:]))
+        self.play(*[Write(self.formula[0][i]) for i in (0, 1, 5)])
+        result = MathTex(r"S = {{\sqrt{3}a^2} \over 4}").scale(1.5).align_to(self.formula, DL)
+        self.play(*[Transform(self.formula[0][i], result[0][j])
+                    for i, j in zip([0, 1, 3, 4, 6, 7, 8, 9, 10, 11],
+                                    [0, 1, 7, 8, 2, 3, 4, 5, 7, 8])
+                    ], FadeOut(self.formula[0][5]),
+                  Transform(self.formula[0][2], result[0][6], path_arc=-PI))
+        self.play(Circumscribe(result))
