@@ -1,6 +1,7 @@
 from manim import *
+from common.characters.symbols.pi_symbol import PiSymbol
 
-list_scene = ("SpiralInExample", "TestPi")
+list_scene = ("SpiralInExample", "TestPi", "Example")
 SCENE_NAME = list_scene[1]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
@@ -24,5 +25,8 @@ class Intro(Scene):
 
 class TestPi(Scene):
     def construct(self):
-        svg = SVGMobject(file_name=r"PiCreatures_plain.svg")
-        self.add(svg)
+        kwargs = {
+            "flip": True
+        }
+        pi = PiSymbol(fill_color=RED, stroke_width=4, stroke_color=WHITE, **kwargs)
+        self.add(pi)
