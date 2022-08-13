@@ -1,5 +1,6 @@
 from manim import *
-from common.characters.symbols.pi_symbol import PiSymbol
+from common.characters.symbols.pi_symbol import *
+from common.utils.mobject_utils import get_indexes
 
 list_scene = ("SpiralInExample", "TestPi", "Example")
 SCENE_NAME = list_scene[1]
@@ -25,8 +26,16 @@ class Intro(Scene):
 
 class TestPi(Scene):
     def construct(self):
-        kwargs = {
-            "flip": True
-        }
-        pi = PiSymbol(fill_color=RED, stroke_width=4, stroke_color=WHITE, **kwargs)
-        self.add(pi)
+        pi = NumberCreature(file_name_prefix='PiCreatures', color=BLUE,
+                            flip_at_start=False,
+                            height=3).look(RIGHT)
+        self.play(Create(pi))
+        indexes = get_indexes(pi, font_size=20, color_obj=False)
+        self.add(indexes)
+        square = Square().set(height=1).shift(LEFT*3)
+        self.add(square)
+        self.wait()
+        pi.generate_target()
+        pi.target.change("thinking").look_at(square)
+        self.play(MoveToTarget(pi))
+        self.wait()
