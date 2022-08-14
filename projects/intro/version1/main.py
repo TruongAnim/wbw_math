@@ -6,7 +6,7 @@ list_scene = ("SpiralInExample", "TestPi", "Example")
 SCENE_NAME = list_scene[1]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
-config.background_color = YELLOW
+config.background_color = BLACK
 
 if __name__ == "__main__":
     command = f"manim --disable_caching -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -26,16 +26,26 @@ class Intro(Scene):
 
 class TestPi(Scene):
     def construct(self):
-        pi = NumberCreature(file_name_prefix='PiCreatures', color=BLUE,
-                            flip_at_start=False,
-                            height=3).look(RIGHT)
+        pi = NumberCreature(
+            file_name_prefix='PiCreatures',
+            flip_at_start=False,
+            mode="wonder"
+        ).shift(LEFT*3+DOWN)
         self.play(Create(pi))
-        indexes = get_indexes(pi, font_size=20, color_obj=False)
-        self.add(indexes)
-        square = Square().set(height=1).shift(LEFT*3)
-        self.add(square)
         self.wait()
-        pi.generate_target()
-        pi.target.change("thinking").look_at(square)
-        self.play(MoveToTarget(pi))
+        self.play(Blink(pi),  run_time=1)
+        self.wait()
+        bubble_kwargs = {
+            "fill_color":BLACK,
+            "fill_opacity": 0.5,
+            "stroke_width":3,
+            "stroke_color":WHITE,
+            "stretch_width": 7,
+            "stretch_height":3
+        }
+        self.play(NumberCreatureSays(pi, Tex("hello!", color=BLUE), bubble_kwargs=bubble_kwargs))
+        rec = Rectangle().surround(pi, stretch=True)
+        self.add(rec)
+        self.play(NumberCreatureThinks(pi, Tex("GoodBye!", color=BLUE), bubble_kwargs=bubble_kwargs))
+
         self.wait()

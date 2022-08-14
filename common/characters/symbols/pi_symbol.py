@@ -16,6 +16,7 @@ def filtered_locals(caller_locals):
     return result
 
 
+# temporary not use
 def digest_config(obj, kwargs, caller_locals={}):
     """
     Sets init args and CONFIG values as local variables
@@ -50,32 +51,35 @@ NUMBER_CREATURE_DIR = config.assets_dir
 
 
 class Bubble(SVGMobject):
-    CONFIG = {
-        "direction": LEFT,
-        "center_point": ORIGIN,
-        "content_scale_factor": 0.75,
-        # "height": 5,
-        # "width": 8,
-        "bubble_center_adjustment_factor": 1.0 / 8,
-        "file_name": None,
-        # "fill_color": BLACK,
-        "fill_opacity": 0.8,
-        # "stroke_color": WHITE,
-        "stroke_width": 3,
-    }
+    def __init__(
+            self,
+            file_name=None,
+            direction=LEFT,
+            stretch_width=3,
+            stretch_height=2,
+            center_point=ORIGIN,
+            content_scale_factor=0.75,
+            bubble_center_adjustment_factor=1.0 / 8,
+            **kwargs
+    ):
+        self.file_name = file_name
+        self.direction = direction
+        self.stretch_width = stretch_width
+        self.stretch_height = stretch_height
+        self.center_point = center_point
+        self.content_scale_factor = content_scale_factor
+        self.bubble_center_adjustment_factor = bubble_center_adjustment_factor
 
-    def __init__(self, **kwargs):
-        digest_config(self, kwargs, locals())
         if self.file_name is None:
             raise Exception("Must invoke Bubble subclass")
         try:
-            SVGMobject.__init__(self, **kwargs)
+            SVGMobject.__init__(self, file_name=self.file_name, **kwargs)
         except IOError as err:
             self.file_name = os.path.join(config.assets_dir, self.file_name)
-            SVGMobject.__init__(self, **kwargs)
+            SVGMobject.__init__(self, file_name=self.file_name, **kwargs)
         self.center()
-        self.stretch_to_fit_height(self.height)
-        self.stretch_to_fit_width(self.width)
+        self.stretch_to_fit_height(self.stretch_height)
+        self.stretch_to_fit_width(self.stretch_width)
         if self.direction[0] > 0:
             self.flip()
         self.direction_was_specified = "direction" in kwargs
@@ -146,32 +150,19 @@ class Bubble(SVGMobject):
 
 
 class SpeechBubble(Bubble):
-    CONFIG = {
-        "file_name": "Bubbles_speech.svg",
-        # "height": 4
-    }
-
     def __init__(self, **kwargs):
-        super().__init__(file_name="assets\Bubbles_speech.svg", **kwargs)
+        super().__init__(file_name="Bubbles_speech.svg", **kwargs)
 
 
+# temporary not use
 class DoubleSpeechBubble(Bubble):
-    CONFIG = {
-        "file_name": "Bubbles_double_speech.svg",
-        # "height": 4
-    }
-
     def __init__(self, **kwargs):
         super().__init__(file_name="Bubbles_double_speech.svg", **kwargs)
 
 
 class ThoughtBubble(Bubble):
-    CONFIG = {
-        "file_name": "Bubbles_thought.svg",
-    }
-
     def __init__(self, **kwargs):
-        Bubble.__init__(self, file_name="Bubbles_thought.svg", **kwargs)
+        super().__init__(file_name="Bubbles_thought.svg", **kwargs)
         self.submobjects.sort(key=lambda m: m.get_bottom()[1])
 
     def make_green_screen(self):
@@ -185,7 +176,6 @@ class NumberCreature(SVGMobject):
             file_name_prefix="PiCreatures",
             mode="plain",
             color=RED,
-            height=1,
             flip_at_start=False,
             corner_scale_factor=0.5,
             start_corner=None,
@@ -228,8 +218,6 @@ class NumberCreature(SVGMobject):
             self.to_corner(self.start_corner)
 
         self.corner_scale_factor = corner_scale_factor
-        self.height = height
-        self.set_color(color)
 
     def align_data(self, mobject, skip_point_alignment=True):
         # This ensures that after a transform into a different mode,
@@ -387,7 +375,7 @@ class NumberCreature(SVGMobject):
         return self
 
     def get_bubble(self, *content, **kwargs):
-        bubble_class = kwargs.pop("bubble_class", ThoughtBubble)
+        bubble_class = kwargs.pop("bubble_class", SpeechBubble)
         bubble = bubble_class(**kwargs)
         if len(content) > 0:
             if isinstance(content[0], str):
@@ -395,7 +383,7 @@ class NumberCreature(SVGMobject):
             else:
                 content_mob = content[0]
             bubble.add_content(content_mob)
-            if "height" not in kwargs and "width" not in kwargs:
+            if "stretch_width" not in kwargs and "stretch_height" not in kwargs:
                 bubble.resize_to_content()
         bubble.pin_to(self)
         self.bubble = bubble
@@ -423,6 +411,7 @@ class NumberCreature(SVGMobject):
         ])
 
 
+# temporary not use
 def get_all_pi_creature_modes():
     result = []
     prefix = "%s_" % NumberCreature.CONFIG["file_name_prefix"]
@@ -435,10 +424,7 @@ def get_all_pi_creature_modes():
     return result
 
 
-class Alex(NumberCreature):
-    pass  # Nothing more than an alternative name
-
-
+# temporary not use
 class Eyes(VMobject):
     CONFIG = {
         # "height": 0.3,
@@ -505,20 +491,31 @@ class Eyes(VMobject):
 
 
 class NumberCreatureBubbleIntroduction(AnimationGroup):
-    CONFIG = {
-        "target_mode": "speaking",
-        "bubble_class": SpeechBubble,
-        "change_mode_kwargs": {},
-        "bubble_creation_class": Create,
-        "bubble_creation_kwargs": {},
-        "bubble_kwargs": {},
-        "content_introduction_class": Write,
-        "content_introduction_kwargs": {},
-        "look_at_arg": None,
-    }
+    def __init__(
+            self,
+            creature,
+            *content,
+            target_mode="speaking",
+            bubble_class=SpeechBubble,
+            change_mode_kwargs={},
+            bubble_creation_class=FadeIn,
+            bubble_creation_kwargs={},
+            bubble_kwargs={},
+            content_introduction_class=Write,
+            content_introduction_kwargs={},
+            look_at_arg=None,
+            **kwargs
+    ):
+        self.target_mode = target_mode
+        self.bubble_class = bubble_class
+        self.change_mode_kwargs = change_mode_kwargs
+        self.bubble_creation_class = bubble_creation_class
+        self.bubble_creation_kwargs = bubble_creation_kwargs
+        self.bubble_kwargs = bubble_kwargs
+        self.content_introduction_class = content_introduction_class
+        self.content_introduction_kwargs = content_introduction_kwargs
+        self.look_at_arg = look_at_arg
 
-    def __init__(self, creature, *content, **kwargs):
-        digest_config(self, kwargs)
         bubble = creature.get_bubble(
             *content,
             bubble_class=self.bubble_class,
@@ -526,7 +523,6 @@ class NumberCreatureBubbleIntroduction(AnimationGroup):
         )
         Group(bubble, bubble.content).shift_onto_screen()
 
-        print(creature.submobjects)
         creature.generate_target()
         creature.target.change_mode(self.target_mode, creature.get_file_name_prefix())
         if self.look_at_arg is not None:
@@ -546,16 +542,43 @@ class NumberCreatureBubbleIntroduction(AnimationGroup):
 
 
 class NumberCreatureSays(NumberCreatureBubbleIntroduction):
-    CONFIG = {
-        "target_mode": "speaking",
-        "bubble_class": SpeechBubble,
-    }
+    def __init__(
+            self,
+            creature,
+            *content,
+            target_mode="speaking",
+            bubble_class=SpeechBubble,
+            **kwargs
+    ):
+        super().__init__(
+            creature,
+            *content,
+            target_mode=target_mode,
+            bubble_class=bubble_class,
+            **kwargs
+        )
+
+
+class NumberCreatureThinks(NumberCreatureBubbleIntroduction):
+    def __init__(
+            self,
+            creature,
+            *content,
+            target_mode="thinking",
+            bubble_class=ThoughtBubble,
+            **kwargs
+    ):
+        super().__init__(
+            creature,
+            *content,
+            target_mode=target_mode,
+            bubble_class=bubble_class,
+            **kwargs
+        )
 
 
 class Blink(ApplyMethod):
-    CONFIG = {
-        "rate_func": squish_rate_func(there_and_back)
-    }
-
     def __init__(self, pi_creature, **kwargs):
+        if "rate_func" not in kwargs:
+            kwargs["rate_func"] = squish_rate_func(there_and_back)
         ApplyMethod.__init__(self, pi_creature.blink, **kwargs)
