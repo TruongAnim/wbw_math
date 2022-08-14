@@ -1,6 +1,6 @@
 from manim import *
-from common.characters.symbols.pi_symbol import *
-from common.utils.mobject_utils import get_indexes
+from common.svg.character.number_creature import NumberCreature
+from common.svg.character.number_creature_anim import *
 
 list_scene = ("SpiralInExample", "TestPi", "Example")
 SCENE_NAME = list_scene[1]
@@ -43,9 +43,11 @@ class TestPi(Scene):
             "stretch_width": 7,
             "stretch_height":3
         }
-        self.play(NumberCreatureSays(pi, Tex("hello!", color=BLUE), bubble_kwargs=bubble_kwargs))
+        self.play(NumberCreatureSays(
+            pi,
+            Tex("hello!", color=BLUE),
+            target_mode="wonder",
+            bubble_kwargs=bubble_kwargs
+        ))
         rec = Rectangle().surround(pi, stretch=True)
-        self.add(rec)
-        self.play(NumberCreatureThinks(pi, Tex("GoodBye!", color=BLUE), bubble_kwargs=bubble_kwargs))
-
         self.wait()
