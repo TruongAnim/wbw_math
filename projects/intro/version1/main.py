@@ -93,7 +93,7 @@ class Outro(Scene):
             for i in subcribe
         ], lag_ratio=0.5), run_time=2)
         self.wait(0.3)
-        self.play(FadeIn(pi), FadeIn(rec), FadeIn(sub))
+        self.play(FadeIn(pi), FadeIn(rec), FadeIn(sub), ApplyWave(truong_anim))
         self.play(Blink(pi))
         self.play(MoveToTarget(pi), run_time=0.5)
         self.add_sound("click_sub.wav")
