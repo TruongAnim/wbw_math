@@ -1,9 +1,9 @@
 from manim import *
-from common.characters.symbols.pi_symbol import *
-from common.utils.mobject_utils import get_indexes
+from common.svg.character.number_creature import NumberCreature
+from common.svg.character.number_creature_anim import *
 
-list_scene = ("SpiralInExample", "TestPi", "Example")
-SCENE_NAME = list_scene[1]
+list_scene = ("Intro", "TestPi", "Outro")
+SCENE_NAME = list_scene[2]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 config.background_color = BLACK
@@ -16,12 +16,89 @@ if __name__ == "__main__":
 
 class Intro(Scene):
     def construct(self):
-        pi = MathTex(r"\pi").scale(7)
-        pi.shift(2.25 * LEFT + 1.5 * UP)
-        circle = Circle(color=GREEN_C, fill_opacity=1).shift(LEFT)
-        square = Square(color=BLUE_D, fill_opacity=1).shift(UP)
-        shapes = VGroup(pi, circle, square)
-        self.play(SpiralIn(shapes))
+        logo_green = "#87c2a5"
+        logo_blue = "#525893"
+        logo_red = "#e07a5f"
+        logo_black = "#343434"
+
+        circle = Circle(color=logo_green, fill_opacity=1).shift(LEFT)
+        square = Square(color=logo_blue, fill_opacity=1).shift(UP)
+        triangle = Triangle(color=logo_red, fill_opacity=1).shift(RIGHT)
+        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder")\
+            .scale(1.5).align_to(circle, DOWN)
+        pi.shift(3 * LEFT)
+        truong_anim = Text("@TruongAnim", font_size=25).shift(DOWN * 2.5)
+        logo = VGroup(triangle, square, circle, pi)  # order matters
+        logo.move_to(ORIGIN)
+        bubble_kwargs = {
+            "stroke_width":2,
+            "stretch_width":3,
+            "stretch_height":2,
+            "stroke_color":WHITE,
+        }
+        creature_thinks = NumberCreatureThinks(pi,
+                                       Text("Wait... But why?"),
+                                       target_mode="wonder",
+                                       bubble_kwargs=bubble_kwargs
+                                       )
+        self.play(SpiralIn(logo), FadeIn(truong_anim, shift=UP),
+                  run_time=2, )
+
+        self.play(creature_thinks,
+                  ApplyWave(truong_anim),
+                  Blink(pi),
+                  run_time=2)
+
+
+class Outro(Scene):
+    def construct(self):
+        logo_green = "#87c2a5"
+        logo_blue = "#525893"
+        logo_red = "#e07a5f"
+        logo_black = "#343434"
+
+        circle = Circle(color=logo_green, fill_opacity=1).shift(LEFT)
+        square = Square(color=logo_blue, fill_opacity=1).shift(UP)
+        triangle = Triangle(color=logo_red, fill_opacity=1).shift(RIGHT)
+
+        truong_anim = Text("@TruongAnim", font_size=25).shift(DOWN * 2.5+ LEFT*4)
+        logo = VGroup(triangle, square, circle)  # order matters
+        logo.move_to(ORIGIN).shift(LEFT*4)
+        self.add(logo, truong_anim)
+        self.wait()
+        these_videos = MarkupText(f'''These videos are always <span fgcolor="{YELLOW}">free!</span>''')
+        if_you_like = MarkupText(f'''If you <span fgcolor="{YELLOW}">like</span> what I do''')
+        please_consider = MarkupText(f'''Please consider <span fgcolor="{YELLOW}">subscribing</span>''')
+        subcribe = VGroup(these_videos, if_you_like, please_consider)\
+            .arrange(DOWN, buff=MED_LARGE_BUFF, aligned_edge=LEFT).scale(0.7).shift(RIGHT*3+UP)
+        pi = NumberCreature(file_name_prefix="PiCreatures", color=BLUE, mode="smile1") \
+            .align_to(subcribe, LEFT)
+        pi.shift(3 * DOWN)
+        pi.generate_target().scale(1.2).shift(0.2*UP)
+        pi.target.change_mode("smile2")
+        sub = Text("SUBSCRIBE", font="Arial", weight=BOLD, font_size=27, color=WHITE)\
+            .next_to(pi, RIGHT).shift(UP*1.7)
+        rec = Rectangle(
+            width=2.7, height=0.7,
+            fill_color=RED,
+            fill_opacity=1,
+            stroke_width=0
+            ).move_to(sub)
+        sub_ed = Text("SUBSCRIBED", font="Arial", weight=BOLD, font_size=27, color=DARK_GRAY)\
+            .next_to(pi, RIGHT).shift(UP*1.7)
+        rec.generate_target()
+        rec.target.stretch_to_fit_width(3).move_to(sub_ed).set_color(WHITE)
+        self.play(LaggedStart(*[
+            FadeIn(i, shift=LEFT*5)
+            for i in subcribe
+        ], lag_ratio=0.5), run_time=2)
+        self.wait(0.3)
+        self.play(FadeIn(pi), FadeIn(rec), FadeIn(sub), ApplyWave(truong_anim))
+        self.play(Blink(pi))
+        self.play(MoveToTarget(pi), run_time=0.5)
+        self.add_sound("click_sub.wav")
+        self.play(MoveToTarget(rec), FadeTransform(sub, sub_ed), run_time=0.5)
+        self.wait()
 
 
 class TestPi(Scene):
@@ -43,9 +120,10 @@ class TestPi(Scene):
             "stretch_width": 7,
             "stretch_height":3
         }
-        self.play(NumberCreatureSays(pi, Tex("hello!", color=BLUE), bubble_kwargs=bubble_kwargs))
-        rec = Rectangle().surround(pi, stretch=True)
-        self.add(rec)
-        self.play(NumberCreatureThinks(pi, Tex("GoodBye!", color=BLUE), bubble_kwargs=bubble_kwargs))
-
+        self.play(NumberCreatureSays(
+            pi,
+            Tex("hello!", color=BLUE),
+            target_mode="wonder",
+            bubble_kwargs=bubble_kwargs
+        ))
         self.wait()
