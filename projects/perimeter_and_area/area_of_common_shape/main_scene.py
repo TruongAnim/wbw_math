@@ -1,6 +1,7 @@
 from manim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
+# SCENE_NAME = list_scene[4]
 SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
@@ -15,11 +16,11 @@ class ProofScene(Scene):
     def setup(self):
         pass
 
-    def create_title(self, en, vn, edge=LEFT):
-        self.title_en = Text(en, font_size=30).to_edge(edge)
-        self.title_vn = Text(vn, font="Times New Roman",
-                             font_size=24, slant=ITALIC) \
-            .next_to(self.title_en, DOWN)
+    def create_title(self, vn, en, edge=LEFT):
+        self.title_vn = Text(vn, font="Times New Roman", font_size=30) \
+            .to_edge(edge)
+        self.title_en = Text(en, font_size=25, slant=ITALIC) \
+            .next_to(self.title_vn, DOWN)
 
     def draw_title(self, other_obj):
         self.my_play(Write(self.title_en), Write(self.title_vn),
@@ -55,7 +56,7 @@ class ProofScene(Scene):
 # acute triangle
 class Scene1(ProofScene):
     def setup(self):
-        self.create_title(r"Acute triangle", r"(Tam giác nhọn)")
+        self.create_title(r"Tam giác nhọn", r"(Acute triangle)")
 
     def construct(self):
         A = np.array([0, 3, 0])
@@ -114,7 +115,7 @@ class Scene1(ProofScene):
 class Scene2(ProofScene):
     def setup(self):
         import numpy as np
-        self.create_title(r"Parallelogram", r"(Hình bình hành)")
+        self.create_title(r"Hình bình hành", r"(Parallelogram)")
 
     def construct(self):
         A = np.array([0, 3, 0])
@@ -169,7 +170,7 @@ class Scene2(ProofScene):
 class Scene3(ProofScene):
     def setup(self):
         import numpy as np
-        self.create_title(r"Obtuse triangle", r"(Tam giác tù)", edge=RIGHT)
+        self.create_title(r"Tam giác tù", r"(Obtuse triangle)", edge=RIGHT)
 
     def construct(self):
         A = np.array([2, 3.8, 0])
@@ -225,7 +226,7 @@ class Scene3(ProofScene):
 # Rhombus
 class Scene4(ProofScene):
     def setup(self):
-        self.create_title(r"Rhombus", r"(Hình thoi)")
+        self.create_title(r"Hình thoi", r"(Rhombus)")
 
     def construct(self):
         A = np.array([0, 3.8, 0])
@@ -284,7 +285,7 @@ class Scene4(ProofScene):
 class Scene5(ProofScene):
     def setup(self):
         import numpy as np
-        self.create_title(r"Trapezoid", r"(Hình thang)")
+        self.create_title(r"Hình thang", r"(Trapezoid)")
 
     def construct(self):
         A = np.array([-1, 3, 0])

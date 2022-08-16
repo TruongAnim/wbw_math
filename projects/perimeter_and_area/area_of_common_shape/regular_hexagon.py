@@ -15,15 +15,15 @@ class ProofScene(Scene):
     def setup(self):
         pass
 
-    def create_title(self, en, vn, edge=LEFT):
-        self.title_en = Text(en, font_size=30).to_edge(edge)
-        self.title_vn = Text(vn, font="Times New Roman",
-                             font_size=24, slant=ITALIC) \
-            .next_to(self.title_en, DOWN)
+    def create_title(self, vn, en, edge=LEFT):
+        self.title_vn = Text(vn, font="Times New Roman", font_size=30) \
+            .to_edge(edge)
+        self.title_en = Text(en, font_size=25, slant=ITALIC) \
+            .next_to(self.title_vn, DOWN)
 
     def draw_title(self, other_obj):
         self.my_play(Write(self.title_en), Write(self.title_vn),
-                  Write(other_obj), )
+                     Write(other_obj), )
 
     def creat_formula(self, formula):
         self.formula = MathTex(formula).scale(1.5).shift(DOWN * 2.5)
@@ -56,7 +56,7 @@ class ProofScene(Scene):
 class Scene1(ProofScene):
     def setup(self):
         super().setup()
-        self.create_title(r"Regular hexagon", r"(Lục giác đều)")
+        self.create_title(r"Lục giác đều", r"(Regular hexagon)")
 
     def construct(self):
         circle = Circle(radius=2).shift(UP * 1.5)
@@ -114,7 +114,7 @@ class Scene1(ProofScene):
             Create(angle) for angle in angles
         ], *[
             Create(mark) for mark in marks
-             ], lag_ratio=0), Write(text_angle))
+        ], lag_ratio=0), Write(text_angle))
         self.my_play(Write(sub_tri), *[
             FadeOut(i) for i in (circle, *angles[0:4], *marks[0:4],
                                  angles[5])
@@ -129,11 +129,11 @@ class Scene1(ProofScene):
         copy_tri = sub_tri.copy().scale(0.4).move_to(self.formula[0][9])
         self.my_play(ReplacementTransform(sub_tri.copy(), copy_tri), Write(self.formula[0][:4]))
         self.my_play(FadeOut(copy_tri),
-                  FadeTransformPieces(text_s[0][4:].copy(), self.formula[0][4:]))
+                     FadeTransformPieces(text_s[0][4:].copy(), self.formula[0][4:]))
         result = MathTex(r"S = {3 \over 2}{\sqrt{3}a^2}") \
             .scale(1.5).align_to(self.formula, DL)
         self.my_play(*[Transform(self.formula[0][i], result[0][j])
-                    for i, j in zip([0, 1, 2, 4, 5, 6, 7, 8, 9, 10],
-                                    [0, 1, 2, 5, 6, 7, 8, 9, 3, 4])
-                    ], FadeOut(self.formula[0][3]))
+                       for i, j in zip([0, 1, 2, 4, 5, 6, 7, 8, 9, 10],
+                                       [0, 1, 2, 5, 6, 7, 8, 9, 3, 4])
+                       ], FadeOut(self.formula[0][3]))
         self.my_play(Circumscribe(result, run_time=2))
