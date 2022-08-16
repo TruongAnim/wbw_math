@@ -85,15 +85,15 @@ class Scene1(ProofScene):
                   for i, j in zip(angle_init, angle_quadrent)]
 
         text_angle = MathTex("60^{\circ}").scale(0.7).next_to(angles[4], DOWN, SMALL_BUFF)
-        text_equil_tri_en = Text("Equilateral triangle", font_size=25) \
+        text_equil_tri_vn = Text("Tam giác đều", font="Times New Roman", font_size=25) \
             .to_corner(UR, buff=LARGE_BUFF)
-        text_equil_tri_vn = Text("(Tam giác đều)", font="Times New Roman",
+        text_equil_tri_en = Text("(Equilateral triangle)",
                                  font_size=20, slant=ITALIC) \
-            .next_to(text_equil_tri_en, DOWN)
+            .next_to(text_equil_tri_vn, DOWN)
 
         text_s = MathTex("\implies S = {{\sqrt{3}a^2} \over 4}") \
-            .next_to(text_equil_tri_vn, DOWN)
-        text_remember = Text("Remember?", font_size=20).next_to(text_s, DOWN)
+            .next_to(text_equil_tri_en, DOWN)
+        text_remember = Text(r"remember  that?", font_size=20).next_to(text_s, DOWN)
 
         mark_location = [j.point_from_proportion(i) for i in (1 / 4, 3 / 4)
                          for j in lines]
@@ -120,9 +120,9 @@ class Scene1(ProofScene):
                                  angles[5])
         ])
         self.my_play(*[
-            Write(i) for i in (arrow, text_equil_tri_en, text_equil_tri_vn,
+            Write(i) for i in ( text_equil_tri_en, text_equil_tri_vn,
                                text_s, text_remember)
-        ])
+        ], GrowArrow(arrow))
 
         #
         self.creat_formula(r"S = 6 \times {{\sqrt{3}a^2} \over 4}")
