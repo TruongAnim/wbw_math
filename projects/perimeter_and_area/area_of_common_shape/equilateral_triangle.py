@@ -15,15 +15,15 @@ class ProofScene(Scene):
     def setup(self):
         pass
 
-    def create_title(self, en, vn, edge=LEFT):
-        self.title_en = Text(en, font_size=30).to_edge(edge)
-        self.title_vn = Text(vn, font="Times New Roman",
-                             font_size=24, slant=ITALIC) \
-            .next_to(self.title_en, DOWN)
+    def create_title(self, vn, en, edge=LEFT):
+        self.title_vn = Text(vn, font="Times New Roman", font_size=30) \
+            .to_edge(edge)
+        self.title_en = Text(en, font_size=25, slant=ITALIC) \
+            .next_to(self.title_vn, DOWN)
 
     def draw_title(self, other_obj):
         self.my_play(Write(self.title_en), Write(self.title_vn),
-                  Write(other_obj), )
+                     Write(other_obj), )
 
     def creat_formula(self, formula):
         self.formula = MathTex(formula).scale(1.5).shift(DOWN * 2.5)
@@ -55,8 +55,7 @@ class ProofScene(Scene):
 # equilateral triangle
 class Scene1(ProofScene):
     def setup(self):
-        import numpy as np
-        self.create_title(r"Equilateral triangle", r"(Tam giác đều)")
+        self.create_title(r"Tam giác đều", r"(Equilateral triangle)")
 
     def construct(self):
         A = np.array([0, 3.464, 0])
@@ -86,7 +85,7 @@ class Scene1(ProofScene):
         self.draw_title(main_tri)
 
         self.my_play(*[
-            FadeIn(i, shift=j) for i,j in zip(
+            FadeIn(i, shift=j) for i, j in zip(
                 (brace_ab, text_ab, brace_ac, text_ac, brace_bc, text_bc),
                 (DR, DR, DL, DL, UP, UP)
             )
@@ -114,7 +113,7 @@ class Scene1(ProofScene):
             ReplacementTransform(i.copy(), pytago1[0][j])
             for i, j in zip([text_ab, text_h], [0, 3])
         ], FadeTransformPieces(text_bh.copy(), pytago1[0][7:10]),
-                  FadeIn(pytago1[0][6]), FadeIn(pytago1[0][10]))
+                     FadeIn(pytago1[0][6]), FadeIn(pytago1[0][10]))
 
         self.my_play(*[
             ReplacementTransform(pytago1[0][i], pytago2[0][j])
@@ -143,12 +142,12 @@ class Scene1(ProofScene):
 
         self.creat_formula(r"S = {a \over 2} \times {{\sqrt{3}a} \over 2}")
         self.my_play(FadeTransform(text_bh.copy(), self.formula[0][2:5]),
-                  FadeTransform(pytago5[0][2:].copy(), self.formula[0][6:]))
+                     FadeTransform(pytago5[0][2:].copy(), self.formula[0][6:]))
         self.my_play(*[Write(self.formula[0][i]) for i in (0, 1, 5)])
         result = MathTex(r"S = {{\sqrt{3}a^2} \over 4}").scale(1.5).align_to(self.formula, DL)
         self.my_play(*[Transform(self.formula[0][i], result[0][j])
-                    for i, j in zip([0, 1, 3, 4, 6, 7, 8, 9, 10, 11],
-                                    [0, 1, 7, 8, 2, 3, 4, 5, 7, 8])
-                    ], FadeOut(self.formula[0][5]),
-                  Transform(self.formula[0][2], result[0][6], path_arc=-PI))
+                       for i, j in zip([0, 1, 3, 4, 6, 7, 8, 9, 10, 11],
+                                       [0, 1, 7, 8, 2, 3, 4, 5, 7, 8])
+                       ], FadeOut(self.formula[0][5]),
+                     Transform(self.formula[0][2], result[0][6], path_arc=-PI))
         self.my_play(Circumscribe(result, run_time=2))
