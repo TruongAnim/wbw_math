@@ -71,5 +71,10 @@ class Scene2(Scene):
             angle=40*DEGREES,
             start_angle=0,
         ).shift(LEFT*4)
+        sector.generate_target()
+        sector.target.rotate(70*DEGREES, about_point=center.get_center())
+        
 
         self.play(Write(sector))
+#         self.play(MoveToTarget(sector))
+        self.play(Rotate(sector, 70*DEGREES))
