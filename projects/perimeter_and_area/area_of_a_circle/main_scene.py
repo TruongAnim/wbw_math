@@ -65,16 +65,36 @@ class Scene2(Scene):
         rectangle = Rectangle(width=2 * PI, height=2, stroke_width=1) \
             .shift(RIGHT * 3)
         self.add(circle, center, rectangle)
-        sector = Sector(
-            outer_radius=2,
-            inner_radius=0,
-            angle=40*DEGREES,
-            start_angle=0,
-        ).shift(LEFT*4)
-        sector.generate_target()
-        sector.target.rotate(70*DEGREES, about_point=center.get_center())
+
+        sector_count = 6
+        angle = 2*PI/sector_count
+        start_angle = [i*angle for i in range(sector_count)]
+        
+        sector_kwargs = {
+            "outer_radius":2,
+            "inner_radius":0,
+        }
+        sectors = [Sector(angle=angle, start_angle = i, **sector_kwargs).shift(LEFT*4) for i in start_angle]
+        line1 = VGroup(*sectors[:int(sector_count/2)])
+        line2 = VGroup(*sectors[int(sector_count/2):])
         
 
-        self.play(Write(sector))
-#         self.play(MoveToTarget(sector))
-        self.play(Rotate(sector, 70*DEGREES))
+        self.play(*[
+            Write(i) for i in line1
+        ])
+        self.play(*[
+            Write(i) for i in line2
+        ])
+        for i in line1:
+            i.save_state()
+        def clousure(index):
+            print(line1[index].points[0])
+            def update_angle(obj, dt):
+                obj.restore()
+                obj.shift(dt * 3 * RIGHT)
+                obj.rotate(dt*(PI/2-(start_angle[index]+angle/2)), about_point=obj.get_center())
+                
+            return update_angle
+        self.play(*[
+            UpdateFromAlphaFunc(obj, clousure(index)) for index,obj in enumerate(line1)
+        ])
