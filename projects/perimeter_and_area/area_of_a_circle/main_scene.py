@@ -77,7 +77,9 @@ class Scene2(Scene):
         sectors = [Sector(angle=angle, start_angle = i, **sector_kwargs).shift(LEFT*4) for i in start_angle]
         line1 = VGroup(*sectors[:int(sector_count/2)])
         line2 = VGroup(*sectors[int(sector_count/2):])
-        
+
+
+
 
         self.play(*[
             Write(i) for i in line1
@@ -97,4 +99,9 @@ class Scene2(Scene):
             return update_angle
         self.play(*[
             UpdateFromAlphaFunc(obj, clousure(index)) for index,obj in enumerate(line1)
+        ])
+        target_line1 = line1.copy()
+        target_line1.arrange(LEFT, buff=0).move_to(rectangle)
+        self.play(*[
+            Write(target_line1)
         ])
