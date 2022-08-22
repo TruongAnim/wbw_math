@@ -98,3 +98,8 @@ class Scene2(Scene):
         self.play(*[
             UpdateFromAlphaFunc(obj, clousure(index)) for index,obj in enumerate(line1)
         ])
+        target_line1 = line1.copy()
+        target_line1.arrange(LEFT, buff=0).move_to(rectangle)
+        self.play(*[
+            Write(target_line1)
+        ])
