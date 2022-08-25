@@ -4,7 +4,7 @@ list_scene = ("Scene1", "Scene2", "Scene3", "Scene31", "Scene4", "Scene5", "Scen
 SCENE_NAME = list_scene[0]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -33,4 +33,5 @@ class MyScene(Scene):
 
 class Scene1(MyScene):
     def construct(self):
-        self.play(Write(Square()))
+        triangle = Triangle()
+        self.add(triangle)
