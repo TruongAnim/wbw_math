@@ -35,3 +35,5 @@ class Scene1(MyScene):
     def construct(self):
         triangle = Triangle()
         self.add(triangle)
+        brace = Brace(triangle, DOWN)
+        self.add(brace)
