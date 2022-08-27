@@ -2,14 +2,14 @@ from manim import *
 from common.svg.character.number_creature import NumberCreature
 from common.svg.character.number_creature_anim import *
 
-list_scene = ("Intro", "TestPi", "Outro")
-SCENE_NAME = list_scene[2]
+list_scene = ("Intro", "TestPi", "Outro", "Logo", "Background")
+SCENE_NAME = list_scene[4]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 config.background_color = BLACK
 
 if __name__ == "__main__":
-    command = f"manim --disable_caching -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim --disable_caching -s -qk -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -97,7 +97,7 @@ class Outro(Scene):
         self.play(Blink(pi))
         self.play(MoveToTarget(pi), run_time=0.5)
         self.add_sound("click_sub.wav")
-        self.play(MoveToTarget(rec), FadeTransform(sub, sub_ed), run_time=0.5)
+        # self.play(MoveToTarget(rec), FadeTransform(sub, sub), run_time=0.5)
         self.wait()
 
 
@@ -127,3 +127,42 @@ class TestPi(Scene):
             bubble_kwargs=bubble_kwargs
         ))
         self.wait()
+
+
+class Logo(Scene):
+    def construct(self):
+        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder")
+        pi.scale(3)
+        self.add(pi)
+
+class Background(Scene):
+    def construct(self):
+        logo_green = "#87c2a5"
+        logo_blue = "#525893"
+        logo_red = "#e07a5f"
+        logo_black = "#343434"
+
+        circle = Circle(color=logo_green, fill_opacity=1).shift(LEFT)
+        square = Square(color=logo_blue, fill_opacity=1).shift(UP)
+        triangle = Triangle(color=logo_red, fill_opacity=1).shift(RIGHT)
+        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder")\
+            .scale(1.5).align_to(circle, DOWN)
+        pi.shift(3 * LEFT + DOWN*0.5).scale(0.6)
+        wbw = MarkupText("Wait, but why?", gradient=(GREEN, BLUE), font_size=30).shift(UP*0.5)
+        truong_anim = MarkupText("@TruongAnim", gradient=(BLUE, GREEN), font_size=30)
+        truong_anim.next_to(wbw, DOWN)
+        logo = VGroup(triangle, square, circle)  # order matters
+        logo.move_to(ORIGIN).shift(RIGHT*3).scale(0.6)
+        bubble_kwargs = {
+            "stroke_width":2,
+            "stretch_width":3,
+            "stretch_height":2,
+            "stroke_color":WHITE,
+        }
+        creature_thinks = NumberCreatureThinks(pi,
+                                       Text("Wait... But why?"),
+                                       target_mode="wonder",
+                                       bubble_kwargs=bubble_kwargs
+                                       )
+        self.add(logo, pi)
+        self.add(wbw, truong_anim)
