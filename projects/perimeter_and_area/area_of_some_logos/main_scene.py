@@ -4,13 +4,13 @@ from manim import *
 list_scene = ("Scene1", "Scene2", "Scene3",
               "Scene4", "Scene5", "Scene6",
               "Scene7")
-# SCENE_NAME = list_scene[2]
-SCENE_NAME = " ".join(list_scene)
+SCENE_NAME = list_scene[5]
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim --disable_caching -c  {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -301,8 +301,8 @@ class Scene2(MyScene):
 
         shape.add_updater(update)
 
-        self.my_play(tracker.animate.increment_value(500),
-                  run_time=1,
+        self.my_play(tracker.animate.increment_value(rel_obj),
+                  run_time=rel_time,
                   rate_func=linear)
         self.my_play(Circumscribe(group[2]))
 
@@ -520,11 +520,10 @@ class Scene4(MyScene):
 
         shape.add_updater(update)
 
-        self.my_play(tracker.animate.increment_value(1000),
-                  run_time=1,
+        self.my_play(tracker.animate.increment_value(rel_obj),
+                  run_time=rel_time,
                   rate_func=linear)
         self.my_play(Circumscribe(group[2]))
-
 
 class Scene5(MyScene):
     def get_random_position(self):
@@ -735,8 +734,8 @@ class Scene6(MyScene):
 
         shape.add_updater(update)
 
-        self.my_play(tracker.animate.increment_value(1000),
-                  run_time=1,
+        self.my_play(tracker.animate.increment_value(rel_obj),
+                  run_time=rel_time,
                   rate_func=linear)
         self.my_play(Circumscribe(group[2]))
 
