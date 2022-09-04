@@ -6,5 +6,17 @@ def distance_between_two_points(p1, p2):
 def get_norm(vect):
     return sum([x ** 2 for x in vect]) ** 0.5
 
+
+def double_factorial(n):
+    start = 1
+    if n%2 ==0:
+        start = 2
+    result = 1
+    for i in range(start, n+1, 2):
+        result*=i
+    return result
+
+
 if __name__ == "__main__":
-    print(distance_between_two_points([1, 2, 0], [2, 3, 0]))
+    for i in range(10):
+        print(double_factorial(i))
