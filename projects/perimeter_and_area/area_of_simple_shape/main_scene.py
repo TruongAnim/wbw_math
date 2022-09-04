@@ -3,14 +3,37 @@ from common.svg.character.number_creature_anim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene31", "Scene4", "Scene5", "Scene6")
 # SCENE_NAME = list_scene[6]
-SCENE_NAME = " ".join(list_scene)
+# SCENE_NAME = " ".join(list_scene)
+SCENE_NAME = "Thumbnail"
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        A = np.array([0, 3, 0])
+        B = np.array([-1.5, 0, 0])
+        C = np.array([2.5, 0, 0])
+        D = np.array([0, 0, 0])
+        tri = VMobject(fill_color=BLUE,
+                       fill_opacity=0.6,
+                       stroke_width=0).set_points_as_corners([A,B,C,A])
+        rec = Rectangle(width=3,
+                        height=2,
+                        fill_color=RED,
+                        fill_opacity=1,
+                        stroke_width=0).align_to(tri, DL)
+        result = MathTex("S_{red}", "=", "S_{blue}").next_to(rec, DOWN, buff=0.1)
+        result[0].set_color(RED)
+        result[2].set_color(BLUE)
+        bw = Text("But why?", color=YELLOW).shift(UP*2.2 + RIGHT*2.5)
+        self.add(rec, tri, result, bw)
+
 
 class MyScene(Scene):
     def my_play(

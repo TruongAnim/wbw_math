@@ -9,8 +9,9 @@ def area_of_ellipse(a, b, accurate=4):
         numerator = double_factorial(2 * i - 3)
         denominator = pow(2, i) * math.factorial(i)
         loop += (pow(numerator / denominator, 2) * pow(h, i))
+        print(i)
     return math.pi * (a + b) * loop
 
 
 if __name__ == "__main__":
-    print(area_of_ellipse(3,30,accurate=10))
+    print(area_of_ellipse(1,5,accurate=10))
