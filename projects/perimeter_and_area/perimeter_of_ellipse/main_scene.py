@@ -6,12 +6,11 @@ from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3",
-              "ErrorChart", "Scene5", "Scene6",
-              "Scene7")
-SCENE_NAME = list_scene[4]
-# SCENE_NAME = " ".join(list_scene)
+              "ErrorChart", "Scene5")
+# SCENE_NAME = list_scene[4]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c  {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -75,41 +74,41 @@ class Scene1(MyScene):
         ellipse_peri = MathTex(r"???") \
             .move_to(ellipse) \
             .align_to(perimeter, DOWN).shift(UP * 0.1)
-        self.play(
+        self.my_play(
             Write(a),
             Write(b),
             Write(a_tex),
             Write(b_tex)
         )
-        self.play(Write(ellipse))
-        self.play(
+        self.my_play(Write(ellipse))
+        self.my_play(
             Write(circle),
             Write(r),
             Write(r_tex)
         )
-        self.play(Write(g_surround))
-        self.play(
+        self.my_play(Write(g_surround))
+        self.my_play(
             g_ellipse.animate.stretch_to_fit_width(3),
             rate_func=there_and_back,
             run_time=3
         )
-        self.play(Unwrite(g_surround))
-        self.play(
+        self.my_play(Unwrite(g_surround))
+        self.my_play(
             Write(area),
             *[Write(circle_area[0][i])
               for i in (0, 1)],
             *[Write(ellipse_area[0][i])
               for i in (0, 1, 3)],
         )
-        self.play(
+        self.my_play(
             *[Transform(r_tex.copy(), circle_area[0][i])
               for i in (2, 3)],
             *[Transform(i.copy(), ellipse_area[0][j])
               for i, j in zip((a_tex, b_tex), (2, 4))],
         )
-        self.play(Write(perimeter))
-        self.play(Write(circle_peri))
-        # self.play(Write(ellipse_peri))
+        self.my_play(Write(perimeter))
+        self.my_play(Write(circle_peri))
+        # self.my_play(Write(ellipse_peri))
 
         ellipse_peri = MathTex(r"\pi \times (a+b )") \
             .move_to(ellipse) \
@@ -119,11 +118,11 @@ class Scene1(MyScene):
         ellipse_peri[0][3].set_color(YELLOW)
         ellipse_peri[0][4].set_color(YELLOW)
         ellipse_peri[0][5].set_color(YELLOW)
-        self.play(
+        self.my_play(
             *[Write(ellipse_peri[0][i])
               for i in (0, 1, 2, 4, 6)],
         )
-        self.play(
+        self.my_play(
             *[Transform(i.copy(), ellipse_peri[0][j])
               for i, j in zip((a_tex, b_tex), (3, 5))],
         )
@@ -139,15 +138,15 @@ class Scene2(MyScene):
         ellipse_peri = MathTex(r"C=\pi \times (a+b )").shift(DOWN)
         ellipse_peri[0][5].set_color(RED)
         ellipse_peri[0][7].set_color(GREEN)
-        self.play(
+        self.my_play(
             *[Write(i)
               for i in (ellipse, a, b, a_tex, b_tex)]
         )
-        self.play(
+        self.my_play(
             *[Write(ellipse_peri[0][i])
               for i in (0, 1, 2, 3, 4, 6, 8)],
         )
-        self.play(
+        self.my_play(
             *[Transform(i.copy(), ellipse_peri[0][j])
               for i, j in zip((a_tex, b_tex), (5, 7))],
         )
@@ -167,19 +166,19 @@ class Scene3(MyScene):
             r"\text{Chu vi} = 4a\int_{0}^{\pi \over 2} \sqrt{1-e^2\sin^2\theta}d\theta") \
             .shift(DOWN + RIGHT * 2)
         e = MathTex(r"\left(e = {\sqrt{a^2-b^2} \over a}\right)").next_to(perimeter, DOWN)
-        self.play(
+        self.my_play(
             *[Write(i)
               for i in (ellipse, a, b, a_tex, b_tex)]
         )
-        self.play(Write(graph), GrowArrow(arrow))
-        self.play(Write(perimeter), Write(e))
+        self.my_play(Write(graph), GrowArrow(arrow))
+        self.my_play(Write(perimeter), Write(e))
         pi = NumberCreature(
             file_name_prefix="PiCreatures",
             mode="wonder",
             color=RED,
         ).to_corner(DL)
-        self.play(FadeIn(pi, shift=RIGHT * 2))
-        self.play(NumberCreatureThinks(
+        self.my_play(FadeIn(pi, shift=RIGHT * 2))
+        self.my_play(NumberCreatureThinks(
             pi, Text("Giải tiếp kiểu gì nhỉ?",
                      font_size=25,
                      font="Sans"),
@@ -294,9 +293,9 @@ class ErrorChart(MyScene):
             color=TEAL) \
             .next_to(formula2, DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF)
 
-        group1 = VGroup(plot1, point1, error1, formula1)
-        group2 = VGroup(plot2, point2, error2, formula2)
-        group3 = VGroup(plot3, point3, error3, formula3)
+        group1 = VGroup(formula1, point1, error1)
+        group2 = VGroup(formula2, point2, error2)
+        group3 = VGroup(formula3, point3, error3)
 
         axes2 = Axes(
             axis_config={
@@ -305,7 +304,7 @@ class ErrorChart(MyScene):
             x_range=(1, 6, 1),
             y_range=(0, 0.015, 0.003)
         )
-        plot4 = axes2.plot(clousure(approximate_3), x_range=[1, 2, 0.01], color=YELLOW)
+        plot4 = axes2.plot(clousure(approximate_3), x_range=[1, 2, 0.01], color=TEAL)
         plot5 = axes2.plot(clousure(approximate_4), x_range=[1, 6, 0.01], color=GREEN)
         plot6 = axes2.plot(clousure(approximate_5), x_range=[1, 6, 0.01], color=PINK)
         point5 = Dot(axes2.i2gp(5, plot5))
@@ -334,28 +333,28 @@ class ErrorChart(MyScene):
             color=PINK) \
             .scale(0.7) \
             .next_to(formula6, DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF)
-        group5 = VGroup(plot5, point5, error5, formula5)
-        group6 = VGroup(plot6, point6, error6, formula6, formula7)
-        self.play(
+        group5 = VGroup(formula5, point5, error5)
+        group6 = VGroup(formula6, formula7, point6, error6)
+        self.my_play(
             *[Write(i)
               for i in (axes, h_lines, v_lines, percent, ba, ellipse)]
         )
-        self.play(Write(group1))
-        self.play(Write(group2))
-        self.play(Write(group3))
+        self.my_play(Write(group1), Write(plot1))
+        self.my_play(Write(group2), Write(plot2))
+        self.my_play(Write(group3), Write(plot3))
 
-        self.play(
+        self.my_play(
             *[FadeOut(i)
-              for i in (group1, group2, point3, error3)]
+              for i in (group1, group2, point3, error3, plot2, plot1)]
         )
-        self.play(
+        self.my_play(
             Transform(axes, axes2),
             Transform(plot3, plot4),
             Transform(formula3, formula4),
             run_time=3
         )
-        self.play(Write(group5))
-        self.play(Write(group6))
+        self.my_play(Write(group5), Write(plot5))
+        self.my_play(Write(group6), Write(plot6))
         self.add(axes, ellipse, percent,
                  ba, h_lines, v_lines, plot1, plot2,
                  plot3, point1, error1,
@@ -363,7 +362,7 @@ class ErrorChart(MyScene):
                  formula1, formula2, formula3)
 
 
-class Scene5(Scene):
+class Scene5(MyScene):
     def construct(self):
         perimeter = MathTex(
             r"\text{Chu vi}=\pi (a+b)\left[ 1+{h\over4}+ \sum_{2}^{\infty }\left( {(2n-3)!!}\over 2^2n! \right)^2h^n\right]") \
@@ -372,7 +371,7 @@ class Scene5(Scene):
                               r"\pi (a+b)\left[ 1+{h\over4}+",
                               "{h^2\over64}",
                               "+{h^3\over256}",
-                              "+{h^4\over 16384}",
+                              "+{25h^4\over 16384}",
                               r"+.",
                               ".",
                               ".",
@@ -395,17 +394,21 @@ class Scene5(Scene):
         list_error_percent = [(math.fabs(i-real_p)*100)/real_p for i in list_error]
         approximate[1].set_color(RED)
         brace = Brace(approximate[1], DOWN)
-        error = brace.get_tex("{:.4f}\%".format(list_error_percent[0]))
+        error = brace.get_tex("{:.6f}\%".format(list_error_percent[0]))
         error_text = Text("Sai số:", font="Sans", font_size=25)\
             .next_to(error, LEFT)
-        self.play(Write(perimeter))
-        self.play(*[Write(i)
+        approximate_h = MathTex(
+            r"\left(h={{(a-b)^2}\over(a+b)^2}  \right)")\
+            .scale(0.8) \
+            .to_corner(DR)
+        self.my_play(Write(perimeter), Write(approximate_h))
+        self.my_play(*[Write(i)
                   for i in (approximate, brace, error, error_text)])
 
         for i in range(2,12):
             new_brace = Brace(approximate[1:i+1], DOWN)
-            new_error = new_brace.get_tex("{:.8f}\%".format(list_error_percent[i-1]))
-            self.play(*[Transform(brace, new_brace),
+            new_error = new_brace.get_tex("{:.6f}\%".format(list_error_percent[i-1]))
+            self.my_play(*[Transform(brace, new_brace),
                         Transform(error, new_error),
                         error_text.animate.next_to(new_error, LEFT)],
                         approximate[1:i+1].animate.set_color(RED))
