@@ -6,11 +6,11 @@ from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 from common.utils.mobject_utils import get_indexes
 
-list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6", "Scene7")
+list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
 SCENE_NAME = list_scene[4]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -426,3 +426,74 @@ class Scene5(Scene):
             self.wait()
             self.play(Write(g_bar[i]))
             self.wait()
+
+class Scene6(MyScene):
+    def get_speech(self, color, line):
+        text_kwargs = {
+            "font": "Sans",
+            "font_size": 30
+        }
+        if color == BLUE:
+            t1 = Text("Không bao giờ lỗ được", **text_kwargs)
+            t2 = Text("Chậm mà chắc", **text_kwargs)
+            t3 = Text("Thua 5,6 lần là lại thắng", **text_kwargs)
+            t4 = Text("...", **text_kwargs)
+            return VGroup(t1,t2,t3, t4)\
+                .arrange(DOWN, aligned_edge=RIGHT)\
+                .next_to(line, LEFT)\
+                .shift(UP*2)
+        else:
+            t1 = Text("Ăn theo cấp số cộng", **text_kwargs)
+            t2 = Text("Mất theo cấp số nhân", **text_kwargs)
+            t3 = Text("Không ai có vô hạn tài sản", **text_kwargs)
+            t4 = Text("...", **text_kwargs)
+            return VGroup(t1,t2,t3, t4)\
+                .arrange(DOWN, aligned_edge=LEFT)\
+                .next_to(line, RIGHT)\
+                .shift(UP*2)
+
+    def construct(self):
+        blue_pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain", color=BLUE)
+        blue_pi.to_corner(DL, buff=MED_SMALL_BUFF)
+        red_pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            color=RED,
+            flip_at_start=True
+        )
+        red_pi.to_corner(DR, buff=MED_SMALL_BUFF)
+        main_line = Line(UP*3, DOWN*3, color=YELLOW, stroke_width=5)
+        speech1 = self.get_speech(BLUE, main_line)
+        speech2 = self.get_speech(RED, main_line)
+        bubble_kwargs = {
+            "stroke_width":3,
+            "stroke_color":WHITE,
+            "stretch_width":4
+        }
+        self.my_play(FadeIn(blue_pi, shift=RIGHT*2))
+        self.my_play(
+            NumberCreatureSays(
+                blue_pi,
+                Text(r"Ngã ở đâu gấp đôi ở đó",
+                     font="Sans",
+                     font_size=25),
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs
+            )
+        )
+        self.my_play(Write(main_line),
+                  Write(speech1))
+        self.my_play(FadeIn(red_pi, shift=LEFT*2))
+        self.my_play(
+            NumberCreatureSays(
+                red_pi,
+                Text(r"Chắc chắn sẽ lỗ đấy",
+                     font="Sans",
+                     font_size=25),
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs
+            )
+        )
+        self.my_play(Write(speech2))
