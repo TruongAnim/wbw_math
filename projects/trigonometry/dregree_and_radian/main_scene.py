@@ -1,10 +1,10 @@
 from manim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-SCENE_NAME = list_scene[4]
+SCENE_NAME = list_scene[0]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -29,3 +29,8 @@ class MyScene(Scene):
                      subcaption_offset=subcaption_offset,
                      **kwargs)
         self.wait()
+
+class Scene1(MyScene):
+    def construct(self):
+        circle = Circle(radius=2)
+        self.add(circle)
