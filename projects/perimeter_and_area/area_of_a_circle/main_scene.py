@@ -3,9 +3,9 @@ from common.svg.character.number_creature_anim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
 # SCENE_NAME = list_scene[1]
-SCENE_NAME = " ".join(list_scene)
+SCENE_NAME = "Thumbnail"
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -514,3 +514,50 @@ class Scene5(MyScene):
                      )
 
         self.my_play(Circumscribe(area2))
+
+class Thumbnail(MyScene):
+    def construct(self):
+        circle = Circle(radius=2, fill_color=YELLOW,
+                        stroke_width=2,
+                        fill_opacity=1)
+        center = Dot(circle.get_center(), color=RED).scale(0.5)
+        rectangle = Rectangle(width=2 * PI, height=2, stroke_width=1) \
+            .shift(RIGHT * 3)
+        # self.add(circle, center, rectangle)
+
+        sector_count = 100
+        angle = 2 * PI / sector_count
+        start_angle = [i * angle for i in range(sector_count)]
+
+        sector_kwargs = {
+            "outer_radius": 2,
+            "inner_radius": 0,
+            "stroke_width": 2,
+            "stroke_color": RED,
+            "fill_color": WHITE
+        }
+        sectors = [Sector(angle=angle, start_angle=i, **sector_kwargs)
+                   for i in start_angle]
+        line1 = VGroup(*sectors[:int(sector_count / 2)])
+        line2 = VGroup(*sectors[int(sector_count / 2):])
+        target_sectors = [Sector(angle=angle, start_angle=PI / 2 - angle / 2, **sector_kwargs)
+                          for i in range(sector_count)]
+        target_line1 = VGroup(*target_sectors[:int(sector_count / 2)]).arrange(LEFT, buff=0) \
+            .move_to(rectangle)
+        target_line2 = VGroup(*target_sectors[int(sector_count / 2):]).arrange(RIGHT, buff=0) \
+            .move_to(rectangle) \
+            .shift(LEFT * (2 * PI / sector_count))
+
+        shifts_line1 = [i.get_center_of_mass() - j.get_center_of_mass()
+                        for i, j in zip(target_line1, line1)]
+        shifts_line2 = [i.get_center_of_mass() - j.get_center_of_mass()
+                        for i, j in zip(target_line2, line2)]
+
+        self.my_play(LaggedStart(*[
+            FadeIn(i) for i in line1
+        ],*[
+            FadeIn(i) for i in line2
+        ], lag_ratio=0.1))
+        area_text = MathTex("S = \pi r^2", color=BLUE).scale(2).shift(RIGHT*4+UP*1.5)
+        bw = Text("But \nwhy?", color=YELLOW, font_size=80).shift(RIGHT*4+DOWN/2)
+        self.play(Write(area_text), Write(bw))

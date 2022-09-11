@@ -3,13 +3,13 @@ from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6", "Scene7")
-SCENE_NAME = list_scene[1]
-# SCENE_NAME = " ".join(list_scene)
+# SCENE_NAME = list_scene[1]
+SCENE_NAME = "Thumbnail"
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -ps -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -221,3 +221,41 @@ class Scene2(MyScene):
         ],  FadeOut(area2[3]))
 
         self.my_play(Circumscribe(area3))
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        main_circle = Circle(radius=1.5,
+                             stroke_width=2,
+                             fill_color=BLUE,
+                             fill_opacity=0.8) \
+            .shift(UP * 2)
+        self.add(main_circle)
+        num_arc = 5
+        num_arc = 10
+        # num_arc = 50
+        num_arc = 5
+        radius = 1.5
+        arcs = VGroup(*[AnnularSector(
+            inner_radius=i * (radius / num_arc),
+            outer_radius=(i + 1) * (radius / num_arc),
+            angle=2 * PI,
+            start_angle=PI / 2,
+            stroke_width=1,
+            stroke_color=RED,
+            fill_color=YELLOW,
+            fill_opacity=0.7)
+                      .move_to(main_circle) for i in range(num_arc)])
+        stroke_arcs = arcs.copy().set_style(fill_opacity=0,
+                                            stroke_color=YELLOW,
+                                            stroke_opacity=0.7)
+        self.play(*[
+            DrawBorderThenFill(arc) for arc in arcs
+        ])
+        tri = Triangle(fill_opacity=0.8, fill_color=RED).scale(2.5)\
+            .stretch_to_fit_height(2)\
+            .next_to(main_circle, RIGHT, buff=0)\
+            .shift(DOWN*0.3)
+        text = MathTex("=").scale(2).next_to(main_circle, RIGHT)
+        self.play(Write(tri), Write(text))
+        self.wait()
