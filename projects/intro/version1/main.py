@@ -3,13 +3,13 @@ from common.svg.character.number_creature import NumberCreature
 from common.svg.character.number_creature_anim import *
 
 list_scene = ("Intro", "TestPi", "Outro", "Logo", "Background")
-SCENE_NAME = list_scene[4]
+SCENE_NAME = list_scene[0]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 config.background_color = BLACK
 
 if __name__ == "__main__":
-    command = f"manim --disable_caching -s -qk -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -48,6 +48,7 @@ class Intro(Scene):
                   ApplyWave(truong_anim),
                   Blink(pi),
                   run_time=2)
+        self.wait()
 
 
 class Outro(Scene):
