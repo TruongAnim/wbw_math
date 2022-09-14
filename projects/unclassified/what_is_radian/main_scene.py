@@ -9,7 +9,7 @@ list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
 SCENE_NAME = list_scene[13]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -133,7 +133,7 @@ class Scene3(MyScene):
     def construct(self):
         l1 = Line(start=ORIGIN, end=RIGHT * 3, color=GREEN)
         l2 = Line(start=ORIGIN, end=RIGHT * 3, color=BLUE).rotate(30 * DEGREES, about_point=ORIGIN)
-        self.play(Create(l1), Create(l2))
+        self.my_play(Create(l1), Create(l2))
 
         def create_angle():
             angle = Angle(l1, l2, quadrant=(1, 1), color=RED)
@@ -149,16 +149,16 @@ class Scene3(MyScene):
         angle = always_redraw(create_angle)
         self.add(angle)
 
-        self.play(Rotate(l2, PI / 2, about_point=ORIGIN))
-        self.play(Rotate(l2, -PI / 4, about_point=ORIGIN))
-        self.play(Rotate(l2, PI, about_point=ORIGIN))
+        self.my_play(Rotate(l2, PI / 2, about_point=ORIGIN))
+        self.my_play(Rotate(l2, -PI / 4, about_point=ORIGIN))
+        self.my_play(Rotate(l2, PI, about_point=ORIGIN))
 
 
 class Scene4(MyScene):
     def construct(self):
         l1 = Line(start=ORIGIN, end=RIGHT * 3, color=GREEN)
         l2 = Line(start=ORIGIN, end=RIGHT * 3, color=BLUE).rotate(30 * DEGREES, about_point=ORIGIN)
-        self.play(Create(l1), Create(l2))
+        self.my_play(Create(l1), Create(l2))
 
         def create_angle():
             angle = Angle(l1, l2, quadrant=(1, 1), color=RED)
@@ -174,9 +174,9 @@ class Scene4(MyScene):
         angle = always_redraw(create_angle)
         self.add(angle)
 
-        self.play(Rotate(l2, PI / 2, about_point=ORIGIN))
-        self.play(Rotate(l2, -PI / 4, about_point=ORIGIN))
-        self.play(Rotate(l2, PI, about_point=ORIGIN))
+        self.my_play(Rotate(l2, PI / 2, about_point=ORIGIN))
+        self.my_play(Rotate(l2, -PI / 4, about_point=ORIGIN))
+        self.my_play(Rotate(l2, PI, about_point=ORIGIN))
 
 
 class Scene5(MyScene):
@@ -220,7 +220,7 @@ class Scene5(MyScene):
             for i, j in zip((r, a, phi),
                             (4, 2, 0))
         ]))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene6(MyScene):
@@ -261,7 +261,7 @@ class Scene6(MyScene):
                             (4, 2, 0))
         ]))
         self.play(Write(phi2[5]), Write(degree))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene7(MyScene):
@@ -302,7 +302,7 @@ class Scene7(MyScene):
                             (4, 2, 0))
         ]))
         self.play(Write(phi2[5]), Write(degree))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene8(MyScene):
@@ -345,7 +345,7 @@ class Scene8(MyScene):
                             (4, 2, 0))
         ]))
         self.play(Write(phi2[5]), Write(degree), Write(rad))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene9(MyScene):
@@ -388,7 +388,7 @@ class Scene9(MyScene):
                             (4, 2, 0))
         ]))
         self.play(Write(phi2[5]), Write(degree), Write(rad))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene10(MyScene):
@@ -431,7 +431,7 @@ class Scene10(MyScene):
                             (4, 2, 0))
         ]))
         self.play(Write(phi2[5]), Write(degree), Write(rad))
-        self.add(circle, line1, line2, arc, angle, phi, r, a, phi2)
+        self.wait()
 
 
 class Scene11(MyScene):
@@ -455,12 +455,12 @@ class Scene11(MyScene):
         r2 = MathTex("\pi\over 4", color=YELLOW).next_to(angle2.get_right(), DOWN).scale(0.7)
         r3 = MathTex("\pi\over 4", color=YELLOW).next_to(angle3.get_top(), LEFT).scale(0.6)
 
-        self.play(Create(tri))
-        self.play(LaggedStart(*[
+        self.my_play(Create(tri))
+        self.my_play(LaggedStart(*[
             Write(i)
             for i in (angle1, angle2, angle3, t1, t2, t3)
         ]))
-        self.play(*[
+        self.my_play(*[
             Transform(i, j)
             for i, j in zip((t1, t2, t3),
                             (r1, r2, r3))
@@ -502,6 +502,7 @@ class Scene12(MyScene):
                                         bubble_kwargs=bubble_kwargs),
                      Rotate(line, PI / 3))
         self.wait()
+
 
 class Scene13(MyScene):
     def construct(self):
@@ -586,6 +587,6 @@ class Scene14(MyScene):
                                         Text(r"Done!"),
                                         target_mode="plain",
                                         bubble_kwargs=bubble_kwargs2),
-                     Rotate(line, 27*DEGREES), run_time=2)
+                     Rotate(line, 27*DEGREES))
         self.wait()
 
