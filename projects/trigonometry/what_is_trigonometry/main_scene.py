@@ -32,5 +32,5 @@ class MyScene(Scene):
 
 class Scene1(MyScene):
     def construct(self):
-        circle = Circle(radius=2)
-        self.add(circle)
+        tri = Triangle()
+        self.add(tri)
