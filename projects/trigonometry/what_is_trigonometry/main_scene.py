@@ -30,7 +30,11 @@ class MyScene(Scene):
                      **kwargs)
         self.wait()
 
+
 class Scene1(MyScene):
     def construct(self):
-        tri = Triangle()
+        A = RIGHT * 2 + UP * 2
+        B = RIGHT * 2 + DOWN * 2
+        C = DOWN * 2
+        tri = VMobject().set_points_as_corners([A, B, C, A])
         self.add(tri)
