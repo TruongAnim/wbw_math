@@ -2,11 +2,11 @@ from manim import *
 from common.utils.manim_utils import line_intersection_
 from common.utils.utils import lerp
 
-list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
+list_scene = ("Scene1", "Scene2")
 SCENE_NAME = list_scene[1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -82,49 +82,49 @@ class Scene1(MyScene):
         formula2[2].set_color(YELLOW)
         formula2[4].set_color(YELLOW)
         formula2[6].set_color(RED)
-        self.play(DrawBorderThenFill(tree))
-        self.play(FadeIn(brace, shift=RIGHT), FadeIn(brace_tex, shift=RIGHT))
-        self.play(FadeOut(brace, brace_tex))
+        self.my_play(DrawBorderThenFill(tree))
+        self.my_play(FadeIn(brace, shift=RIGHT), FadeIn(brace_tex, shift=RIGHT))
+        self.my_play(FadeOut(brace, brace_tex))
         self.bring_to_back(square2)
-        self.play(Create(ABC), *[
+        self.my_play(Create(ABC), *[
             Write(i) for i in text[0:3]
         ], *[
             Write(i) for i in (A, B, C)
         ])
-        self.play(FadeIn(HK, shift=DOWN * 3))
+        self.my_play(FadeIn(HK, shift=DOWN * 3))
         self.bring_to_back(square1)
-        self.play(*[
+        self.my_play(*[
             Write(i)
             for i in (H, K, text[3], text[4])
         ], Write(AK), Write(AH))
-        self.play(Write(simi_text),
+        self.my_play(Write(simi_text),
                   *[Write(formula1[i]) for i in (1, 3, 5)]
                   )
-        self.play(LaggedStart(*[
+        self.my_play(LaggedStart(*[
             ReplacementTransform(i.copy(), formula1[j])
             for i, j in zip(
                 (BC, AB, HK, AH),
                 (0, 2, 4, 6)
             )
         ], lag_ratio=0.5))
-        self.play(Wiggle(BC, scale_value=1.3),
+        self.my_play(Wiggle(BC, scale_value=1.3),
                   Wiggle(formula1[0], scale_value=1.3),
                   Wiggle(AB, scale_value=1.3),
                   Wiggle(formula1[2], scale_value=1.3))
-        self.play(Wiggle(HK, scale_value=1.3),
+        self.my_play(Wiggle(HK, scale_value=1.3),
                   Wiggle(formula1[4], scale_value=1.3),
                   Wiggle(AH, scale_value=1.3),
                   Wiggle(formula1[6], scale_value=1.3))
-        self.play(Write(to))
-        self.play(LaggedStart(*[
+        self.my_play(Write(to))
+        self.my_play(LaggedStart(*[
             ReplacementTransform(formula1[i].copy(), formula2[j])
             for i, j in zip((0, 1, 2, 3, 4, 5, 6),
                             (0, 5, 6, 1, 2, 3, 4))
         ], lag_ratio=0))
-        self.play(FadeOut(formula1), FadeOut(formula2), FadeOut(to), FadeOut(simi_text))
+        self.my_play(FadeOut(formula1), FadeOut(formula2), FadeOut(to), FadeOut(simi_text))
 
 
-class Scene2(Scene):
+class Scene2(MyScene):
     def construct(self):
         tree = SVGMobject("tree").stretch_to_fit_height(5).shift(RIGHT * 5)
         tree.set_color(GREEN)
@@ -159,14 +159,14 @@ class Scene2(Scene):
         square2 = Square(side_length=0.2).move_to(B).shift(UP * 0.1 + LEFT * 0.1)
 
         group = VGroup(square1, square2, tree, A, B, C, H, AC, K, ABC, AHK, *text)
-        tempA = text[0].get_center()
+        tempA = group.get_corner(DL)
         width = group.width
 
         def update(obj, alpha):
             obj.width = lerp(width / 2, width, 1 - alpha)
-            obj.next_to(tempA, RIGHT, aligned_edge=DOWN)
+            obj.next_to(tempA, RIGHT, buff=0, aligned_edge=DOWN)
 
-        self.play(UpdateFromAlphaFunc(group, update))
+        self.my_play(UpdateFromAlphaFunc(group, update))
         angle = Angle(AH, AK, radius=0.4, color=GREEN)
         alpha = MathTex(r"\alpha", color=GREEN).scale(0.8).next_to(angle, UR, buff=0.05)
 
@@ -182,8 +182,8 @@ class Scene2(Scene):
         EF = Line(E, F, color=TEAL)
 
         simi_text = MathTex(r"\triangle{AHK}", r"\sim", r"\triangle{ABC}", r"\sim", r"\triangle{AEF}").to_edge(UL)
-        simi_text[0].set_color(RED)
-        simi_text[2].set_color(YELLOW)
+        simi_text[0].set_color(YELLOW)
+        simi_text[2].set_color(RED)
         simi_text[4].set_color(TEAL)
         formula1 = MathTex("{KH\over AH}", "=", "{BC\over AB}", "=", "{EF\over AE}", " =", r"f(\alpha)") \
             .next_to(simi_text, DOWN * 1.5, aligned_edge=LEFT)
@@ -203,25 +203,25 @@ class Scene2(Scene):
         formula3[2].set_color(TEAL)
         formula3[4].set_color(GREEN)
 
-        self.play(DrawBorderThenFill(building))
-        self.play(*[Write(i)
+        self.my_play(DrawBorderThenFill(building))
+        self.my_play(*[Write(i)
                     for i in (E_text, F_text, E, F, BE, CF, EF)])
-        self.play(Write(angle), Write(alpha))
-        self.play(Write(simi_text))
-        self.play(Write(formula1[:5]))
-        self.play(ReplacementTransform(alpha.copy(), formula1[6]), Write(formula1[5]))
-        self.play(LaggedStart(*[
+        self.my_play(Write(angle), Write(alpha))
+        self.my_play(Write(simi_text))
+        self.my_play(Write(formula1[:5]))
+        self.my_play(ReplacementTransform(alpha.copy(), formula1[6]), Write(formula1[5]))
+        self.my_play(LaggedStart(*[
             FadeOut(i)
             for i in (H, K, square1, text[3], text[4], AH, AK, HK)
         ], lag_ratio=0.2))
-        self.play(LaggedStart(*[
+        self.my_play(LaggedStart(*[
             Write(formula2),
             Write(formula3)
         ]))
         tan1 = MathTex(r"tan(\alpha)", color=GREEN).next_to(formula1[5], RIGHT)
         tan2 = MathTex(r"tan(\alpha)", color=GREEN).next_to(formula2[3], RIGHT)
         tan3 = MathTex(r"tan(\alpha)", color=GREEN).next_to(formula3[3], RIGHT)
-        self.play(
+        self.my_play(
             Transform(formula1[6], tan1),
             Transform(formula2[4], tan2),
             Transform(formula3[4], tan3),

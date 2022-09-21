@@ -5,7 +5,7 @@ PROJECT_NAME = "What_is_trigonometry"
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
 SCENE_NAME = PROJECT_NAME+"_"+list_scene[0]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -54,9 +54,12 @@ class What_is_trigonometry_Scene1(MyScene):
                         color=YELLOW,
                         alignment="center",
                         line_spacing=0.5)
+        self.play(FadeIn(pi, shift=RIGHT*2))
+        self.wait()
         self.my_play(NumberCreatureThinks(pi,
                                           wbw,
                                           target_mode="wonder",
                                           bubble_kwargs=bubble_kwargs
                                           )
                      )
+        self.wait()
