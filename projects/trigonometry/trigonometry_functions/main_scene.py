@@ -1,8 +1,8 @@
 from manim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-# SCENE_NAME = list_scene[4]
-SCENE_NAME = " ".join(list_scene)
+SCENE_NAME = list_scene[4]
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -322,9 +322,9 @@ class Scene5(MyScene):
         cotan_en = Text("Multiplicative inverse", font_size=30, color=RED).next_to(fraction2, DOWN)
         cotan_vn = Text("Nghịch đảo phép nhân", font="Sans", font_size=30, color=YELLOW).next_to(cotan_en, DOWN)
         arctan_en = Text("Inverse", font_size=30, color=RED).next_to(cotan_en, RIGHT, buff=2.5)
-        arctan_vn = Text("Nghịch đảo (Hàm ngược)", font="Sans", font_size=30, color=YELLOW)\
+        arctan_vn = Text("Hàm lượng giác ngược", font="Sans", font_size=30, color=YELLOW)\
             .next_to(arctan_en, DOWN)\
-            .shift(RIGHT)
+            .shift(RIGHT*0.5)
 
         self.my_play(*[
             Write(i)
