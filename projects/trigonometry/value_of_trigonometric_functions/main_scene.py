@@ -110,5 +110,12 @@ class Scene1(MyScene):
         vc = Text("Vuông cân", font="Sans").next_to(arrow.get_start(), LEFT)
         self.play(GrowArrow(arrow), Write(vc))
         self.play(ReplacementTransform(a1.copy(), a2))
-        tan = MathTex("tan(", "45^\circ", ")=", "{a", "\over", "a}", "=1")
+        tan = MathTex("tan(", "45^\circ", ")=", "{a", "\over", "a}", "=1")\
+            .shift(RIGHT*3+UP*3)
+        sin1 = MathTex("sin(", "45^\circ", ")=", "{a", "\over", "\sqrt{2}a}", "=1")\
+            .next_to(tan, DOWN, aligned_edge=LEFT)
+        sin2 = MathTex("sin(", "45^\circ", ")=", "{\sqrt{2}", "\over", "2}", "=1")\
+            .next_to(tan, DOWN, aligned_edge=LEFT)
+        self.play(Write(tan))
+        self.play(Transform(sin1, sin2))
 
