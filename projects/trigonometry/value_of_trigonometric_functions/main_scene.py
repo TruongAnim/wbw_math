@@ -108,14 +108,22 @@ class Scene1(MyScene):
         ]))
         arrow = Arrow(start=A.get_center()+UP*3, end=ABC.get_center())
         vc = Text("Vuông cân", font="Sans").next_to(arrow.get_start(), LEFT)
+        huyen = MathTex("\sqrt{2}a", color=RED).move_to(ABC.get_center()+LEFT)
         self.play(GrowArrow(arrow), Write(vc))
         self.play(ReplacementTransform(a1.copy(), a2))
         tan = MathTex("tan(", "45^\circ", ")=", "{a", "\over", "a}", "=1")\
             .shift(RIGHT*3+UP*3)
-        sin1 = MathTex("sin(", "45^\circ", ")=", "{a", "\over", "\sqrt{2}a}", "=1")\
+        sin = MathTex("sin(", "45^\circ", ")=", "{a", "\over", "\sqrt{2}a}", "=\sqrt{2} \over 2")\
             .next_to(tan, DOWN, aligned_edge=LEFT)
-        sin2 = MathTex("sin(", "45^\circ", ")=", "{\sqrt{2}", "\over", "2}", "=1")\
-            .next_to(tan, DOWN, aligned_edge=LEFT)
-        self.play(Write(tan))
-        self.play(Transform(sin1, sin2))
+        cos = MathTex("cos(", "45^\circ", ")=", "{a", "\over", "\sqrt{2}a}", "=\sqrt{2} \over 2")\
+            .next_to(sin, DOWN, aligned_edge=LEFT)
+        
+        for i, color in zip((tan, sin, cos),
+                                    ((YELLOW, BLUE), (YELLOW, RED), (BLUE, RED))):
+            i[1].set_color(GREEN)
+            i[3].set_color(color[0])
+            i[5].set_color(color[1])
+
+        self.play(FadeOut(arrow), FadeOut(vc))
+        self.play(Transform(a1, huyen), Transform(a2, huyen))
 
