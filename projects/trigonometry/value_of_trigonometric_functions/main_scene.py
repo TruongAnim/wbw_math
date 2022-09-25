@@ -125,5 +125,7 @@ class Scene1(MyScene):
             i[5].set_color(color[1])
 
         self.play(FadeOut(arrow), FadeOut(vc))
-        self.play(Transform(a1, huyen), Transform(a2, huyen))
+        self.play(Transform(a1.copy(), huyen), Transform(a2.copy(), huyen))
+        self.play(Write(sin[:3]), Write(sin[4]))
+        self.play(Transform(a2, sin[3]), Transform(huyen, sin[5]))
 
