@@ -1,7 +1,7 @@
 from manim import *
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-SCENE_NAME = list_scene[2]
+SCENE_NAME = list_scene[3]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
@@ -142,7 +142,7 @@ class Scene2(MyScene):
         ABC = VGroup(AB, AC, BC)
         a1 = MathTex("a", color=BLUE).next_to(AB, DOWN)
         a2 = MathTex("a", color=BLUE).next_to(BD, DOWN)
-        h = MathTex("\sqrt{3}a", color=YELLOW).next_to(BC, LEFT).shift(DOWN*0.5)
+        h = MathTex("\sqrt{3}a", color=YELLOW).next_to(BC, LEFT).shift(DOWN * 0.5)
         square1 = Square(side_length=0.2).move_to(B).shift(UP * 0.1 + LEFT * 0.1)
         angle1 = Angle(AB, AC, radius=0.8, color=GREEN)
         alpha1 = MathTex(r"60^\circ", color=GREEN).move_to(Angle(AB, AC, radius=1.5))
@@ -218,3 +218,20 @@ class Scene2(MyScene):
         self.play(ReplacementTransform(h.copy(), cot[6]),
                   ReplacementTransform(a1.copy(), cot[8]))
         self.play(Write(cot[-1]))
+
+
+class Scene3(MyScene):
+    def construct(self):
+        sin = MathTex("sin(x) = x-{x^3\over3!}+{x^5\over5!}-{x^7\over7!}+{x^9\over9!}-...", color=RED)
+        cos = MathTex("cos(x) = 1-{x^2\over2!}+{x^4\over4!}-{x^6\over6!}+{x^8\over8!}-...", color=YELLOW)
+        tan = MathTex("tan(x) = ", "{sin(x)", "\over", " cos(x)}", color=BLUE)
+        cot = MathTex("cot(x) = ", "{cos(x)", " \over ", "sin(x)}", color=GREEN)
+        tan[1].set_color(RED)
+        tan[3].set_color(YELLOW)
+        cot[1].set_color(YELLOW)
+        cot[3].set_color(RED)
+        sin.shift(UP * 3)
+        cos.next_to(sin, DOWN, aligned_edge=LEFT)
+        tan.next_to(cos, DOWN, aligned_edge=LEFT)
+        cot.next_to(tan, DOWN, aligned_edge=LEFT)
+        self.play(LaggedStart(*[Write(i) for i in (sin, cos, tan, cot)]))

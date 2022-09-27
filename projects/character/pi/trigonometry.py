@@ -3,7 +3,7 @@ from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = PROJECT_NAME+"_"+list_scene[1]
+SCENE_NAME = PROJECT_NAME+"_"+list_scene[3]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -91,4 +91,68 @@ class Trigonometry_Scene1(MyScene):
                                           bubble_kwargs=bubble_kwargs
                                           )
                      )
+        self.wait()
+
+
+class Trigonometry_Scene2(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=True).to_corner(DR)
+        computer = NumberCreature(
+            file_name_prefix="computer",
+            mode="plain",
+            color=BLUE).to_corner(DL)
+        bubble_kwargs = {
+            "stroke_width": 2,
+            "stroke_color": WHITE,
+            "stretch_width": 4,
+            "stretch_height": 1.5
+        }
+
+        self.my_play(NumberCreatureSays(pi,
+                                        MathTex(r"sin(53.6^\circ)=???"),
+                                        target_mode="plain",
+                                        bubble_kwargs=bubble_kwargs))
+        self.my_play(NumberCreatureSays(computer,
+                                        MathTex(r"\text{Easy: } 0.80489"),
+                                        target_mode="plain",
+                                        bubble_kwargs=bubble_kwargs))
+        self.wait()
+
+
+class Trigonometry_Scene3(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1"
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = Text("Tưởng gì, dễ!", font="Sans")
+        self.play(FadeIn(pi, shift=RIGHT*2))
+        self.wait()
+
+        self.play(
+            NumberCreatureSays(
+            pi,
+            text1,
+            target_mode="smile1",
+            bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.wait()
+        text2 = Text("À ừ nhỉ\ntính kiểu gì bây giờ?", font="Sans", font_size=30)
+        self.my_play(
+            NumberCreatureSays(pi,
+            text2,
+            target_mode="wonder",
+            use_fade_transform=True,
+            bubble_kwargs=bubble_kwargs
+            ))
         self.wait()
