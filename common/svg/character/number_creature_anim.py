@@ -15,6 +15,7 @@ class NumberCreatureBubbleIntroduction(AnimationGroup):
             content_introduction_class=Write,
             content_introduction_kwargs={},
             look_at_arg=None,
+            use_fade_transform=False,
             **kwargs
     ):
         self.target_mode = target_mode
@@ -39,8 +40,10 @@ class NumberCreatureBubbleIntroduction(AnimationGroup):
         if self.look_at_arg is not None:
             creature.target.look_at(self.look_at_arg)
 
-        # change_mode = MoveToTarget(creature, **self.change_mode_kwargs)
-        change_mode = FadeTransform(creature, creature.target, **self.change_mode_kwargs)
+        if use_fade_transform:
+            change_mode = FadeTransform(creature, creature.target, **self.change_mode_kwargs)
+        else:
+            change_mode = MoveToTarget(creature, **self.change_mode_kwargs)
         bubble_creation = self.bubble_creation_class(
             bubble, **self.bubble_creation_kwargs
         )
