@@ -1,10 +1,10 @@
 from manim import *
 
-list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-SCENE_NAME = list_scene[3]
-# SCENE_NAME = " ".join(list_scene)
+list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
+# SCENE_NAME = list_scene[3]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -63,19 +63,19 @@ class Scene0(MyScene):
         formula[0].set_color(RED)
         formula2[1].set_color(RED)
         string_len = MathTex("300m", color=RED).next_to(AC.get_center(), LEFT)
-        self.play(LaggedStart(*[
+        self.my_play(LaggedStart(*[
             DrawBorderThenFill(kite),
             Create(ABC),
             *[Write(i)
               for i in (A, B, C, square1, *text)]
         ]))
-        self.play(Write(string_len), Write(angle), Write(alpha))
-        self.play(*[
+        self.my_play(Write(string_len), Write(angle), Write(alpha))
+        self.my_play(*[
             Write(i)
             for i in (brace, brace_tex, formula)
         ])
-        self.play(Write(formula2))
-        self.play(Circumscribe(formula2[3]))
+        self.my_play(Write(formula2))
+        self.my_play(Circumscribe(formula2[3]))
 
 
 class Scene1(MyScene):
@@ -100,8 +100,8 @@ class Scene1(MyScene):
         arrow = Arrow(start=A.get_center() + UP * 3, end=ABC.get_center())
         vc = Text("Vuông cân", font="Sans").next_to(arrow.get_start(), LEFT)
         huyen = MathTex("\sqrt{2}a", color=RED).move_to(ABC.get_center() + LEFT)
-        self.play(GrowArrow(arrow), Write(vc))
-        self.play(ReplacementTransform(a1.copy(), a2))
+        self.my_play(GrowArrow(arrow), Write(vc))
+        self.my_play(ReplacementTransform(a1.copy(), a2))
         tan = MathTex("tan(", "45^\circ", ")=", "{a", "\over", "a}", "=1") \
             .shift(RIGHT * 3 + UP * 3)
         sin = MathTex("sin(", "45^\circ", ")=", "{a", "\over", "\sqrt{2}a}", "={\sqrt{2} \over 2}") \
@@ -115,17 +115,17 @@ class Scene1(MyScene):
             i[3].set_color(color[0])
             i[5].set_color(color[1])
 
-        self.play(Write(tan[:3]), Write(tan[4]))
-        self.play(ReplacementTransform(a2.copy(), tan[3]), ReplacementTransform(a1.copy(), tan[5]))
-        self.play(Write(tan[6]))
-        self.play(FadeOut(arrow), FadeOut(vc))
-        self.play(Transform(a1.copy(), huyen), Transform(a2.copy(), huyen))
-        self.play(Write(sin[:3]), Write(sin[4]))
-        self.play(Transform(a2.copy(), sin[3]), ReplacementTransform(huyen.copy(), sin[5]))
-        self.play(Write(sin[6]))
-        self.play(Write(cos[:3]), Write(cos[4]))
-        self.play(Transform(a1.copy(), cos[3]), ReplacementTransform(huyen.copy(), cos[5]))
-        self.play(Write(cos[6]))
+        self.my_play(Write(tan[:3]), Write(tan[4]))
+        self.my_play(ReplacementTransform(a2.copy(), tan[3]), ReplacementTransform(a1.copy(), tan[5]))
+        self.my_play(Write(tan[6]))
+        self.my_play(FadeOut(arrow), FadeOut(vc))
+        self.my_play(Transform(a1.copy(), huyen), Transform(a2.copy(), huyen))
+        self.my_play(Write(sin[:3]), Write(sin[4]))
+        self.my_play(Transform(a2.copy(), sin[3]), ReplacementTransform(huyen.copy(), sin[5]))
+        self.my_play(Write(sin[6]))
+        self.my_play(Write(cos[:3]), Write(cos[4]))
+        self.my_play(Transform(a1.copy(), cos[3]), ReplacementTransform(huyen.copy(), cos[5]))
+        self.my_play(Write(cos[6]))
 
 
 class Scene2(MyScene):
@@ -159,15 +159,15 @@ class Scene2(MyScene):
               for i in (square1, A, B, C, alpha1, angle1, alpha3, angle3, a1)]
         ]))
         BCD = VGroup(CD, D, BD)
-        self.play(LaggedStart(*[
+        self.my_play(LaggedStart(*[
             Create(BCD),
             Write(angle2), Write(alpha2), Write(alpha4), Write(angle4), FadeIn(a2, shift=UP)
         ]))
         tgd = Text("Tam giác đều", font="Sans", font_size=28).to_corner(UL)
         arrow = Arrow(start=tgd.get_bottom(), end=ABC.get_center())
         huyen = MathTex("2a", color=RED).move_to(ABC.get_center() + UL * 0.5)
-        self.play(GrowArrow(arrow), Write(tgd))
-        self.play(FadeOut(arrow), FadeOut(tgd),
+        self.my_play(GrowArrow(arrow), Write(tgd))
+        self.my_play(FadeOut(arrow), FadeOut(tgd),
                   ReplacementTransform(a1.copy(), huyen),
                   ReplacementTransform(a2.copy(), huyen),
                   )
@@ -196,28 +196,28 @@ class Scene2(MyScene):
             i[6].set_color(color[2])
             i[8].set_color(color[3])
 
-        self.play(Write(sin[:6]), Write(sin[7]))
-        self.play(Transform(a1.copy(), sin[6]),
+        self.my_play(Write(sin[:6]), Write(sin[7]))
+        self.my_play(Transform(a1.copy(), sin[6]),
                   ReplacementTransform(huyen.copy(), sin[8]))
-        self.play(Write(sin[-1]))
+        self.my_play(Write(sin[-1]))
 
-        self.play(ReplacementTransform(huyen.copy(), h),
+        self.my_play(ReplacementTransform(huyen.copy(), h),
                   ReplacementTransform(a1.copy(), h))
 
-        self.play(Write(cos[:6]), Write(cos[7]))
-        self.play(ReplacementTransform(h.copy(), cos[6]),
+        self.my_play(Write(cos[:6]), Write(cos[7]))
+        self.my_play(ReplacementTransform(h.copy(), cos[6]),
                   ReplacementTransform(huyen.copy(), cos[8]))
-        self.play(Write(cos[-1]))
+        self.my_play(Write(cos[-1]))
 
-        self.play(Write(tan[:6]), Write(tan[7]))
-        self.play(ReplacementTransform(a1.copy(), tan[6]),
+        self.my_play(Write(tan[:6]), Write(tan[7]))
+        self.my_play(ReplacementTransform(a1.copy(), tan[6]),
                   ReplacementTransform(h.copy(), tan[8]))
-        self.play(Write(tan[-1]))
+        self.my_play(Write(tan[-1]))
 
-        self.play(Write(cot[:6]), Write(cot[7]))
-        self.play(ReplacementTransform(h.copy(), cot[6]),
+        self.my_play(Write(cot[:6]), Write(cot[7]))
+        self.my_play(ReplacementTransform(h.copy(), cot[6]),
                   ReplacementTransform(a1.copy(), cot[8]))
-        self.play(Write(cot[-1]))
+        self.my_play(Write(cot[-1]))
 
 
 class Scene3(MyScene):
@@ -234,4 +234,4 @@ class Scene3(MyScene):
         cos.next_to(sin, DOWN, aligned_edge=LEFT)
         tan.next_to(cos, DOWN, aligned_edge=LEFT)
         cot.next_to(tan, DOWN, aligned_edge=LEFT)
-        self.play(LaggedStart(*[Write(i) for i in (sin, cos, tan, cot)]))
+        self.my_play(LaggedStart(*[Write(i) for i in (sin, cos, tan, cot)]))

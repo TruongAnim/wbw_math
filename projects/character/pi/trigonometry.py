@@ -3,7 +3,7 @@ from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = PROJECT_NAME+"_"+list_scene[3]
+SCENE_NAME = PROJECT_NAME+"_"+list_scene[2]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -63,6 +63,7 @@ class Trigonometry_Scene0(MyScene):
                                           )
                      )
         self.wait()
+
 
 class Trigonometry_Scene1(MyScene):
     def construct(self):
