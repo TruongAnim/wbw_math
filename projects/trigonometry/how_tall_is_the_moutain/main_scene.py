@@ -1,11 +1,11 @@
 from manim import *
 import math
 
-list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-SCENE_NAME = list_scene[2]
-# SCENE_NAME = " ".join(list_scene)
+list_scene = ("Scene0", "Scene1", "Scene2")
+# SCENE_NAME = list_scene[2]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -63,21 +63,21 @@ class Scene0(MyScene):
         formula1[0].set_color(RED)
         formula1[2].set_color(BLUE)
         formula1.to_edge(UL)
-        self.play(DrawBorderThenFill(moutain1),
+        self.my_play(DrawBorderThenFill(moutain1),
                   Create(HK),
                   Write(text[0]),
                   Create(K),
                   Create(H))
-        self.play(Create(AK),
+        self.my_play(Create(AK),
                   Create(AH),
                   Create(alpha),
                   Create(A))
-        self.play(FadeIn(text[5], shift=LEFT),
+        self.my_play(FadeIn(text[5], shift=LEFT),
                   FadeIn(text[1], shift=UP),
                   FadeIn(text[3], shift=UP),
                   FadeIn(text[4], shift=DOWN))
-        self.play(Write(formula1))
-        self.play(Transform(AH, AH_dash), Create(cross), Create(Cross(formula1[2])))
+        self.my_play(Write(formula1))
+        self.my_play(Transform(AH, AH_dash), Create(cross), Create(Cross(formula1[2])))
         self.add(moutain1, K, H, hk_text, HK,
                  A, B, AH, BA, BK, AK,
                  cross, alpha, beta, *text)
@@ -128,25 +128,25 @@ class Scene1(MyScene):
         formula4[3].set_color(BLUE)
         formula3.next_to(formula2, DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF)
         formula4.next_to(formula3, DOWN, aligned_edge=LEFT)
-        self.play(DrawBorderThenFill(moutain1),
+        self.my_play(DrawBorderThenFill(moutain1),
                   Create(HK),
                   Write(text[0]),
                   Create(K),
                   Create(H))
-        self.play(Create(AK),
+        self.my_play(Create(AK),
                   Create(AH_dash),
                   Create(alpha),
                   Create(A))
-        self.play(FadeIn(text[5], shift=LEFT),
+        self.my_play(FadeIn(text[5], shift=LEFT),
                   FadeIn(text[1], shift=UP),
                   FadeIn(text[3], shift=UP),
                   FadeIn(text[4], shift=DOWN))
-        self.play(Create(BK), Create(BA), Create(B))
-        self.play(Create(beta), FadeIn(text[-1], shift=LEFT), FadeIn(text[2], shift=UP))
+        self.my_play(Create(BK), Create(BA), Create(B))
+        self.my_play(Create(beta), FadeIn(text[-1], shift=LEFT), FadeIn(text[2], shift=UP))
 
-        self.play(Write(formula1), Write(formula2), FadeIn(brace, shift=RIGHT))
-        self.play(Write(formula3))
-        self.play(Write(formula4))
+        self.my_play(Write(formula1), Write(formula2), FadeIn(brace, shift=RIGHT))
+        self.my_play(Write(formula3))
+        self.my_play(Write(formula4))
 
 
 class Scene2(MyScene):
@@ -198,28 +198,28 @@ class Scene2(MyScene):
         formula4[-1].set_color(RED)
         formula3.to_edge(UL, buff=MED_LARGE_BUFF)
         formula4.next_to(formula3, DOWN, aligned_edge=LEFT, buff=MED_LARGE_BUFF)
-        self.play(DrawBorderThenFill(moutain1),
+        self.my_play(DrawBorderThenFill(moutain1),
                   Create(HK),
                   Write(text[0]),
                   Create(K),
                   Create(H))
-        self.play(Create(AK),
+        self.my_play(Create(AK),
                   Create(AH_dash),
                   Create(alpha),
                   Create(A))
-        self.play(FadeIn(text[5], shift=LEFT),
+        self.my_play(FadeIn(text[5], shift=LEFT),
                   FadeIn(text[1], shift=UP),
                   FadeIn(text[3], shift=UP),
                   FadeIn(text[4], shift=DOWN))
-        self.play(Create(BK), Create(BA), Create(B))
-        self.play(Create(beta),
+        self.my_play(Create(BK), Create(BA), Create(B))
+        self.my_play(Create(beta),
                   FadeIn(text[-1], shift=LEFT),
                   FadeIn(text[2], shift=UP),
                   FadeIn(brace, shift=UP),
                   FadeIn(brace_tex, shift=UP))
 
-        self.play(Write(formula3))
-        self.play(Write(formula4))
+        self.my_play(Write(formula3))
+        self.my_play(Write(formula4))
         copy = formula4[-1].copy()
-        self.play(copy.animate.next_to(HK, RIGHT), FadeOut(text[0]))
-        self.play(Circumscribe(formula4[-1]), Circumscribe(copy))
+        self.my_play(copy.animate.next_to(HK, RIGHT), FadeOut(text[0]))
+        self.my_play(Circumscribe(formula4[-1]), Circumscribe(copy))
