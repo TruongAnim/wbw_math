@@ -3,16 +3,16 @@ import math
 from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 
-list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
+list_scene = ("Thumbnail", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10",
               "Scene11", "Scene12", "Scene13", "Scene14")
-SCENE_NAME = list_scene[13]
+SCENE_NAME = list_scene[0]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim  -ps -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -35,6 +35,19 @@ class MyScene(Scene):
                      **kwargs)
         self.wait()
 
+class Thumbnail(Scene):
+    def construct(self):
+        proportion = 1 / (2 * PI)
+        circle = Circle(radius=3, color=WHITE)
+        A = circle.point_from_proportion(proportion)
+        arc = circle.get_subcurve(0, proportion)
+        arc.set_stroke(WHITE, width=5)
+        circle.set_fill(BLUE, opacity=1)
+        arc.add_points_as_corners([circle.get_center(), circle.get_start()])
+        arc.set_fill(RED, opacity=1)
+        text = MathTex(r"1 \text{ }rad", color=YELLOW).scale(2.5).to_edge(RIGHT, buff=0.1).shift(UP*2)
+        arrow = Arrow(start=text.get_left(), end=UP+RIGHT*1.5)
+        self.add(circle, arc, text, arrow)
 
 class Scene1(MyScene):
     def construct(self):

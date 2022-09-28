@@ -3,9 +3,9 @@ from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = PROJECT_NAME+"_"+list_scene[3]
+SCENE_NAME = PROJECT_NAME+"_"+list_scene[2]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -63,6 +63,7 @@ class Trigonometry_Scene0(MyScene):
                                           )
                      )
         self.wait()
+
 
 class Trigonometry_Scene1(MyScene):
     def construct(self):
@@ -138,7 +139,7 @@ class Trigonometry_Scene3(MyScene):
         self.play(FadeIn(pi, shift=RIGHT*2))
         self.wait()
 
-        self.play(
+        self.my_play(
             NumberCreatureSays(
             pi,
             text1,
@@ -146,7 +147,6 @@ class Trigonometry_Scene3(MyScene):
             bubble_kwargs=bubble_kwargs,
             )
         )
-        self.wait()
         text2 = Text("À ừ nhỉ\ntính kiểu gì bây giờ?", font="Sans", font_size=30)
         self.my_play(
             NumberCreatureSays(pi,
@@ -155,4 +155,3 @@ class Trigonometry_Scene3(MyScene):
             use_fade_transform=True,
             bubble_kwargs=bubble_kwargs
             ))
-        self.wait()
