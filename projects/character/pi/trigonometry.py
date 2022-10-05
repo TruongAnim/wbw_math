@@ -3,7 +3,7 @@ from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = PROJECT_NAME+"_"+list_scene[2]
+SCENE_NAME = PROJECT_NAME+"_"+list_scene[5]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -155,3 +155,68 @@ class Trigonometry_Scene3(MyScene):
             use_fade_transform=True,
             bubble_kwargs=bubble_kwargs
             ))
+
+
+class Trigonometry_Scene4(MyScene):
+    def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR)
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = MarkupText('Chúng ta sẽ tìm hiểu\n   về <span foreground="yellow">lượng giác</span>', font="sans")
+        text2 = MarkupText('<span foreground="yellow">sin cos</span> các thứ\nchắc khó lắm...', font="sans", font_size=25)
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+        self.my_play(
+            NumberCreatureSays(
+            pi1,
+            text1,
+            target_mode="smile1",
+            bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureThinks(
+            pi2,
+            text2,
+            target_mode="wonder",
+            bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+class Trigonometry_Scene5(MyScene):
+    myTemplate = TexTemplate()
+    myTemplate.add_to_preamble(r"\usepackage{vntex}")
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR)
+        text1 = Text("sin cos tan là gì?", font="Sans", font_size=27)
+        text2 = Text("Bảng giá trị lượng giác từ đâu ra?", font="Sans", font_size=27)
+        text3 = MathTex(r"\text{Tại sao } sin(45^\circ)={\sqrt{2}\over{2}}?", tex_template=self.myTemplate)
+        text4 = Text("Làm sao sử dụng sin cos trong tam giác không vuông?", font_size=27, font="Sans")
+        text5 = MathTex(r"\text{Tại sao } sin^{2}a+cos^{2}a=1?", tex_template=self.myTemplate)
+        text6 = Text("...", font_size=27, font="Sans")
+
+        group = VGroup(text1, text2, text3, text4, text5, text6).arrange(DOWN, aligned_edge=LEFT).shift(UP)
+        group.scale(1.2)
+        self.play(FadeIn(pi, shift=LEFT*2))
+        for i in group:
+            self.play(Write(i))
+        self.wait()
