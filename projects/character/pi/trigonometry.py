@@ -2,10 +2,11 @@ from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
-list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = PROJECT_NAME+"_"+list_scene[5]
+list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
+              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10")
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[6]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -15,9 +16,9 @@ if __name__ == "__main__":
 
 class MyScene(Scene):
     def setup(self):
-        self.slice_stroke_color=RED
-        self.slice_fill_color=TEAL,
-        self.slice_fill_opacity=0.5
+        self.slice_stroke_color = RED
+        self.slice_fill_color = TEAL,
+        self.slice_fill_opacity = 0.5
 
     def my_play(
             self,
@@ -54,7 +55,7 @@ class Trigonometry_Scene0(MyScene):
                         color=YELLOW,
                         alignment="center",
                         line_spacing=0.5)
-        self.play(FadeIn(pi, shift=RIGHT*2))
+        self.play(FadeIn(pi, shift=RIGHT * 2))
         self.wait()
         self.my_play(NumberCreatureThinks(pi,
                                           wbw,
@@ -84,13 +85,13 @@ class Trigonometry_Scene1(MyScene):
                         alignment="center",
                         line_spacing=0.5).next_to(sin, DOWN)
         group = VGroup(sin, wbw)
-        self.play(FadeIn(pi, shift=RIGHT*2))
+        self.play(FadeIn(pi, shift=RIGHT * 2))
         self.wait()
         self.my_play(NumberCreatureSays(pi,
-                                          group,
-                                          target_mode="plain",
-                                          bubble_kwargs=bubble_kwargs
-                                          )
+                                        group,
+                                        target_mode="plain",
+                                        bubble_kwargs=bubble_kwargs
+                                        )
                      )
         self.wait()
 
@@ -136,25 +137,25 @@ class Trigonometry_Scene3(MyScene):
             "stroke_color": WHITE
         }
         text1 = Text("Tưởng gì, dễ!", font="Sans")
-        self.play(FadeIn(pi, shift=RIGHT*2))
+        self.play(FadeIn(pi, shift=RIGHT * 2))
         self.wait()
 
         self.my_play(
             NumberCreatureSays(
-            pi,
-            text1,
-            target_mode="smile1",
-            bubble_kwargs=bubble_kwargs,
+                pi,
+                text1,
+                target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
             )
         )
         text2 = Text("À ừ nhỉ\ntính kiểu gì bây giờ?", font="Sans", font_size=30)
         self.my_play(
             NumberCreatureSays(pi,
-            text2,
-            target_mode="wonder",
-            use_fade_transform=True,
-            bubble_kwargs=bubble_kwargs
-            ))
+                               text2,
+                               target_mode="wonder",
+                               use_fade_transform=True,
+                               bubble_kwargs=bubble_kwargs
+                               ))
 
 
 class Trigonometry_Scene4(MyScene):
@@ -177,29 +178,32 @@ class Trigonometry_Scene4(MyScene):
             "stroke_color": WHITE
         }
         text1 = MarkupText('Chúng ta sẽ tìm hiểu\n   về <span foreground="yellow">lượng giác</span>', font="sans")
-        text2 = MarkupText('<span foreground="yellow">sin cos</span> các thứ\nchắc khó lắm...', font="sans", font_size=25)
+        text2 = MarkupText('<span foreground="yellow">sin cos</span> các thứ\nchắc khó lắm...', font="sans",
+                           font_size=25)
         self.play(FadeIn(pi1, shift=LEFT * 2))
         self.my_play(
             NumberCreatureSays(
-            pi1,
-            text1,
-            target_mode="smile1",
-            bubble_kwargs=bubble_kwargs,
+                pi1,
+                text1,
+                target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
             )
         )
         self.play(FadeIn(pi2, shift=RIGHT * 2))
         self.my_play(
             NumberCreatureThinks(
-            pi2,
-            text2,
-            target_mode="wonder",
-            bubble_kwargs=bubble_kwargs,
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
             )
         )
+
 
 class Trigonometry_Scene5(MyScene):
     myTemplate = TexTemplate()
     myTemplate.add_to_preamble(r"\usepackage{vntex}")
+
     def construct(self):
         pi = NumberCreature(
             file_name_prefix="PiCreatures",
@@ -216,7 +220,35 @@ class Trigonometry_Scene5(MyScene):
 
         group = VGroup(text1, text2, text3, text4, text5, text6).arrange(DOWN, aligned_edge=LEFT).shift(UP)
         group.scale(1.2)
-        self.play(FadeIn(pi, shift=LEFT*2))
+        self.play(FadeIn(pi, shift=LEFT * 2))
         for i in group:
             self.play(Write(i))
+        self.wait()
+
+
+class Trigonometry_Scene6(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder"
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        wbw = Paragraph("Đây đâu phải tam giác vuông?",
+                        font="Sans",
+                        color=YELLOW,
+                        alignment="center",
+                        line_spacing=0.5)
+        self.play(FadeIn(pi, shift=RIGHT * 2))
+        self.wait()
+        self.my_play(NumberCreatureThinks(pi,
+                                          wbw,
+                                          target_mode="wonder",
+                                          bubble_kwargs=bubble_kwargs
+                                          )
+                     )
         self.wait()
