@@ -2,10 +2,10 @@ from manim import *
 import math
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[3]
+SCENE_NAME = list_scene[2]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -183,7 +183,7 @@ class Scene2(MyScene):
         ]))
         self.my_play(Write(equation2))
         self.my_play(Write(equation3))
-        self.my_play(equation3[-1].copy().animate.move_to(a).set_color(BLUE), FadeOut(a))
+        self.my_play(equation3[-1].copy().animate.move_to(a).set_color(YELLOW), FadeOut(a))
 
 
 class Scene3(MyScene):
@@ -198,6 +198,7 @@ class Scene3(MyScene):
         BC = Line(B, C, color=YELLOW)
         AC = Line(C, A, color=BLUE)
         BH = Line(B, H, color=GREEN)
+        H_angle = RightAngle(BH, AC, quadrant=(-1, -1))
         A_angle = Angle(AC, AB, quadrant=(-1, 1))
         A_angle_t = MathTex("60^\circ").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=1))
         B_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
@@ -213,12 +214,13 @@ class Scene3(MyScene):
         self.play(*[Write(i) for i in (c, A_angle_t, b)],
                   *[Create(i) for i in (A_angle)])
         self.wait()
-        self.play(Create(BH), Create(H))
+        self.play(Create(BH), Create(H), Create(H_angle))
+        self.wait()
         self.play(*[Write(h[i]) for i in (1, 3)],
                   Transform(c.copy(),h[0]),
                   Transform(A_angle_t.copy(), h[2]))
 
-        equation1 = MathTex("\Rightarrow", r"\text{Area}=", "{1\over 2}", "a", "b", "sin(60^\circ)") \
+        equation1 = MathTex("\Rightarrow", r"\text{Area}=", "{1\over 2}", "a", "b", "sin(", "60^\circ", ")") \
             .shift(LEFT*3)
         color_map = {
             "a": RED,
@@ -232,6 +234,6 @@ class Scene3(MyScene):
             Write(equation1[i]) for i in (0, 1, 2)
         ]))
         self.my_play(LaggedStart(*[
-            Transform(j.copy(), equation1[i]) for i, j in zip((3, 4, 5),
-                                                              (h[0], b, h[1]))
+            Transform(j.copy(), equation1[i]) for i, j in zip((3, 4, 5, 6, 7),
+                                                              (h[0], b, h[1], h[2], h[3]))
         ]))
