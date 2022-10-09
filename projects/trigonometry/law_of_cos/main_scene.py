@@ -5,7 +5,7 @@ list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
 SCENE_NAME = list_scene[0]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -43,20 +43,54 @@ class Scene0(MyScene):
         AB = Line(A, B, color=RED)
         BC = Line(B, C, color=YELLOW)
         AC = Line(C, A, color=BLUE)
-        BH = Line(B, H, color=GREEN)
         A_angle = Angle(AC, AB, quadrant=(-1, 1))
-        A_angle_t = MathTex("60^\circ").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=1))
-        B_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
-        B_angle_t = MathTex("50^\circ").move_to(Angle(AC, BC, quadrant=(1, -1), other_angle=True, radius=1))
-        c = MathTex("4", color=RED).next_to(AB.get_center(), UL)
-        c = MathTex("4", color=RED).next_to(AB.get_center(), UL)
-        a = MathTex("a=?", color=YELLOW).next_to(BC.get_center(), UR)
-        self.play(Create(A), Create(B), Create(C))
-        self.play(Create(AB), Create(BC), Create(AC))
-        self.play(*[Write(i) for i in (c, A_angle_t)],
-                  *[Create(i) for i in (A_angle)])
-        self.play(Write(a))
-        self.wait()
+        A_angle_t = MathTex("A").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=1))
+        B_angle = Angle(AB, BC, quadrant=(-1, 1))
+        B_angle_t = MathTex("B").move_to(Angle(AB, BC, quadrant=(-1, 1), radius=0.8))
+        C_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
+        C_angle_t = MathTex("C").move_to(Angle(AC, BC, quadrant=(1, -1), other_angle=True, radius=1))
+
+        c = MathTex("c", color=RED).next_to(AB.get_center(), UL)
+        b = MathTex("b", color=BLUE).next_to(AC.get_center(), DOWN)
+        a = MathTex("a", color=YELLOW).next_to(BC.get_center(), UR)
+        fomular1 = MathTex("{sin(A)\over a} = {sin(B)\over b} = {sin(C) \over c}")
+        fomular2 = MathTex("a^2 = b^2+c^2-2bc.cos(A)")
+        fomular3 = MathTex("b^2 = a^2+c^2-2ac.cos(B)")
+        fomular4 = MathTex("c^2 = a^2+b^2-2ab.cos(C)")
+        fomular5 = MathTex(
+            r"{a-b \over a+b} = {tan\left[ {1\over2}(A-B) \right] \over tan\left[{1\over2} (A+B) \right]}")
+        los = Text("Định lý sin", font="Sans", font_size=27)
+        loc = Text("Định lý cos", font="Sans", font_size=27)
+        lot = Text("Định lý tan", font="Sans", font_size=27)
+        group1 = VGroup(los, fomular1).arrange(DOWN, aligned_edge=LEFT).to_corner(UL)
+        group2 = VGroup(loc, fomular2, fomular3, fomular4).arrange(DOWN, aligned_edge=LEFT) \
+            .next_to(group1, DOWN, aligned_edge=LEFT)
+        group3 = VGroup(lot, fomular5).arrange(DOWN, aligned_edge=LEFT) \
+            .next_to(group2, DOWN, aligned_edge=LEFT)
+        group1[0].set_color(RED)
+        group2[0].set_color(GREEN)
+        group3[0].set_color(BLUE)
+        letter = [a, c, c, A_angle_t, B_angle_t, C_angle_t]
+        question_mark = [MathTex("?").move_to(i) for i in letter]
+        case = ["(Góc - Góc - Cạnh)",
+                "(Góc - Cạnh - Góc)",
+                "(Cạnh - Góc - Cạnh)",
+                "(Cạnh - Cạnh - Góc)",
+                "(Cạnh - Cạnh - Cạnh)",
+                "(Góc - Góc - Góc)"]
+        self.add(A, B, C, AB, BC, AC,
+                 A_angle, A_angle_t, B_angle,
+                 B_angle_t, C_angle, C_angle_t,
+                 a, b, c, group1, group2, group3, *question_mark)
+
+        # self.play(LaggedStart(*[
+        #     Write(i)
+        #     for i, j in zip((A, B, C, AB, BC, AC, A_angle, B_angle, C_angle, A_angle_t, B_angle_t, C_angle_t, a, b, c),
+        #                     (1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1))
+        # ], lag_ratio=0.2))
+        # self.play(Write(group1))
+        # self.play(Write(group2))
+        # self.play(Write(group3))
 
 
 class Scene1(MyScene):
@@ -208,7 +242,7 @@ class Scene3(MyScene):
         a = MathTex("a", color=YELLOW).next_to(BC.get_center(), UR)
         b = MathTex("b", color=BLUE).next_to(AC.get_center(), DR)
         h = MathTex(r"a", "sin(", "60^\circ", ")").scale(0.8).next_to(BH.get_center(), RIGHT, buff=SMALL_BUFF)
-        h.shift(DOWN*0.5)
+        h.shift(DOWN * 0.5)
         h[0].set_color(RED)
         self.play(Create(A), Create(B), Create(C))
         self.play(Create(AB), Create(BC), Create(AC))
@@ -218,11 +252,11 @@ class Scene3(MyScene):
         self.play(Create(BH), Create(H), Create(H_angle))
         self.wait()
         self.play(*[Write(h[i]) for i in (1, 3)],
-                  Transform(c.copy(),h[0]),
+                  Transform(c.copy(), h[0]),
                   Transform(A_angle_t.copy(), h[2]))
 
         equation1 = MathTex("\Rightarrow", r"\text{Area}=", "{1\over 2}", "a", "b", "sin(", "60^\circ", ")") \
-            .shift(LEFT*3)
+            .shift(LEFT * 3)
         color_map = {
             "a": RED,
             "b": BLUE,
