@@ -1,11 +1,11 @@
 from manim import *
 import math
 
-list_scene = ("Scene0", "Scene1", "Scene2")
-# SCENE_NAME = list_scene[2]
-SCENE_NAME = " ".join(list_scene)
+list_scene = ("Scene0", "Scene1", "Scene2", "Thumbnail")
+SCENE_NAME = "Thumbnail"
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -223,3 +223,16 @@ class Scene2(MyScene):
         copy = formula4[-1].copy()
         self.my_play(copy.animate.next_to(HK, RIGHT), FadeOut(text[0]))
         self.my_play(Circumscribe(formula4[-1]), Circumscribe(copy))
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        moutain1 = SVGMobject("moutain1").stretch_to_fit_height(6).stretch_to_fit_width(5).to_edge(RIGHT)
+        K = Dot(moutain1.get_top(), color=RED)
+        H = Dot(moutain1.get_bottom(), color=RED)
+        HK = Line(H, K, color=RED)
+        hk_text = MathTex("?", color=RED).scale(2).next_to(HK, RIGHT)
+        apply = Text("Ứng dụng", font="Sans", color=RED).scale(2).to_corner(UL)
+        trinogometry = Text("Lượng giác", font="Sans", color=YELLOW).scale(2).next_to(apply, DOWN, aligned_edge=LEFT)
+        in_real_life = Text("trong thực tế", font="Sans", color=GREEN).scale(1.5).next_to(trinogometry, DOWN, aligned_edge=LEFT)
+        self.add(moutain1, H, K, HK, hk_text, apply, trinogometry, in_real_life)
