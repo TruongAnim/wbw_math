@@ -4,9 +4,9 @@ from common.svg.character.number_creature_anim import *
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[6]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[7]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -252,3 +252,13 @@ class Trigonometry_Scene6(MyScene):
                                           )
                      )
         self.wait()
+
+
+class Trigonometry_Scene7(Scene):
+    def construct(self):
+        fomular = MathTex("sin(", "60^\circ", ")=", "{\sqrt{3}\over 2}", "?").scale(1.5)
+        fomular[1].set_color(RED)
+        fomular[3].set_color(YELLOW)
+        why = Text("Tại sao", font="Sans", color=TEAL).next_to(fomular, UP, aligned_edge=LEFT)
+        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder", color=RED).scale(1.5).shift(LEFT*4+DOWN)
+        self.add(fomular, why, pi)
