@@ -2,7 +2,7 @@ from manim import *
 import math
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[0]
+SCENE_NAME = list_scene[1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
@@ -70,155 +70,96 @@ class Scene0(MyScene):
         group1[0].set_color(RED)
         group2[0].set_color(GREEN)
         group3[0].set_color(BLUE)
-        letter = [a, c, c, A_angle_t, B_angle_t, C_angle_t]
-        question_mark = [MathTex("?").move_to(i) for i in letter]
-        case = ["(Góc - Góc - Cạnh)",
-                "(Góc - Cạnh - Góc)",
-                "(Cạnh - Góc - Cạnh)",
-                "(Cạnh - Cạnh - Góc)",
-                "(Cạnh - Cạnh - Cạnh)",
-                "(Góc - Góc - Góc)"]
-        self.add(A, B, C, AB, BC, AC,
-                 A_angle, A_angle_t, B_angle,
-                 B_angle_t, C_angle, C_angle_t,
-                 a, b, c, group1, group2, group3, *question_mark)
+        source = [a, b, c, A_angle_t, B_angle_t, C_angle_t]
+        letter = [i.copy() for i in source]
+        question_mark = [MathTex("?").move_to(i) for i in source]
+        case = [Text(i, font="Sans", font_size=30).next_to(b, DOWN) for i in
+                ("(Góc - Góc - Cạnh)",
+                 "(Góc - Cạnh - Góc)",
+                 "(Cạnh - Góc - Cạnh)",
+                 "(Cạnh - Cạnh - Góc)",
+                 "(Cạnh - Cạnh - Cạnh)",
+                 "(Góc - Góc - Góc)")]
+        case_letter = [
+            (0, 1, 0, 1, 1, 0),
+            (0, 1, 0, 1, 0, 1),
+            (0, 1, 1, 1, 0, 0),
+            (0, 1, 1, 0, 0, 1),
+            (1, 1, 1, 0, 0, 0),
+            (0, 0, 0, 1, 1, 1)
+        ]
 
-        # self.play(LaggedStart(*[
-        #     Write(i)
-        #     for i, j in zip((A, B, C, AB, BC, AC, A_angle, B_angle, C_angle, A_angle_t, B_angle_t, C_angle_t, a, b, c),
-        #                     (1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1))
-        # ], lag_ratio=0.2))
-        # self.play(Write(group1))
-        # self.play(Write(group2))
-        # self.play(Write(group3))
+        def get_plays(state):
+            result = []
+            for index, i in enumerate(state):
+                if i == 1:
+                    result.append(Transform(source[index], letter[index]))
+                else:
+                    result.append(Transform(source[index], question_mark[index]))
+            return result
+
+        triangle_group = VGroup(A, B, C, AB, BC, AC, A_angle, B_angle, C_angle, A_angle_t, B_angle_t, C_angle_t, a, b,
+                                c)
+        self.play(LaggedStart(*[
+            Write(i)
+            for i, j in zip((triangle_group),
+                            (1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1))
+        ], lag_ratio=0.2))
+        self.play(Write(group1))
+        self.wait()
+        self.play(Write(group2))
+        self.play(Write(group3))
+        for i, j in enumerate(case):
+            if i != 0:
+                self.play(FadeOut(case[i - 1]))
+            self.play(Write(j), *get_plays(case_letter[i]))
+            self.play(*[Indicate(source[index]) for index, temp in enumerate(case_letter[i]) if temp == 1])
+        self.play(Create(Cross(case[-1])))
+        self.play(triangle_group.animate.scale(0.5), rate_func=linear)
+        self.play(triangle_group.animate.scale(1.8), rate_func=linear)
 
 
 class Scene1(MyScene):
     def construct(self):
-        A = Dot(LEFT * 2)
-        B = Dot(UP * 3.464)
-        C = Dot(RIGHT * 2.9)
-        H = Dot(ORIGIN)
-        group_point = VGroup(A, B, C, H)
-        group_point.shift(RIGHT * 3 + DOWN).scale(1.3)
+        map = ImageMobject("map").rotate(PI).scale(1.2).shift(LEFT * 4)
+        ship = SVGMobject("ship").scale(0.3)
+
+        A = Dot(LEFT * 5 + DOWN * 2.5, color=RED)
+        B = Dot(LEFT * 2 + DOWN * 2.5, color=RED)
+        C = Dot(LEFT * 5 + UP * 3, color=YELLOW)
+        a = MathTex("A", color=RED).next_to(A, DOWN)
+        b = MathTex("B", color=RED).next_to(B, DOWN)
+        c = MathTex("C", color=YELLOW).next_to(C, UP, MED_LARGE_BUFF)
+        path = Line(C, A)
+        AC = DashedLine(A, C)
+        BC = DashedLine(B, C)
         AB = Line(A, B, color=RED)
-        BC = Line(B, C, color=YELLOW)
-        AC = Line(C, A, color=BLUE)
-        BH = Line(B, H, color=GREEN)
-        A_angle = Angle(AC, AB, quadrant=(-1, 1))
-        A_angle_t = MathTex("A").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=0.8))
-        C_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
-        C_angle_t = MathTex("C").move_to(Angle(AC, BC, quadrant=(1, -1), other_angle=True, radius=0.8))
-        B_angle = Angle(AB, BC, quadrant=(-1, 1))
-        B_angle_t = MathTex("B").move_to(Angle(AB, BC, quadrant=(-1, 1), radius=0.8)) \
-            .shift(RIGHT * 0.15)
-        H_angle_t = MathTex("H").next_to(H, DOWN)
-        H_angle = RightAngle(BH, AC, quadrant=(-1, -1))
-        c = MathTex("c", color=RED).next_to(AB.get_center(), UL)
-        a = MathTex("a", color=YELLOW).next_to(BC.get_center(), UR)
-        b = MathTex("b", color=BLUE).next_to(AC.get_center(), DOWN).shift(RIGHT * 0.5)
-        h = MathTex("h", color=GREEN).next_to(BH.get_center(), RIGHT)
-        equation1 = MathTex("sin(", "A", ")", "=", "{h", r"\over", "c}").to_corner(UL, buff=MED_LARGE_BUFF)
-        equation2 = MathTex("sin(", "C", ")", "=", "{h", r"\over", "a}").next_to(equation1, DOWN, aligned_edge=LEFT,
-                                                                                 buff=MED_LARGE_BUFF)
-        equation3 = MathTex("\Rightarrow {sin(", "A", ")", "\over", "a}", "=", "{sin(", "C", ")", "\over", "c}", "=",
-                            "{sin(", "B", ")", "\over", "b}").next_to(equation2, DOWN, aligned_edge=LEFT)
-        color_map = {
-            "a": YELLOW,
-            "b": BLUE,
-            "c": RED,
-            "h": GREEN,
-            "sin": WHITE
-        }
-        for i in (equation1, equation2, equation3):
-            i.set_color_by_tex_to_color_map(color_map)
-        brace = Brace(VGroup(equation2, equation1), LEFT)
-        law_of_sin = Text("Định lý sin", font="Sans", color=YELLOW).next_to(equation3, DOWN)
+        c_angle =
+        def create_angle():
+            angle = Angle(AB, BC, quadrant=(-1, 1), other_angle=True)
+            degree = math.atan(AC.get_length()/AB.get_length()) * 57.29
+            angle_t = MathTex({})
 
-        # self.add(equation1, equation2, equation3, brace)
-        # self.add(BH, H, AB, BC, AC, A_angle, A_angle_t, C_angle, C_angle_t, B_angle_t, B_angle,
-        #          a, b, c, A, B, C, H_angle, h, H_angle_t, law_of_sin)
+        ship.next_to(C)
 
-        self.play(Create(A), Create(B), Create(C))
-        self.play(Create(AB), Create(BC), Create(AC))
-        self.play(
-            LaggedStart(*[
-                Write(i) for i in (a, b, c, A_angle_t, B_angle_t, C_angle_t)
-            ]),
-            *[Create(i) for i in (A_angle, B_angle, C_angle)])
-        self.play(Create(BH), FadeIn(h, shift=LEFT),
-                  Create(H_angle), Write(H_angle_t), FadeIn(H))
-        self.wait()
-        self.my_play(LaggedStart(*[
-            Write(equation1[i]) for i in (0, 2, 3, 5)
-        ]), LaggedStart(*[
-            Write(equation2[i]) for i in (0, 2, 3, 5)
-        ]), Write(brace))
-        transform_map = (((A_angle_t, h, c),
-                          (equation1[1], equation1[4], equation1[6])),
-                         ((C_angle_t, h, a),
-                          (equation2[1], equation2[4], equation2[6])))
-        for transform in transform_map:
-            self.my_play(LaggedStart(*[
-                ReplacementTransform(i.copy(), j) for i, j in zip(transform[0], transform[1])
-            ]))
-        self.my_play(Write(equation3[:11]))
-        self.my_play(Write(equation3[11:]), *[FadeOut(i) for i in (BH, H_angle, H_angle_t, h, H)])
-        self.my_play(Write(law_of_sin))
-        self.my_play(Circumscribe(VGroup(equation3[1:], law_of_sin)))
+        obj = VMobject()
+        self.add(map, ship, A, B, C, a, b, c, obj, AC, BC, AB, c_angle)
+
+        def move_ship(obj):
+            c.next_to(C, UP, MED_SMALL_BUFF)
+            AC.become(DashedLine(A, C))
+            BC.become(DashedLine(B, C))
+            obj.move_to(C)
+            c_angle.become(Angle(AB, BC, quadrant=(-1, 1), other_angle=True))
+        ship.add_updater(move_ship)
+
+        self.play(MoveAlongPath(C, path))
 
 
 class Scene2(MyScene):
     def construct(self):
-        A = Dot(LEFT * 2)
-        B = Dot(UP * 3.464)
-        C = Dot(RIGHT * 2.9)
-        H = Dot(ORIGIN)
-        group_point = VGroup(A, B, C, H)
-        group_point.shift(RIGHT * 3 + DOWN).scale(1.3)
-        AB = Line(A, B, color=RED)
-        BC = Line(B, C, color=YELLOW)
-        AC = Line(C, A, color=BLUE)
-        BH = Line(B, H, color=GREEN)
-        A_angle = Angle(AC, AB, quadrant=(-1, 1))
-        A_angle_t = MathTex("60^\circ").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=1))
-        B_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
-        B_angle_t = MathTex("50^\circ").move_to(Angle(AC, BC, quadrant=(1, -1), other_angle=True, radius=1))
-        c = MathTex("4", color=RED).next_to(AB.get_center(), UL)
-        a = MathTex("a=?", color=YELLOW).next_to(BC.get_center(), UR)
-        self.play(Create(A), Create(B), Create(C))
-        self.play(Create(AB), Create(BC), Create(AC))
-        self.play(*[Write(i) for i in (c, A_angle_t, B_angle_t)],
-                  *[Create(i) for i in (A_angle, B_angle)])
-        self.play(Write(a))
-        self.wait()
-        equation1 = MathTex("{sin(", "60^\circ", ")", "\over", "a}", "=", "{sin(", "50^\circ", ")", "\over", "4}") \
-            .to_corner(UL)
-        equation2 = MathTex("\Rightarrow", "a", "=", "{sin(", "60^\circ", ")", r"\times", "4", "\over", "sin(",
-                            "50^\circ", ")}") \
-            .next_to(equation1, DOWN, aligned_edge=LEFT)
-        equation3 = MathTex("\Rightarrow", "a", r"\approx", "4.52").next_to(equation2, DOWN, aligned_edge=LEFT)
-        color_map = {
-            "a": YELLOW,
-            "b": BLUE,
-            "4": RED,
-            "h": GREEN,
-            "sin": WHITE,
-            "approx": WHITE,
-            "4.52": WHITE
-        }
-        for i in (equation1, equation2, equation3):
-            i.set_color_by_tex_to_color_map(color_map)
-        self.play(LaggedStart(*[
-            Write(equation1[i]) for i in (0, 2, 3, 5, 6, 8, 9)
-        ]))
-        self.my_play(LaggedStart(*[
-            Transform(j.copy(), equation1[i]) for i, j in zip((10, 1, 4, 7),
-                                                              (c, A_angle_t, a[0][0], B_angle_t))
-        ]))
-        self.my_play(Write(equation2))
-        self.my_play(Write(equation3))
-        self.my_play(equation3[-1].copy().animate.move_to(a).set_color(YELLOW), FadeOut(a))
+        map = ImageMobject("map")
+        self.add(map)
 
 
 class Scene3(MyScene):
