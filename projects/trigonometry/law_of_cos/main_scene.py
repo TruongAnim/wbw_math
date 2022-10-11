@@ -2,10 +2,10 @@ from manim import *
 import math
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[1]
-# SCENE_NAME = " ".join(list_scene)
+# SCENE_NAME = list_scene[2]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -115,8 +115,8 @@ class Scene0(MyScene):
             self.play(Write(j), *get_plays(case_letter[i]))
             self.play(*[Indicate(source[index]) for index, temp in enumerate(case_letter[i]) if temp == 1])
         self.play(Create(Cross(case[-1])))
-        self.play(triangle_group.animate.scale(0.5), rate_func=linear)
-        self.play(triangle_group.animate.scale(1.8), rate_func=linear)
+        self.my_play(triangle_group.animate.scale(0.5), rate_func=linear)
+        self.my_play(triangle_group.animate.scale(1.8), rate_func=linear)
 
 
 class Scene1(MyScene):
@@ -125,91 +125,288 @@ class Scene1(MyScene):
         ship = SVGMobject("ship").scale(0.3)
 
         A = Dot(LEFT * 5 + DOWN * 2.5, color=RED)
+        base = SVGMobject("base", color=GREEN).scale(0.3).move_to(A)
+
         B = Dot(LEFT * 2 + DOWN * 2.5, color=RED)
-        C = Dot(LEFT * 5 + UP * 3, color=YELLOW)
+        C = Dot(LEFT * 5 + UP * 3.2, color=YELLOW)
         a = MathTex("A", color=RED).next_to(A, DOWN)
         b = MathTex("B", color=RED).next_to(B, DOWN)
-        c = MathTex("C", color=YELLOW).next_to(C, UP, MED_LARGE_BUFF)
-        path = Line(C, A)
-        AC = DashedLine(A, C)
+        c = MathTex("C", color=YELLOW).next_to(C, UP)
+        AC = DashedLine(A, C, color=YELLOW)
         BC = DashedLine(B, C)
         AB = Line(A, B, color=RED)
-        c_angle =
+        right_angle = RightAngle(AC, AB, color=RED)
+        AB_t = MathTex("1(km)", color=RED).scale(0.8).next_to(AB, DOWN, buff=SMALL_BUFF)
+        AC_t = MathTex("1880(m)", color=YELLOW).scale(0.8).next_to(AC, LEFT, buff=SMALL_BUFF)
+
+        def get_angle():
+            return math.atan(AC.get_length() / AB.get_length()) * 57.29
+
         def create_angle():
-            angle = Angle(AB, BC, quadrant=(-1, 1), other_angle=True)
-            degree = math.atan(AC.get_length()/AB.get_length()) * 57.29
-            angle_t = MathTex({})
+            angle = Angle(AB, BC, quadrant=(-1, 1), other_angle=True, color=PINK)
+            degree = get_angle()
+            angle_t = MathTex("{0} ^\circ".format(int(degree)), color=PINK).scale(0.8).move_to(
+                Angle(AB, BC, quadrant=(-1, 1), other_angle=True, radius=0.8))
+            return VGroup(angle, angle_t)
 
-        ship.next_to(C)
+        def create_fomular(text):
+            fomular1 = MathTex(r"\Rightarrow ", "AC", " = ", "AB", r"\times ",
+                               "tan({0}^\circ)".format(int(get_angle()))).next_to(text, DOWN, aligned_edge=LEFT)
+            fomular2 = MathTex("AC", " = ", "{0}(m)".format(int(1000 * math.tan(int(get_angle()) * DEGREES)))).next_to(
+                fomular1[1],
+                DOWN,
+                aligned_edge=LEFT)
+            fomular1[5].set_color(PINK)
+            fomular1[3].set_color(RED)
+            fomular1[1].set_color(YELLOW)
+            fomular2[0].set_color(YELLOW)
+            fomular2[2].set_color(YELLOW)
+            return VGroup(fomular1, fomular2)
 
-        obj = VMobject()
-        self.add(map, ship, A, B, C, a, b, c, obj, AC, BC, AB, c_angle)
+        c_angle = create_angle()
+
+        ship.move_to(C)
+        text1 = Text("Tam giác ABC vuông:", font="Sans", font_size=30).shift(UP * 2 + RIGHT * 2)
+        fomular = create_fomular(text1)
+
+        # self.add(map, ship, A, B, C, a, b, c, AC, BC, AB, c_angle, text1, fomular, AB_t, right_angle)
 
         def move_ship(obj):
             c.next_to(C, UP, MED_SMALL_BUFF)
-            AC.become(DashedLine(A, C))
+            AC.become(DashedLine(A, C, color=YELLOW))
             BC.become(DashedLine(B, C))
             obj.move_to(C)
-            c_angle.become(Angle(AB, BC, quadrant=(-1, 1), other_angle=True))
-        ship.add_updater(move_ship)
+            c_angle.become(create_angle())
+            AC_t.become(
+                MathTex("{0}(m)".format(int(1000 * math.tan(int(get_angle()) * DEGREES))), color=YELLOW)
+                .scale(0.8).next_to(AC, LEFT, buff=SMALL_BUFF))
+            fomular.become(create_fomular(text1))
 
-        self.play(MoveAlongPath(C, path))
+        self.my_play(FadeIn(map), Write(base), Create(A), Create(a))
+        self.my_play(Write(ship), Write(C), Write(c))
+        self.my_play(Write(b), Create(B), Write(AB_t), Create(AB))
+        self.my_play(Create(AC), Create(BC), Write(c_angle), Create(right_angle))
+        self.my_play(Write(text1), Write(fomular))
+        self.my_play(ReplacementTransform(fomular[1][2].copy(), AC_t))
+        ship.add_updater(move_ship)
+        self.play(C.animate.shift(DOWN * 5), rate_func=linear, run_time=5)
+        self.wait()
+        # self.play(C.animate.shift(UP*2), rate_func=linear, run_time=2)
 
 
 class Scene2(MyScene):
     def construct(self):
-        map = ImageMobject("map")
-        self.add(map)
+        map = ImageMobject("map").rotate(PI).scale(1.2).shift(LEFT * 4)
+        ship = SVGMobject("ship").scale(0.3)
+
+        A = Dot(LEFT * 5 + DOWN * 2.5, color=RED)
+        base = SVGMobject("base", color=GREEN).scale(0.3).move_to(A)
+
+        B = Dot(LEFT * 2 + DOWN * 2.5, color=RED)
+        C = Dot(LEFT * 5 + UP * 3.2, color=YELLOW)
+        a = MathTex("A", color=RED).next_to(A, DOWN)
+        b = MathTex("B", color=RED).next_to(B, DOWN)
+        c = MathTex("C", color=YELLOW).next_to(C, UP)
+
+        def create_path(init_point):
+            p1 = init_point + DOWN + LEFT
+            p2 = p1 + DOWN + RIGHT * 5
+            p3 = p2 + DOWN * 2 + LEFT
+            p4 = p3 + UP + LEFT * 2
+            return VMobject().set_points_smoothly([init_point, p1, p2, p3, p4])
+
+        path = create_path(C.get_center())
+        AC = DashedLine(A, C, color=YELLOW)
+        BC = DashedLine(B, C)
+        AB = Line(A, B, color=RED)
+        right_angle = RightAngle(AC, AB, color=RED)
+        AB_t = MathTex("1(km)", color=RED).scale(0.8).next_to(AB, DOWN, buff=SMALL_BUFF)
+        AC_t = MathTex("1950(m)", color=YELLOW).scale(0.8).next_to(AC, LEFT, buff=SMALL_BUFF)
+
+        def get_angle():
+            return math.atan(AC.get_length() / AB.get_length()) * 57.29
+
+        def create_angle():
+            angle = Angle(AB, BC, quadrant=(-1, 1), other_angle=True, color=PINK)
+            degree = get_angle()
+            angle_t = MathTex("{0} ^\circ".format(int(degree)), color=PINK).scale(0.8).move_to(
+                Angle(AB, BC, quadrant=(-1, 1), other_angle=True, radius=0.8))
+            return VGroup(angle, angle_t)
+
+        def create_fomular(text):
+            fomular1 = MathTex(r"\Rightarrow ", "AC", " = ", "AB", r"\times ",
+                               "tan({0}^\circ)".format(int(get_angle()))).next_to(text, DOWN, aligned_edge=LEFT)
+            fomular2 = MathTex("AC", " = ", "{0}(m)".format(int(1000 * math.tan(get_angle() * DEGREES)))).next_to(
+                fomular1[1],
+                DOWN,
+                aligned_edge=LEFT)
+            fomular1[5].set_color(PINK)
+            fomular1[3].set_color(RED)
+            fomular1[1].set_color(YELLOW)
+            fomular2[0].set_color(YELLOW)
+            fomular2[2].set_color(YELLOW)
+            return VGroup(fomular1, fomular2)
+
+        c_angle = create_angle()
+
+        ship.move_to(C)
+        text1 = Text("Tam giác ABC vuông:", font="Sans", font_size=30).shift(UP * 2 + RIGHT * 2)
+        fomular = create_fomular(text1)
+
+        # self.add(map, ship, A, B, C, a, b, c, AC, BC, AB, c_angle, text1, fomular, AB_t, right_angle)
+
+        def move_ship(obj):
+            c.next_to(C, UP, MED_SMALL_BUFF)
+            AC.become(DashedLine(A, C, color=YELLOW))
+            BC.become(DashedLine(B, C))
+            obj.move_to(C)
+            c_angle.become(create_angle())
+            AC_t.become(
+                MathTex("{0}(m)".format(int(1000 * math.tan(get_angle() * DEGREES))), color=YELLOW).next_to(AC, LEFT,
+                                                                                                            buff=SMALL_BUFF))
+            fomular.become(create_fomular(text1))
+
+        self.play(FadeIn(map), Write(base), Create(A), Create(a))
+        self.play(Write(ship), Write(C), Write(c))
+        self.play(Write(b), Create(B), Write(AB_t), Create(AB))
+        self.play(Create(AC), Create(BC), Write(c_angle))
+        self.wait()
+        ship.add_updater(move_ship)
+        self.play(MoveAlongPath(C, path), rate_func=linear, run_time=5)
+        self.wait()
 
 
 class Scene3(MyScene):
     def construct(self):
-        A = Dot(LEFT * 2)
-        B = Dot(UP * 3.464)
-        C = Dot(RIGHT * 2.9)
-        H = Dot(ORIGIN)
-        group_point = VGroup(A, B, C, H)
-        group_point.shift(RIGHT * 3 + DOWN).scale(1.3)
-        AB = Line(A, B, color=RED)
-        BC = Line(B, C, color=YELLOW)
-        AC = Line(C, A, color=BLUE)
-        BH = Line(B, H, color=GREEN)
-        H_angle = RightAngle(BH, AC, quadrant=(-1, -1))
-        A_angle = Angle(AC, AB, quadrant=(-1, 1))
-        A_angle_t = MathTex("60^\circ").move_to(Angle(AC, AB, quadrant=(-1, 1), radius=1))
-        B_angle = Angle(AC, BC, quadrant=(1, -1), other_angle=True)
-        B_angle_t = MathTex("50^\circ").move_to(Angle(AC, BC, quadrant=(1, -1), other_angle=True, radius=1))
-        c = MathTex("a", color=RED).next_to(AB.get_center(), UL)
-        a = MathTex("a", color=YELLOW).next_to(BC.get_center(), UR)
-        b = MathTex("b", color=BLUE).next_to(AC.get_center(), DR)
-        h = MathTex(r"a", "sin(", "60^\circ", ")").scale(0.8).next_to(BH.get_center(), RIGHT, buff=SMALL_BUFF)
-        h.shift(DOWN * 0.5)
-        h[0].set_color(RED)
-        self.play(Create(A), Create(B), Create(C))
-        self.play(Create(AB), Create(BC), Create(AC))
-        self.play(*[Write(i) for i in (c, A_angle_t, b)],
-                  *[Create(i) for i in (A_angle)])
-        self.wait()
-        self.play(Create(BH), Create(H), Create(H_angle))
-        self.wait()
-        self.play(*[Write(h[i]) for i in (1, 3)],
-                  Transform(c.copy(), h[0]),
-                  Transform(A_angle_t.copy(), h[2]))
+        map = ImageMobject("map").rotate(PI).scale(1.2).shift(LEFT * 4)
+        ship = SVGMobject("ship").scale(0.3)
 
-        equation1 = MathTex("\Rightarrow", r"\text{Area}=", "{1\over 2}", "a", "b", "sin(", "60^\circ", ")") \
-            .shift(LEFT * 3)
-        color_map = {
-            "a": RED,
-            "b": BLUE,
-            "sin": WHITE,
-            "Area": WHITE,
-            "Rightarrow": WHITE
-        }
-        equation1.set_color_by_tex_to_color_map(color_map)
-        self.play(LaggedStart(*[
-            Write(equation1[i]) for i in (0, 1, 2)
-        ]))
-        self.my_play(LaggedStart(*[
-            Transform(j.copy(), equation1[i]) for i, j in zip((3, 4, 5, 6, 7),
-                                                              (h[0], b, h[1], h[2], h[3]))
-        ]))
+        A = Dot(LEFT * 5 + DOWN * 2.5, color=RED)
+        base = SVGMobject("base", color=GREEN).scale(0.3).move_to(A)
+
+        B = Dot(LEFT * 2 + DOWN * 2.5, color=RED)
+        C = Dot(LEFT * 5 + UP * 3.2, color=YELLOW)
+        a = MathTex("A", color=RED).next_to(A, DOWN)
+        b = MathTex("B", color=RED).next_to(B, DOWN)
+        c = MathTex("C", color=YELLOW).next_to(C, UP)
+
+        def create_path(init_point):
+            p1 = init_point + DOWN + LEFT
+            p2 = p1 + DOWN + RIGHT * 5
+            p3 = p2 + DOWN * 2 + LEFT
+            p4 = p3 + DOWN + LEFT * 2
+            p5 = p4 + UP * 2 + LEFT * 3
+            p6 = p5 + RIGHT * 4 + UP
+            return VMobject().set_points_smoothly([init_point, p1, p2, p3, p4, p5, p6])
+
+        path = create_path(C.get_center())
+        AC = DashedLine(A, C, color=YELLOW)
+        BC = DashedLine(B, C)
+        AB = Line(A, B, color=RED)
+        AB_t = MathTex("1(km)", color=RED).scale(0.8).next_to(AB, DOWN, buff=SMALL_BUFF)
+        AC_t = MathTex("1880(m)", color=YELLOW).scale(0.8).next_to(AC, LEFT, buff=SMALL_BUFF)
+
+        def get_angle():
+            a = BC.get_length()
+            b = AC.get_length() + 0.05
+            c = AB.get_length()
+            return math.acos((c * c + a * a - b * b) / (2 * a * c)) * 57.2957
+
+        def get_angle2():
+            a = BC.get_length()
+            b = AC.get_length() + 0.05
+            c = AB.get_length()
+            return math.acos((c * c + b * b - a * a) / (2 * b * c)) * 57.2957
+
+        def create_angle():
+            angle = Angle(AB, BC, quadrant=(-1, 1), other_angle=True, color=PINK)
+            degree = get_angle()
+            angle_t = MathTex("{0} ^\circ".format(int(degree)), color=PINK).scale(0.8).move_to(
+                Angle(AB, BC, quadrant=(-1, 1), other_angle=True, radius=0.8).point_from_proportion(0.5))
+            return VGroup(angle, angle_t)
+
+        def create_angle2():
+            angle = Angle(AB, AC, color="#143264")
+            degree = get_angle2()
+            angle_t = MathTex("{0} ^\circ".format(int(degree)), color="#143264").scale(0.8).move_to(
+                Angle(AB, AC, radius=0.8).point_from_proportion(0.5))
+            return VGroup(angle, angle_t)
+
+        def create_fomular1(text):
+            angle1 = int(get_angle())
+            angle2 = int(get_angle2())
+            angle3 = 180 - angle1 - angle2
+            fomular1 = MathTex(r"\Rightarrow ", r"\angle C", "=", "180^\circ", "-", "{0}^\circ".format(angle1), "-",
+                               "{0}^\circ".format(angle2), "=", "{0}^\circ".format(angle3)) \
+                .scale(0.9) \
+                .next_to(text, DOWN, aligned_edge=LEFT)
+            fomular1[5].set_color(PINK)
+            fomular1[7].set_color("#143264")
+            fomular1[1].set_color(YELLOW)
+            fomular1[9].set_color(YELLOW)
+            return fomular1
+
+        def create_fomular(text):
+            angle1 = int(get_angle())
+            angle2 = int(get_angle2())
+            angle3 = 180 - angle1 - angle2
+            fomular1 = MathTex(r"\Rightarrow ", "{AC", "\over", "sin({0}^\circ)".format(angle1) + "}", "= ", "{AB",
+                               r"\over", "sin({0}^\circ)".format(angle3), "}").scale(0.9).next_to(text, DOWN,
+                                                                                                  aligned_edge=LEFT)
+            result = int(1000 * math.sin(angle1 * DEGREES) / math.sin(angle3 * DEGREES))
+            fomular2 = MathTex(r"\Rightarrow ", "AC", " = ", "{AB", r"\times", "sin({0}^\circ)".format(angle1), "\over",
+                               " sin({0}^\circ)".format(angle3) + "}", "=", "{0}(m)".format(result)).scale(0.9).next_to(
+                fomular1,
+                DOWN,
+                aligned_edge=LEFT)
+            fomular1[1].set_color(YELLOW)
+            fomular1[3].set_color(PINK)
+            fomular1[5].set_color(RED)
+            fomular1[7].set_color(YELLOW)
+
+            fomular2[1].set_color(YELLOW)
+            fomular2[3].set_color(RED)
+            fomular2[5].set_color(PINK)
+            fomular2[7].set_color(YELLOW)
+            fomular2[9].set_color(YELLOW)
+            return VGroup(fomular1, fomular2)
+
+        c_angle = create_angle()
+        a_angle = create_angle2()
+
+        ship.move_to(C)
+        text1 = Text("Tổng 3 góc tam giác = 180 độ:", font="Sans", font_size=30).shift(UP * 2 + RIGHT * 3)
+        text2 = Text("Áp dụng định lý sin:", font="Sans", font_size=30).align_to(text1, LEFT)
+        fomular = create_fomular(text2)
+        fomular1 = create_fomular1(text1)
+
+        # self.add(map, ship, A, B, C, a, b, c, AC, BC, AB, c_angle, text1, fomular, AB_t, a_angle, text2, fomular1)
+
+        def move_ship(obj):
+            c.next_to(C, UP, MED_SMALL_BUFF)
+            AC.become(DashedLine(A, C, color=YELLOW))
+            BC.become(DashedLine(B, C))
+            obj.move_to(C)
+            c_angle.become(create_angle())
+            a_angle.become(create_angle2())
+            angle1 = int(get_angle())
+            angle2 = int(get_angle2())
+            angle3 = 180 - angle1 - angle2
+            result = int(1000 * math.sin(angle1 * DEGREES) / math.sin(angle3 * DEGREES))
+            AC_t.become(
+                MathTex("{0}(m)".format(result), color=YELLOW).scale(0.8).next_to(AC.get_center(), LEFT,
+                                                                                  buff=SMALL_BUFF))
+            fomular.become(create_fomular(text2))
+            fomular1.become(create_fomular1(text1))
+
+        # self.add(path)
+        self.play(FadeIn(map), Write(base), Create(A), Create(a))
+        self.play(Write(ship), Write(C), Write(c))
+        self.play(Write(b), Create(B), Write(AB_t), Create(AB))
+        self.play(Create(AC), Create(BC), Write(c_angle), Write(a_angle))
+        self.play(Write(text1), Write(fomular1))
+        self.play(Write(text2), Write(fomular[0]), Write(fomular[1]))
+        self.play(ReplacementTransform(fomular[1][-1].copy(), AC_t))
+        self.wait()
+        ship.add_updater(move_ship)
+        self.play(MoveAlongPath(C, path), rate_func=linear, run_time=20)
