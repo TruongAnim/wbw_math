@@ -4,9 +4,9 @@ from common.svg.character.number_creature_anim import *
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[7]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[8]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -262,3 +262,31 @@ class Trigonometry_Scene7(Scene):
         why = Text("Tại sao", font="Sans", color=TEAL).next_to(fomular, UP, aligned_edge=LEFT)
         pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder", color=RED).scale(1.5).shift(LEFT*4+DOWN)
         self.add(fomular, why, pi)
+
+
+class Trigonometry_Scene8(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            flip_at_start=True,
+            mode="wonder"
+        ).to_corner(DR)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        wbw = Text("Đây đâu phải tam giác vuông?",
+                        font="Sans",
+                        color=YELLOW,
+                        font_size=30)
+        self.play(FadeIn(pi, shift=LEFT * 2))
+        self.wait()
+        self.my_play(NumberCreatureThinks(pi,
+                                          wbw,
+                                          target_mode="wonder",
+                                          bubble_kwargs=bubble_kwargs
+                                          )
+                     )
+        self.wait()
