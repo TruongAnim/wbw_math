@@ -26,7 +26,7 @@ class TickDecimalNumber(VGroup):
             self.tick.rotate(PI)
         elif (self.tick_direction == LEFT).all():
             self.tick.rotate(PI / 2)
-        elif (self.tick_direction == RGIHT).all():
+        elif (self.tick_direction == RIGHT).all():
             self.tick.rotate(-PI / 2)
 
         self.tick.next_to(self.decimal_number, self.tick_direction)
