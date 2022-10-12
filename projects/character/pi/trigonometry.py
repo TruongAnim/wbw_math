@@ -4,9 +4,9 @@ from common.svg.character.number_creature_anim import *
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[8]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[9]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -290,3 +290,45 @@ class Trigonometry_Scene8(MyScene):
                                           )
                      )
         self.wait()
+
+
+class Trigonometry_Scene9(MyScene):
+    def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR)
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = MarkupText('Đó mới là <span foreground="yellow">khởi đầu</span>', font="sans")
+        text2 = MarkupText('Đâu còn gì để học nữa?', font="sans",
+                           font_size=25)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi1,
+                text1,
+                target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
