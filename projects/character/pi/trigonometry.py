@@ -3,8 +3,9 @@ from common.svg.character.number_creature_anim import *
 
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
-              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[10]
+              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
+              "Scene12", "Scene13")
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[13]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -260,7 +261,7 @@ class Trigonometry_Scene7(Scene):
         fomular[1].set_color(RED)
         fomular[3].set_color(YELLOW)
         why = Text("Tại sao", font="Sans", color=TEAL).next_to(fomular, UP, aligned_edge=LEFT)
-        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder", color=RED).scale(1.5).shift(LEFT*4+DOWN)
+        pi = NumberCreature(file_name_prefix="PiCreatures", mode="wonder", color=RED).scale(1.5).shift(LEFT * 4 + DOWN)
         self.add(fomular, why, pi)
 
 
@@ -278,9 +279,9 @@ class Trigonometry_Scene8(MyScene):
             "stroke_color": WHITE
         }
         wbw = Text("Đây đâu phải tam giác vuông?",
-                        font="Sans",
-                        color=YELLOW,
-                        font_size=30)
+                   font="Sans",
+                   color=YELLOW,
+                   font_size=30)
         self.play(FadeIn(pi, shift=LEFT * 2))
         self.wait()
         self.my_play(NumberCreatureThinks(pi,
@@ -353,7 +354,7 @@ class Trigonometry_Scene10(MyScene):
             "stroke_width": 2,
             "stroke_color": WHITE
         }
-        fomular = MathTex("sin(x)={1 \over 2}", color=YELLOW).scale(1.5).shift(UP*3)
+        fomular = MathTex("sin(x)={1 \over 2}", color=YELLOW).scale(1.5).shift(UP * 3)
         text0 = Text("Tìm x?", font="Sans", font_size=32, color=YELLOW).next_to(fomular, DOWN, aligned_edge=LEFT)
         text1 = MarkupText("Không đơn giản như thế", font="sans", font_size=28)
         text2 = MathTex(r'sin(\pi \backslash 6)=1 \backslash 2')
@@ -378,3 +379,224 @@ class Trigonometry_Scene10(MyScene):
                 bubble_kwargs=bubble_kwargs,
             )
         )
+
+
+class Trigonometry_Scene11(MyScene):
+    def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR).shift(DOWN * 0.5)
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL).shift(DOWN * 0.5)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        fomular = Group(*[ImageMobject(str(i)) for i in range(1, 4)]).arrange(DOWN, buff=0).shift(UP * 2.2)
+        text0 = Text("Tìm x?", font="Sans", font_size=32, color=YELLOW).next_to(fomular, DOWN, aligned_edge=LEFT)
+        text1 = MarkupText("Thử một ví dụ thực tế xem sao!", font="sans", font_size=28)
+        text2 = Text("Khó thế này", font="Sans", font_size=27)
+        text3 = Text("chắc mình không làm nổi", font="Sans", font_size=27).next_to(text2, DOWN)
+        self.play(FadeIn(fomular, shift=UP))
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.wait()
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                VGroup(text2, text3),
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi1,
+                text1,
+                target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Trigonometry_Scene12(MyScene):
+    def create_number(self):
+        hour = str(self.nowhour)
+        if self.nowhour < 10:
+            hour = "0" + str(self.nowhour)
+        minute = str(self.nowminute)
+        if self.nowminute < 10:
+            minute = "0" + str(self.nowminute)
+        number = Text(hour + ":" + minute)
+        rec = Rectangle().surround(number, buff=0.5, stretch=True)
+        return VGroup(rec, number)
+
+    def setup(self):
+        from datetime import datetime
+        # self.now = datetime.now()
+        self.nowhour = 12
+        self.nowminute = 20
+        self.hour = self.nowhour + self.nowminute / 60
+        self.minute = self.nowminute
+        print(self.hour)
+        print(self.minute)
+        self.circle = Circle().scale(2).rotate(PI / 2).flip(UP)
+        self.add(self.circle)
+        self.list_min = [self.circle.point_from_proportion(i / 60) for i in range(60)]
+        self.list_line = [Line(i, self.circle.get_center()) for i in self.list_min]
+        self.hour_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.4),
+                               buff=0).set_color(RED).rotate(-self.hour / 6 * PI, about_point=self.circle.get_center())
+        self.minute_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.15),
+                                 buff=0).set_color(BLUE).rotate(-self.minute / 30 * PI,
+                                                                about_point=self.circle.get_center())
+        self.dot = Dot(self.circle.get_center())
+        self.number = [
+            Text("{hour:.0f}".format(hour=12 if i == 0 else i / 5), color=YELLOW).scale(0.7).move_to(line.point_from_proportion(0.2))
+            for i, line in enumerate(self.list_line) if i % 5 == 0]
+        self.tick = [line.get_subcurve(0, 0.1) if i % 5 == 0 else line.get_subcurve(0, 0.03) for i, line in
+                     enumerate(self.list_line)]
+        self.clock = VGroup(self.hour_hand, self.minute_hand, self.circle, self.dot, *self.tick, *self.number)
+
+    def construct(self):
+        self.clock.shift(UP * 2.3).scale(0.8)
+        number = self.create_number().next_to(self.circle, DOWN)
+        self.add(number)
+        self.add(self.clock)
+        self.remove(self.hour_hand, self.minute_hand)
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR).shift(DOWN * 0.5)
+        pi2 = NumberCreature(
+            file_name_prefix="computer",
+            mode="plain",
+            flip_at_start=False
+        ).to_corner(DL).shift(DOWN * 0.5)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = Text("Vẽ kim phút chỉ số 4 đi...", font="sans", font_size=28)
+        text2 = Text("Ủa, là sao???", font="Sans", font_size=28)
+        text3 = Text('Cụ thể hơn được hem?', font="Sans", font_size=28).next_to(text2, DOWN)
+
+        self.play(FadeIn(pi2, shift=RIGHT * 2), FadeIn(pi1, shift=LEFT * 2))
+        self.wait()
+        self.my_play(
+            NumberCreatureSays(
+                pi1,
+                text1,
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                VGroup(text2, text3),
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Trigonometry_Scene13(MyScene):
+    def create_number(self):
+        hour = str(self.nowhour)
+        if self.nowhour < 10:
+            hour = "0" + str(self.nowhour)
+        minute = str(self.nowminute)
+        if self.nowminute < 10:
+            minute = "0" + str(self.nowminute)
+        number = Text(hour + ":" + minute)
+        rec = Rectangle().surround(number, buff=0.5, stretch=True)
+        return VGroup(rec, number)
+
+    def setup(self):
+        from datetime import datetime
+        # self.now = datetime.now()
+        self.nowhour = 12
+        self.nowminute = 20
+        self.hour = self.nowhour + self.nowminute / 60
+        self.minute = self.nowminute
+        print(self.hour)
+        print(self.minute)
+        self.circle = Circle().scale(2).rotate(PI / 2).flip(UP)
+        self.add(self.circle)
+        self.list_min = [self.circle.point_from_proportion(i / 60) for i in range(60)]
+        self.list_line = [Line(i, self.circle.get_center()) for i in self.list_min]
+        self.hour_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.4),
+                               buff=0).set_color(RED).rotate(-self.hour / 6 * PI, about_point=self.circle.get_center())
+        self.minute_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.15),
+                                 buff=0).set_color(BLUE).rotate(-self.minute / 30 * PI,
+                                                                about_point=self.circle.get_center())
+        self.dot = Dot(self.circle.get_center())
+        self.number = [
+            Text("{hour:.0f}".format(hour=12 if i == 0 else i / 5)).scale(0.7).move_to(
+                line.point_from_proportion(0.2))
+            for i, line in enumerate(self.list_line) if i % 5 == 0]
+        self.tick = [line.get_subcurve(0, 0.1) if i % 5 == 0 else line.get_subcurve(0, 0.03) for i, line in
+                     enumerate(self.list_line)]
+        self.clock = VGroup(self.hour_hand, self.minute_hand, self.circle, self.dot, *self.tick, *self.number)
+
+    def construct(self):
+        self.clock.shift(UP * 2.3).scale(0.8)
+        number = self.create_number().next_to(self.circle, DOWN)
+        self.add(number)
+        self.add(self.clock)
+        self.remove(self.hour_hand, self.minute_hand)
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR).shift(DOWN * 0.5)
+        pi2 = NumberCreature(
+            file_name_prefix="computer",
+            mode="plain",
+            flip_at_start=False
+        ).to_corner(DL).shift(DOWN * 0.5)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = Text("Okê bạn êiii!", font="sans", font_size=28)
+        O_t = Text("O", font_size=25).next_to(self.dot, DL, buff=SMALL_BUFF)
+        A = Dot(self.circle.point_from_proportion(1/3), color=YELLOW)
+        A_t = Text("A", font_size=25, color=YELLOW).next_to(A, DR, buff=SMALL_BUFF)
+        step1 = MarkupText('12:<span foreground="yellow">20</span>', font="sans")
+        step2 = MarkupText('<span foreground="yellow">insert</span> quá trình\ntính toán các thứ', font="sans")
+        step3 = MarkupText('Điểm <span foreground="yellow">A(0.87,-0.5)</span>', font="sans")
+        step4 = MarkupText('Vẽ một mũi tên\ntừ <span foreground="yellow">O</span> đến <span foreground="yellow">A</span>', font="sans")
+        step_group = VGroup(step1, step2, step3, step4).arrange(DOWN, buff=1).scale(0.70).to_corner(UR)
+        arrows = VGroup(*[Arrow(step_group[i].get_bottom(), step_group[i+1].get_top(), buff=0.05) for i in range(len(step_group)-1)])
+        self.play(FadeIn(pi2, shift=RIGHT * 2), FadeIn(pi1, shift=LEFT * 2))
+        self.wait()
+        # self.play(Write(step_group))
+        self.play((LaggedStart(*[Write(i) for i in (step1, arrows[0], step2, arrows[1])], lag_ratio=0.5)))
+        self.play(*[Write(i) for i in (A, A_t, O_t, step3)])
+        self.play(Write(arrows[2]), Write(step4))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text1,
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.play(GrowArrow(self.minute_hand))
+
