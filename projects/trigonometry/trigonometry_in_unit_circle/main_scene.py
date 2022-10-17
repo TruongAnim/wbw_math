@@ -3,10 +3,10 @@ import math
 from manim import *
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5")
-SCENE_NAME = list_scene[5]
-# SCENE_NAME = " ".join(list_scene)
+# SCENE_NAME = list_scene[5]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -89,34 +89,34 @@ class Scene0(MyScene):
         for item in color_map:
             item.set_color(color_map[item])
         # self.add(unit_circle, fomular1, fomular2)
-        self.play(Create(O), Write(O_t), Create(main_circle))
-        self.play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
-        self.play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
-        self.play(Create(OH), Create(alpha), Create(H), Create(OH_t))
-        self.play(Write(alpha_t), Create(H_t))
-        self.play(Create(HX), Create(OHX), Create(X))
-        self.play(Create(OX), Write(a))
-        self.play(Write(fomular1[0]), Write(fomular1[2]), Write(fomular1[4]))
-        self.play(ReplacementTransform(a.copy(), fomular1[1]),
+        self.my_play(Create(O), Write(O_t), Create(main_circle))
+        self.my_play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
+        self.my_play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
+        self.my_play(Create(OH), Create(alpha), Create(H), Create(OH_t))
+        self.my_play(Write(alpha_t), Create(H_t))
+        self.my_play(Create(HX), Create(OHX), Create(X))
+        self.my_play(Create(OX), Write(a))
+        self.my_play(Write(fomular1[0]), Write(fomular1[2]), Write(fomular1[4]))
+        self.my_play(ReplacementTransform(a.copy(), fomular1[1]),
                   ReplacementTransform(OH_t.copy(), fomular1[3]))
-        self.play(Write(fomular1[-1]))
-        self.play(Create(HY), Create(OHY), Create(Y))
-        self.play(Create(OY), Write(b))
-        self.play(Write(fomular2[0]), Write(fomular2[2]), Write(fomular2[4]))
-        self.play(ReplacementTransform(b.copy(), fomular2[1]),
+        self.my_play(Write(fomular1[-1]))
+        self.my_play(Create(HY), Create(OHY), Create(Y))
+        self.my_play(Create(OY), Write(b))
+        self.my_play(Write(fomular2[0]), Write(fomular2[2]), Write(fomular2[4]))
+        self.my_play(ReplacementTransform(b.copy(), fomular2[1]),
                   ReplacementTransform(OH_t.copy(), fomular2[3]))
-        self.play(Write(fomular2[-1]))
-        self.play(Transform(OH.copy(), OX), Wiggle(fomular1))
-        self.play(Transform(OH.copy(), OY), Wiggle(fomular2))
-        self.play(Write(fomular3[0]))
-        self.play(Transform(a.copy(), fomular3[1]),
+        self.my_play(Write(fomular2[-1]))
+        self.my_play(Transform(OH.copy(), OX), Wiggle(fomular1))
+        self.my_play(Transform(OH.copy(), OY), Wiggle(fomular2))
+        self.my_play(Write(fomular3[0]))
+        self.my_play(Transform(a.copy(), fomular3[1]),
                   Transform(b.copy(), fomular3[4]))
-        self.play(Write(fomular3[2]),
+        self.my_play(Write(fomular3[2]),
                   Write(fomular3[3]),
                   Write(fomular3[5]),
                   Write(fomular3[6]))
-        self.play(Transform(OH_t.copy(), fomular3[-1]))
-        self.play(Circumscribe(fomular3))
+        self.my_play(Transform(OH_t.copy(), fomular3[-1]))
+        self.my_play(Circumscribe(fomular3))
 
 
 class Scene1(MyScene):
@@ -176,16 +176,16 @@ class Scene1(MyScene):
         for item in color_map:
             item.set_color(color_map[item])
         # self.add(unit_circle, fomular1, fomular2)
-        self.play(Create(O), Write(O_t), Create(main_circle))
-        self.play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
-        self.play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
-        self.play(Create(OH), Create(alpha), Create(H))
-        self.play(Write(H_t), Write(alpha_t), Write(OH_t))
-        self.play(Create(OK), Create(beta), Create(K))
-        self.play(Write(K_t), Write(beta_t), Write(fomular1), Write(OK_t))
-        self.play(Create(HY), Create(KY), Create(OY), Create(OHY), Create(Y), Write(b))
-        self.play(Write(fomular2[:-1]))
-        self.play(Transform(b.copy(), fomular2[-1]))
+        self.my_play(Create(O), Write(O_t), Create(main_circle))
+        self.my_play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
+        self.my_play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
+        self.my_play(Create(OH), Create(alpha), Create(H))
+        self.my_play(Write(H_t), Write(alpha_t), Write(OH_t))
+        self.my_play(Create(OK), Create(beta), Create(K))
+        self.my_play(Write(K_t), Write(beta_t), Write(fomular1), Write(OK_t))
+        self.my_play(Create(HY), Create(KY), Create(OY), Create(OHY), Create(Y), Write(b))
+        self.my_play(Write(fomular2[:-1]))
+        self.my_play(Transform(b.copy(), fomular2[-1]))
 
 
 class Scene2(MyScene):
@@ -245,16 +245,16 @@ class Scene2(MyScene):
         for item in color_map:
             item.set_color(color_map[item])
         # self.add(unit_circle, fomular1, fomular2)
-        self.play(Create(O), Write(O_t), Create(main_circle))
-        self.play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
-        self.play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
-        self.play(Create(OH), Create(alpha), Create(H))
-        self.play(Write(H_t), Write(alpha_t), Write(OH_t))
-        self.play(Create(OK), Create(beta), Create(K))
-        self.play(Write(K_t), Write(beta_t), Write(fomular1), Write(OK_t))
-        self.play(Create(HX), Create(KX), Create(OX), Create(OHY), Create(X), Write(a))
-        self.play(Write(fomular2[:-1]))
-        self.play(Transform(a.copy(), fomular2[-1]))
+        self.my_play(Create(O), Write(O_t), Create(main_circle))
+        self.my_play(Create(vertical), Create(horizontal), Write(x_t), Write(y_t))
+        self.my_play(Write(coord_A), Write(coord_B), Write(coord_C), Write(coord_D))
+        self.my_play(Create(OH), Create(alpha), Create(H))
+        self.my_play(Write(H_t), Write(alpha_t), Write(OH_t))
+        self.my_play(Create(OK), Create(beta), Create(K))
+        self.my_play(Write(K_t), Write(beta_t), Write(fomular1), Write(OK_t))
+        self.my_play(Create(HX), Create(KX), Create(OX), Create(OHY), Create(X), Write(a))
+        self.my_play(Write(fomular2[:-1]))
+        self.my_play(Transform(a.copy(), fomular2[-1]))
 
 
 class Scene3(MyScene):
