@@ -4,10 +4,10 @@ from common.svg.character.number_creature_anim import *
 PROJECT_NAME = "Trigonometry"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
-              "Scene12", "Scene13")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[13]
+              "Scene12", "Scene13", "Scene14", "Scene15")
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[11]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -600,3 +600,129 @@ class Trigonometry_Scene13(MyScene):
         )
         self.play(GrowArrow(self.minute_hand))
 
+
+class Trigonometry_Scene14(MyScene):
+    def create_number(self):
+        hour = str(self.nowhour)
+        if self.nowhour < 10:
+            hour = "0" + str(self.nowhour)
+        minute = str(self.nowminute)
+        if self.nowminute < 10:
+            minute = "0" + str(self.nowminute)
+        number = Text(hour + ":" + minute)
+        rec = Rectangle().surround(number, buff=0.5, stretch=True)
+        return VGroup(rec, number)
+
+    def setup(self):
+        from datetime import datetime
+        # self.now = datetime.now()
+        self.nowhour = 12
+        self.nowminute = 0
+        self.hour = self.nowhour + self.nowminute / 60
+        self.minute = self.nowminute
+        print(self.hour)
+        print(self.minute)
+        self.circle = Circle().scale(2).rotate(PI / 2).flip(UP)
+        self.add(self.circle)
+        self.list_min = [self.circle.point_from_proportion(i / 60) for i in range(60)]
+        self.list_line = [Line(i, self.circle.get_center()) for i in self.list_min]
+        self.hour_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.4),
+                               buff=0).set_color(RED).rotate(-self.hour / 6 * PI, about_point=self.circle.get_center())
+        self.minute_hand = Arrow(self.circle.get_center(), self.list_line[0].point_from_proportion(0.15),
+                                 buff=0).set_color(BLUE).rotate(-self.minute / 30 * PI,
+                                                                about_point=self.circle.get_center())
+        self.dot = Dot(self.circle.get_center())
+        self.number = [
+            Text("{hour:.0f}".format(hour=12 if i == 0 else i / 5)).scale(0.7).move_to(
+                line.point_from_proportion(0.2))
+            for i, line in enumerate(self.list_line) if i % 5 == 0]
+        self.tick = [line.get_subcurve(0, 0.1) if i % 5 == 0 else line.get_subcurve(0, 0.03) for i, line in
+                     enumerate(self.list_line)]
+        self.clock = VGroup(self.hour_hand, self.minute_hand, self.circle, self.dot, *self.tick, *self.number)
+
+    def construct(self):
+        self.clock.shift(UP * 2).scale(0.8)
+        # number = self.create_number().next_to(self.circle, DOWN)
+        # self.add(number)
+        self.add(self.clock)
+        self.remove(self.hour_hand, self.minute_hand)
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR).shift(DOWN * 0.5)
+        pi2 = NumberCreature(
+            file_name_prefix="computer",
+            mode="plain",
+            flip_at_start=False
+        ).to_corner(DL).shift(DOWN * 0.5)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 2,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = Text("Cái này dễ hơn", font="sans", font_size=28)
+        O_t = Text("O", font_size=25).next_to(self.dot, DL, buff=SMALL_BUFF)
+        A = Dot(self.circle.point_from_proportion(0), color=YELLOW)
+        A_t = Text("A", font_size=25, color=YELLOW).next_to(A, UP, buff=SMALL_BUFF)
+        step1 = MarkupText('12:<span foreground="yellow">20</span>', font="sans")
+        step2 = MathTex(r"\alpha", "={2\pi \over 3}").scale(1.2)
+        step3 = MarkupText("Vẽ mũi tên O->A", font="sans").scale(0.8)
+        step4 = MarkupText("Quay mũi tên 1 góc ", font="sans").scale(0.8)
+        step_group = VGroup(step1, step2, step3, step4).arrange(DOWN, buff=1).scale(0.70).to_corner(UR).shift(LEFT)
+        arrows = VGroup(*[Arrow(step_group[i].get_bottom(), step_group[i+1].get_top(), buff=0.05) for i in range(len(step_group)-1)])
+        step41 = MathTex(r"-\alpha").next_to(step4, RIGHT, buff=SMALL_BUFF)
+        step2[0].set_color(RED)
+        step41.set_color(RED)
+        self.play(FadeIn(pi2, shift=RIGHT * 2), FadeIn(pi1, shift=LEFT * 2))
+        self.wait()
+        # self.play(Write(step_group))
+        self.play((LaggedStart(*[Write(i) for i in (step1, arrows[0], step2, arrows[1])], lag_ratio=0.5)))
+        self.play(*[Write(i) for i in (A, A_t, O_t, step3)], Write(self.minute_hand))
+        A_copy = A.copy()
+        hand = self.minute_hand.copy()
+        self.play(Write(arrows[2]), Write(step4), Write(step41),
+                  Rotate(A_copy, -2*PI/3, about_point=self.dot.get_center()),
+                  Rotate(A_t.copy(), -2*PI/3, about_point=self.dot.get_center()),
+                  Rotate(hand, -2*PI/3, about_point=self.dot.get_center()),
+                  self.minute_hand.animate.set_fill(opacity=0.5).set_stroke(opacity=0.5))
+        angle = Angle(self.minute_hand, hand, other_angle=True, color=RED, radius=0.3)
+        self.play(Create(angle),
+                  step2[0].copy().animate.move_to(Angle(self.minute_hand, hand, other_angle=True, radius=0.5).point_from_proportion(0.5)))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text1,
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Trigonometry_Scene15(MyScene):
+    def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1",
+            flip_at_start=True,
+            color=BLUE
+        ).scale(1.5).to_corner(DR)
+        bubble_kwargs = {
+            "stretch_width": 6,
+            "stretch_height": 4,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = MarkupText('Thank you <span foreground="yellow">so much!</span>', font="sans", font_size=40)
+
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi1,
+                text1,
+                target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
