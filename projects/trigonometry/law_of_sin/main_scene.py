@@ -1,11 +1,11 @@
 from manim import *
 import math
 
-list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[2]
+list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Thumbnail")
+SCENE_NAME = list_scene[-1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -30,6 +30,27 @@ class MyScene(Scene):
                      subcaption_offset=subcaption_offset,
                      **kwargs)
         self.wait()
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        A = Dot(LEFT * 2)
+        B = Dot(UP * 3.464)
+        C = Dot(RIGHT * 2.9)
+        H = Dot(ORIGIN)
+        group_point = VGroup(A, B, C, H)
+        group_point.shift(LEFT * 3 + DOWN).scale(1.3)
+        tri = VMobject(fill_opacity=1, fill_color=RED).set_points_as_corners([A.get_center(), B.get_center(), C.get_center(), A.get_center()])
+        AB = Line(A.get_center(), B.get_center(), color=RED)
+        BC = Line(B.get_center(), C.get_center(), color=YELLOW)
+        AC = Line(C.get_center(), A.get_center(), color=BLUE)
+        BH = Line(B.get_center(), H.get_center(), color=GREEN)
+        normal_tri = MarkupText('<span foreground="green" size="x-large">Tam giác</span>\n<span foreground="yellow" size="x-large">Không vuông</span>',
+                                font_size=40, font="Sans").to_corner(UR)
+        still_sin = MarkupText('<span foreground="green" size="x-large">vẫn dùng được </span><span foreground="red" size="x-large">sin?</span>',
+                               font_size=50, font="Sans").shift(DOWN*3)
+        arrow = Arrow(normal_tri.get_corner(DL), BC.point_from_proportion(0.5))
+        self.add(A, B, C, AB, BC, AC, tri, normal_tri, still_sin, arrow)
 
 
 class Scene0(MyScene):
@@ -207,7 +228,7 @@ class Scene3(MyScene):
         a = MathTex("a", color=YELLOW).next_to(BC.get_center(), UR)
         b = MathTex("b", color=BLUE).next_to(AC.get_center(), DR)
         h = MathTex(r"a", "sin(", "60^\circ", ")").scale(0.8).next_to(BH.get_center(), RIGHT, buff=SMALL_BUFF)
-        h.shift(DOWN*0.5)
+        h.shift(DOWN * 0.5)
         h[0].set_color(RED)
         self.play(Create(A), Create(B), Create(C))
         self.play(Create(AB), Create(BC), Create(AC))
@@ -217,11 +238,11 @@ class Scene3(MyScene):
         self.play(Create(BH), Create(H), Create(H_angle))
         self.wait()
         self.play(*[Write(h[i]) for i in (1, 3)],
-                  Transform(c.copy(),h[0]),
+                  Transform(c.copy(), h[0]),
                   Transform(A_angle_t.copy(), h[2]))
 
         equation1 = MathTex("\Rightarrow", r"\text{Area}=", "{1\over 2}", "a", "b", "sin(", "60^\circ", ")") \
-            .shift(LEFT*3)
+            .shift(LEFT * 3)
         color_map = {
             "a": RED,
             "b": BLUE,
