@@ -1,5 +1,5 @@
 from manim import interpolate_color
-
+from colour import Color
 
 def interpolate_color_range(*colors):
     alpha = colors[-1]
@@ -25,3 +25,7 @@ def interpolate_color_range(*colors):
             c_alpha = d_alpha / dx
             return interpolate_color(c_s[0], c_s[1], c_alpha)
         i_count += 1
+
+
+def HSL(hue, saturation=1, lightness=0.5):
+    return Color(hsl=(hue, saturation, lightness))

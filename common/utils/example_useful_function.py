@@ -1,4 +1,5 @@
 from manim import *
+from color_utils import HSL
 from color_utils import interpolate_color_range
 
 SCENE_NAME = "TestGetIndexes"
@@ -105,14 +106,6 @@ MoveAlongPath(Dot(), part_line)  # self.play(MoveAlongPath(Dot(), part_line))
 
 # Create a rectangle surround an object
 Rectangle().surround(square)
-
-# Get a gradient color range
-from colour import Color
-
-
-def HSL(hue, saturation=1, lightness=0.5):
-    return Color(hsl=(hue, saturation, lightness))
-
 
 # => just change hue from 0 to 1
 partitions = 100
