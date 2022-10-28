@@ -2,14 +2,14 @@ from manim import *
 from common.svg.character.number_creature import NumberCreature
 from common.svg.character.number_creature_anim import *
 
-list_scene = ("Intro", "TestPi", "Outro", "Logo", "Background")
-SCENE_NAME = list_scene[0]
+list_scene = ("Intro", "TestPi", "Outro", "Logo", "Background", "ColorName")
+SCENE_NAME = list_scene[-1]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 config.background_color = BLACK
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -t -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -167,3 +167,9 @@ class Background(Scene):
                                        )
         self.add(logo, pi)
         self.add(wbw, truong_anim)
+
+
+class ColorName(Scene):
+    def construct(self):
+        truong_anim = MarkupText("@TruongAnim", font="Sans", font_size=35, gradient=(BLUE, GREEN))
+        self.add(truong_anim)
