@@ -9,7 +9,7 @@ CONFIG = "production.cfg"
 config.background_color = BLACK
 
 if __name__ == "__main__":
-    command = f"manim -t -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
