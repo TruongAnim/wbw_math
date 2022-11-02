@@ -5,7 +5,7 @@ import random
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9")
-SCENE_NAME = list_scene[4]
+SCENE_NAME = list_scene[3]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
@@ -57,8 +57,8 @@ class Scene0(MyScene):
             i in list_rand]
         to_do = Text("Hãy tính sấp xỉ số Pi.", font_size=35, font="Sans", color=GREEN).shift(DOWN)
         first_value = texts[0]
-        self.play(Write(ran))
-        self.play(Write(first_value))
+        self.my_play(Write(ran))
+        self.my_play(Write(first_value))
         count = 0
         for i in texts[1:]:
             self.play(Transform(first_value, i))
@@ -207,7 +207,7 @@ class Scene3(MyScene):
 
 
 rel_obj = 500000
-rel_time = 100
+rel_time = 20
 test_obj = 100
 test_time = 3
 
