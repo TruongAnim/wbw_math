@@ -12,4 +12,4 @@ def calculate(n):
     print("--- %s seconds ---" % (time.time() - start_time))
     return 4*sum
 
-print(calculate(1000000000))
+print(calculate(1000000))
