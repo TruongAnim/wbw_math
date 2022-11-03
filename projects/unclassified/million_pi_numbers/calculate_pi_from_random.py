@@ -10,6 +10,10 @@ def calculate_pi(sample):
             count += 1
         if i % 10000000 == 0:
             print(i, "--- %s seconds ---" % (time.time() - start_time))
+        if i == 999990000:
+            print(i, "--- %s seconds ---" % (time.time() - start_time))
+            print(count, sample)
+    print(count, sample)
     print("--- %s seconds ---" % (time.time() - start_time))
     return (count / sample) * 4
 
