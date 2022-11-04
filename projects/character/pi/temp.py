@@ -5,7 +5,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[2]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[4]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -126,6 +126,80 @@ class Temp_Scene2(MyScene):
                 pi1,
                 text1,
                 target_mode="smile1",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Temp_Scene3(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4.5,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text2 = MarkupText('Vậy làm sao để tính\nsố <span foreground="yellow">Pi</span> chính xác hơn?', font="sans",
+                           font_size=25)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Temp_Scene4(MyScene):
+    def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1",
+            flip_at_start=True,
+            color=BLUE
+        ).scale(1).to_corner(DR)
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+
+        def create_text(content):
+            return Text(content, font_size=40, font="Sans", color=YELLOW)
+
+        group = VGroup(*[create_text(i) for i in (
+            "B1: Tìm một công thức toán học nào đó có số Pi",
+            "B2: Rút Pi sang một vế",
+            "B3: Tìm cách tính vế còn lại"
+        )]).arrange(DOWN, buff=MED_LARGE_BUFF, aligned_edge=LEFT).shift(LEFT)
+        for i in group:
+            self.my_play(Write(i))
+
+
+class Temp_Scene5(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4.5,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text2 = MarkupText('Chắc gì đã đúng???', font="sans",
+                           font_size=25)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
                 bubble_kwargs=bubble_kwargs,
             )
         )
