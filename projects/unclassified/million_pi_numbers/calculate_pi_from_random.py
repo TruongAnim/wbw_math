@@ -8,9 +8,7 @@ def calculate_pi(sample):
         y = random.uniform(0, 1)
         if x * x + y * y <= 1:
             count += 1
-        if i % 10000000 == 0:
-            print(i, "--- %s seconds ---" % (time.time() - start_time))
-        if i == 999990000:
+        if i % 1000000 == 0:
             print(i, "--- %s seconds ---" % (time.time() - start_time))
             print(count, sample)
     print(count, sample)
