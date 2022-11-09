@@ -4,11 +4,11 @@ from manim import *
 import random
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
-              "Scene6", "Scene7", "Scene8", "Scene9")
-SCENE_NAME = list_scene[3]
+              "Scene6", "Scene7", "Scene8", "Scene9", "Thumbnail")
+SCENE_NAME = list_scene[-1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -38,6 +38,47 @@ class MyScene(Scene):
 myTemplate = TexTemplate()
 myTemplate.add_to_preamble(r"\usepackage{vntex}")
 
+
+class Thumbnail(MyScene):
+    def construct(self):
+        import random
+        main_circle = Circle(radius=3, color=BLUE)
+        vertical = Arrow(start=DOWN * 4, end=UP * 4, stroke_width=1)
+        horizontal = Arrow(start=LEFT * 4, end=RIGHT * 4, stroke_width=1)
+        O = Dot(ORIGIN)
+        P = Dot(RIGHT * 2.3 + UP * 1, color=YELLOW)
+        random.seed(9)
+        list_x = [random.uniform(0, 1) for _ in range(100)]
+        random.seed(2)
+        list_y = [random.uniform(0, 1) for _ in range(100)]
+        list_point = [Dot(RIGHT * i *3 + UP * j * 3, color=YELLOW) if (i*i+j*j)<=1 else Dot(RIGHT * i *3 + UP * j * 3) for i, j in zip(list_x, list_y)]
+        count = 0
+        for i, j in zip(list_x, list_y):
+            if i*i+j*j <=1:
+                count+=1
+        print(count)
+        sub_circle = main_circle.get_subcurve(0, 0.25)
+        sub_circle.add_points_as_corners([ORIGIN, RIGHT*3])
+        sub_circle.set_stroke(color=YELLOW, width=2)
+        sub_circle.set_fill(color=YELLOW, opacity=0.2)
+        square = VMobject(stroke_width=2, stroke_color=WHITE, fill_color=WHITE, fill_opacity=0.2)\
+            .set_points_as_corners([ORIGIN, RIGHT*3, UR*3, UP*3, ORIGIN])
+        O_t = MathTex("O").next_to(O, DL)
+        x_t = MathTex("x").next_to(horizontal.get_end(), DOWN)
+        y_t = MathTex("y").next_to(vertical.get_end(), RIGHT)
+        brace = Brace(Line(start=ORIGIN, end=RIGHT * 3), DOWN, buff=SMALL_BUFF, color=GREEN)
+        brace_t = brace.get_tex("1")
+        brace_t.set_color(GREEN)
+        brace2 = Brace(Line(start=ORIGIN, end=UP * 3), LEFT, buff=SMALL_BUFF, color=GREEN)
+        brace2_t = brace2.get_tex("1")
+        brace2_t.set_color(GREEN)
+        group = VGroup(vertical, horizontal, O, O_t, x_t, y_t, brace, brace2, brace_t, brace2_t, P,
+                       *list_point, sub_circle, square).scale(1.5).shift(LEFT * 5 + DOWN*2)
+        text1 = MathTex(r"\text{Tính số }\pi", color=GREEN, tex_template=myTemplate).scale(3).to_corner(UR)
+        text1[0][-1].set_color(YELLOW)
+        text2 = Text("từ", color=BLUE, font="Sans", font_size=60).next_to(text1, DOWN)
+        text3 = Text("ngẫu nhiên", font="Sans", color=RED, font_size=80).next_to(text2, DOWN)
+        self.add(group, text1, text2, text3)
 
 class Scene0(MyScene):
     def construct(self):

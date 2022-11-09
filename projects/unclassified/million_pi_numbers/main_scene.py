@@ -4,11 +4,11 @@ from manim.utils.rate_functions import ease_in_expo
 import random
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
-              "Scene6", "Scene7", "Scene8", "Scene9")
-SCENE_NAME = list_scene[3]
+              "Scene6", "Scene7", "Scene8", "Scene9", "Thumbnail")
+SCENE_NAME = list_scene[-1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -42,6 +42,17 @@ rel_obj = 1000000
 rel_time = 5
 test_obj = 100
 test_time = 3
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        pi2 = MathTex(r"\pi=", "3.14159265...458151").scale(2.5).shift(UP)
+        colors = [RED, PINK, YELLOW]
+        pi2.set_color_by_gradient(*colors)
+        brace2 = Brace(pi2[1], DOWN).stretch_to_fit_height(0.5)
+        billi = Text("1 triệu chữ số", color=GREEN, font_size=75, font="Sans")\
+            .next_to(brace2, DOWN, buff=SMALL_BUFF)
+        self.add(pi2, brace2, billi)
 
 
 class Scene0(MyScene):
