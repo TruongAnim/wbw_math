@@ -5,9 +5,9 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[4]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[5]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -203,3 +203,37 @@ class Temp_Scene5(MyScene):
                 bubble_kwargs=bubble_kwargs,
             )
         )
+
+
+class Temp_Scene5(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder"
+        ).scale(1.5).to_corner(DL, buff=0)
+        bubble_kwargs = {
+            "stretch_width": 3,
+            "stretch_height": 2,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+
+        euclid = ImageMobject("euclid").to_corner(DR, buff=0)
+        bubble = SVGMobject("Bubbles_speech", stroke_color=WHITE).flip(UP).scale(2).next_to(euclid, UL, buff=-0.8)
+        text = MarkupText('Tồn tại <span foreground="yellow">vô hạn</span>\nsố nguyên tố',
+                        font="Sans",
+                        font_size=40,
+                        color=WHITE).move_to(bubble).shift(UP*0.5)
+        wbw = Text("But why?", font_size=35, font="Sans").move_to(bubble).shift(UP * 0.3)
+        self.play(FadeIn(euclid, shift=LEFT))
+        self.play(FadeIn(bubble), Write(text))
+        self.wait()
+        self.play(FadeIn(pi, shift=RIGHT * 2))
+        self.wait()
+        self.play(NumberCreatureSays(pi,
+                                     wbw,
+                                     target_mode="wonder",
+                                     bubble_kwargs=bubble_kwargs
+                                     )
+                  )
+        self.wait()
