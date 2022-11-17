@@ -5,9 +5,9 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[5]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[7]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -37,6 +37,10 @@ class MyScene(Scene):
                      subcaption_offset=subcaption_offset,
                      **kwargs)
         self.wait()
+
+
+myTemplate = TexTemplate()
+myTemplate.add_to_preamble(r"\usepackage{vntex}")
 
 
 class Temp_Scene0(Scene):
@@ -247,4 +251,57 @@ class Temp_Scene6(MyScene):
                                      bubble_kwargs=bubble_kwargs
                                      )
                   )
+        self.wait()
+
+
+class Temp_Scene7(MyScene):
+    def construct(self):
+        pi = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="smile1"
+        ).scale(1).to_corner(DL, buff=0)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 3.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        wbw = Paragraph("Mình nhất định\nsẽ tìm ra",
+                        font="Sans",
+                        color=YELLOW,
+                        alignment="center",
+                        font_size=35,
+                        line_spacing=0.5)
+        self.play(FadeIn(pi, shift=RIGHT * 2))
+        self.wait()
+        self.play(NumberCreatureSays(pi,
+                                     wbw,
+                                     target_mode="smile1",
+                                     bubble_kwargs=bubble_kwargs
+                                     )
+                  )
+
+        root1 = MathTex("\sqrt{2}=", "{7 \over 5}", r"(\text{Sai số: }1 \% )", tex_template=myTemplate)
+        root2 = MathTex("\sqrt{2}=", "{141 \over 100}", r"(\text{Sai số: }0.3 \% )", tex_template=myTemplate)
+        root3 = MathTex("\sqrt{2}=", "{707 \over 500}", r"(\text{Sai số: }0.015 \% )", tex_template=myTemplate)
+        root4 = MathTex("\sqrt{2}=", "{7071 \over 5000}", r"(\text{Sai số: }0.001 \% )", tex_template=myTemplate)
+        root5 = MathTex("\sqrt{2}=", "{141421 \over 100000}", r"(\text{Sai số: }0.00025 \% )", tex_template=myTemplate)
+        root6 = MathTex("\sqrt{2}=", "{35355339 \over 25000000}", r"(\text{Sai số: }0.0000001 \% )", tex_template=myTemplate)
+        root_group = VGroup(root1, root2, root3, root4, root5, root6).arrange(DOWN, aligned_edge=LEFT)
+        root_group.set_color_by_gradient(RED, YELLOW)
+        root_group.to_edge(RIGHT)
+        for i in root_group:
+            self.play(FadeIn(i, shift=UP))
+        euclid = ImageMobject("hippasus").scale(0.5).to_corner(DR, buff=0)
+        bubble = SVGMobject("Bubbles_speech", stroke_color=WHITE).flip(UP).scale(1.7).next_to(euclid, UL, buff=-0.5)
+        never = Paragraph("Bọn trẻ bây giờ\ncứng đầu thật",
+                        font="Sans",
+                        color=YELLOW,
+                        alignment="center",
+                        font_size=35,
+                        line_spacing=0.5).move_to(bubble).shift(UP * 0.3)
+
+        self.play(FadeIn(euclid, shift=LEFT))
+        self.play(FadeIn(bubble), Write(never))
+
         self.wait()
