@@ -7,7 +7,7 @@ list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene12", "Scene13", "Scene14", "Scene15")
 SCENE_NAME = PROJECT_NAME + "_" + list_scene[7]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -280,7 +280,6 @@ class Temp_Scene7(MyScene):
                                      bubble_kwargs=bubble_kwargs
                                      )
                   )
-
         root1 = MathTex("\sqrt{2}=", "{7 \over 5}", r"(\text{Sai số: }1 \% )", tex_template=myTemplate)
         root2 = MathTex("\sqrt{2}=", "{141 \over 100}", r"(\text{Sai số: }0.3 \% )", tex_template=myTemplate)
         root3 = MathTex("\sqrt{2}=", "{707 \over 500}", r"(\text{Sai số: }0.015 \% )", tex_template=myTemplate)
@@ -294,13 +293,13 @@ class Temp_Scene7(MyScene):
             self.play(FadeIn(i, shift=UP))
         euclid = ImageMobject("hippasus").scale(0.5).to_corner(DR, buff=0)
         bubble = SVGMobject("Bubbles_speech", stroke_color=WHITE).flip(UP).scale(1.7).next_to(euclid, UL, buff=-0.5)
-        never = Paragraph("Bọn trẻ bây giờ\ncứng đầu thật",
+        never = Paragraph("Bọn trẻ bây giờ\ncố chấp thật",
                         font="Sans",
                         color=YELLOW,
                         alignment="center",
                         font_size=35,
                         line_spacing=0.5).move_to(bubble).shift(UP * 0.3)
-
+        self.wait()
         self.play(FadeIn(euclid, shift=LEFT))
         self.play(FadeIn(bubble), Write(never))
 
