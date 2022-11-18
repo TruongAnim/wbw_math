@@ -58,3 +58,20 @@ class TextTranslation(VGroup):
 
     def align_points_with_larger(self, larger_mobject):
         pass
+
+
+class Explain(VGroup):
+    def __init__(self, target, text: str = "text", location=ORIGIN, shift=ORIGIN, font_size: float=35, **kwargs):
+        super().__init__(**kwargs)
+        explain = Text(text, font="Sans", font_size=font_size).move_to(location).shift(shift)
+        rec = Rectangle(color=YELLOW).surround(target, stretch=True, buff=SMALL_BUFF)
+        arrow = Arrow(explain.get_bottom(), rec.get_top())
+        if explain.get_center()[1] < target.get_center()[1]:
+            arrow = Arrow(explain.get_top(), rec.get_bottom())
+        self.add(rec)
+        self.add(arrow)
+        self.add(explain)
+
+
+    def align_points_with_larger(self, larger_mobject):
+        pass
