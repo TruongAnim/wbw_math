@@ -72,6 +72,5 @@ class Explain(VGroup):
         self.add(arrow)
         self.add(explain)
 
-
     def align_points_with_larger(self, larger_mobject):
         pass
