@@ -6,14 +6,14 @@ from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
 
 list_scene = ("Scene1", "Scene2", "Scene3",
-              "ErrorChart", "Scene5")
-# SCENE_NAME = list_scene[4]
-SCENE_NAME = " ".join(list_scene)
+              "ErrorChart", "Scene5", "Thumbnail")
+SCENE_NAME = list_scene[-1]
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c  {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -s -c  {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -37,6 +37,24 @@ class MyScene(Scene):
                      subcaption_offset=subcaption_offset,
                      **kwargs)
         self.wait()
+
+
+class Thumbnail(Scene):
+    def construct(self):
+        ellipse = Ellipse(width=7, height=4, color=BLUE, fill_color=BLUE, fill_opacity=0.8)
+        b = Line(ellipse.get_top(), ellipse.get_center(), color=GREEN, stroke_width=10)
+        a = Line(ellipse.get_right(), ellipse.get_center(), color=RED, stroke_width=10)
+        a_tex = MathTex("a", color=RED).scale(2).next_to(a, DOWN)
+        b_tex = MathTex("b", color=GREEN).scale(2).next_to(b, LEFT)
+        text = Text("Hình Elip", font="Sans", font_size=60, color=BLUE).next_to(ellipse, DOWN)
+        group = VGroup(ellipse, a, b, a_tex, b_tex, text).to_edge(LEFT, buff=SMALL_BUFF)
+        cv = Text("Diện tích:", font="Sans", font_size=45, color=YELLOW).shift(UP+RIGHT*1.5)
+        dt = Text("Chu vi:", font="Sans", font_size=45, color=YELLOW).next_to(cv, DOWN, buff=2, aligned_edge=LEFT)
+        ellipse_peri = MathTex(r"\pi \times a \times b ").scale(1.7).next_to(cv, RIGHT)
+        dt_peri = MathTex(r"???", color=RED).scale(3).next_to(dt, RIGHT)
+        ellipse_peri[0][2].set_color(RED)
+        ellipse_peri[0][4].set_color(GREEN)
+        self.add(group, cv, dt, ellipse_peri, dt_peri)
 
 
 class Scene1(MyScene):
