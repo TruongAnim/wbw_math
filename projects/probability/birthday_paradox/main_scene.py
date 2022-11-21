@@ -1,6 +1,5 @@
 from manim import *
-from common.custom.custom_mobject import TextTranslation
-from common.custom.custom_mobject import Explain
+from common.custom.custom_mobject import ImageAndMathTex
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
 SCENE_NAME = list_scene[0]
@@ -39,6 +38,5 @@ myTemplate.add_to_preamble(r"\usepackage{vntex}")
 
 class Scene0(MyScene):
     def construct(self):
-        names = ["chars/char (" + str(i) + ")" for i in range(1, 11)]
-        group = Group(*[ImageMobject(i).scale_to_fit_height(1.7) for i in names]).arrange_in_grid(5, 5, buff=-0.2)
-        self.add(group)
+        a = ImageAndMathTex("chars/char (1)")
+        self.add(a)

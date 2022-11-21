@@ -90,3 +90,18 @@ class ImageAndText(Group):
         image = ImageMobject(name).scale_to_fit_width(image_width)
         text = Text(content, font_size=text_size, font=text_font, color=text_color).next_to(image, DOWN, buff=text_buff)
         self.add(image, text)
+
+
+class ImageAndMathTex(Group):
+    def __init__(self,
+                 name: str = "file_name",
+                 image_width: float = 2,
+                 content: str = "abc",
+                 tex_scale: float = 1,
+                 tex_color: str = RED,
+                 text_buff: float = 0.2,
+                 **kwargs):
+        super().__init__(**kwargs)
+        image = ImageMobject(name).scale_to_fit_width(image_width)
+        tex = MathTex(content, color=tex_color).scale(tex_scale).next_to(image, DOWN, buff=text_buff)
+        self.add(image, tex)
