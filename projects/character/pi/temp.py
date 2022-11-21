@@ -5,7 +5,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[7]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[8]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -304,3 +304,29 @@ class Temp_Scene7(MyScene):
         self.play(FadeIn(bubble), Write(never))
 
         self.wait()
+
+
+class Temp_Scene8(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4.5,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text2 = MarkupText('Tại sao lại trùng\nnhiều như vậy?', font="sans",
+                           font_size=35)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
