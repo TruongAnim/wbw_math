@@ -2,14 +2,14 @@ from manim import *
 from common.custom.custom_mobject import TextTranslation
 from common.custom.custom_mobject import Explain
 
-list_scene = ("Scene0", "Scene1", "Scene2", "Scene3")
-SCENE_NAME = list_scene[1]
+list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Thumbnail")
+SCENE_NAME = list_scene[-1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -s -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -35,6 +35,23 @@ class MyScene(Scene):
 
 myTemplate = TexTemplate()
 myTemplate.add_to_preamble(r"\usepackage{vntex}")
+
+
+class Thumbnail(MyScene):
+    def construct(self):
+        square = Square(side_length=6, color=GREEN, stroke_width=10)
+        square_t1 = MathTex("1", color=GREEN).scale(2).next_to(square, DOWN)
+        square_t2 = MathTex("1", color=GREEN).scale(2).next_to(square, LEFT)
+        hypotenus = Line(square.point_from_proportion(0.25), square.point_from_proportion(0.75), color=YELLOW, stroke_width=10)
+        root_of_2 = MathTex("\sqrt{2}", color=YELLOW).scale(2).next_to(hypotenus.get_center(), UP).shift(RIGHT * 0.3)
+        square_group = VGroup(square.get_subcurve(0.25, 0.75), square_t1, square_t2, root_of_2, hypotenus).shift(LEFT * 3)
+        root_of_20 = MathTex("\sqrt{2}", "=").to_edge(UP).shift(LEFT*3)
+        root_of_20[0].set_color(YELLOW)
+        root_of_22 = MathTex("=", "1.414213562373...").scale(2).next_to(root_of_2, RIGHT)
+        brace = Brace(root_of_22[1], DOWN)
+        text = Text("Dài vô tận", font='Sans', font_size=70, color=GREEN).next_to(brace, DOWN)
+        self.add(square_group, root_of_22, text, brace)
+        self.wait()
 
 
 class Scene0(MyScene):
