@@ -74,3 +74,19 @@ class Explain(VGroup):
 
     def align_points_with_larger(self, larger_mobject):
         pass
+
+
+class ImageAndText(Group):
+    def __init__(self,
+                 name: str = "file_name",
+                 image_width: float = 2,
+                 content: str = "hello",
+                 text_font: str = "Sans",
+                 text_size: float = 30,
+                 text_color: str = RED,
+                 text_buff: float = 0.2,
+                 **kwargs):
+        super().__init__(**kwargs)
+        image = ImageMobject(name).scale_to_fit_width(image_width)
+        text = Text(content, font_size=text_size, font=text_font, color=text_color).next_to(image, DOWN, buff=text_buff)
+        self.add(image, text)
