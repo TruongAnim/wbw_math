@@ -5,9 +5,9 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[8]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[9]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -321,6 +321,38 @@ class Temp_Scene8(MyScene):
         }
         text2 = MarkupText('Tại sao lại trùng\nnhiều như vậy?', font="sans",
                            font_size=35)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Temp_Scene9(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False
+        ).to_corner(DL, buff=SMALL_BUFF)
+        bubble_kwargs = {
+            "stretch_width": 6,
+            "stretch_height": 3.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text1 = MathTex(r"\text{Thua}", r"\rightarrow", r"\text{Gấp đôi}", tex_template=myTemplate).scale(3).to_edge(UP)
+        text1[0].set_color(RED)
+        text1[2].set_color(GREEN)
+        text2 = MarkupText('Liệu có thành công?', font="Sans",
+                           font_size=100, color=TEAL)
+        text3 = MarkupText('1,000,000\n     ván', font="Sans",
+                           font_size=80, color=YELLOW).to_edge(RIGHT)
+        self.add(text1, text3)
         self.play(FadeIn(pi2, shift=RIGHT * 2))
         self.my_play(
             NumberCreatureSays(

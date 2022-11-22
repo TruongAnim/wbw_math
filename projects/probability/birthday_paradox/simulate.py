@@ -5,6 +5,7 @@ def calculate(students):
     product = 1
     for i in range(365, 365 - students, -1):
         product *= (i / 365)
+        print(i)
     print(product)
     return 1 - product
 
@@ -39,7 +40,7 @@ def test_probability_to_one(students, run_times):
 
 if __name__ == "__main__":
     print("hello")
-    # print(calculate(45))
+    print(calculate(45))
     # test_probability(45, 1000000)
-    print(calculate_to_one(20))
-    test_probability_to_one(20, 1000000)
+    # print(calculate_to_one(20))
+    # test_probability_to_one(20, 1000000)
