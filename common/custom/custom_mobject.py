@@ -115,10 +115,15 @@ class SetNumber(VGroup):
                  elip_height: float = 5,
                  font_size: float = 35,
                  text_color: str = RED,
+                 use_elip: bool = True,
                  **kwargs):
         super().__init__(**kwargs)
+
+
         elip = Ellipse(width=elip_width, height=elip_height, color=text_color)
+        if not use_elip:
+            elip = RoundedRectangle(width=elip_width, height=elip_height, color=text_color, corner_radius=0.5)
         text = Text(name, font_size=font_size, font="Sans", color=text_color).next_to(elip, DOWN)
-        self.add(elements, elip, text)
+        self.add(elements, text, elip)
 
 
