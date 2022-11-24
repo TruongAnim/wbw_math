@@ -5,11 +5,11 @@ from common.custom.custom_mobject import SetNumber
 from common.custom.custom_mobject import TextTranslation
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
-              "Scene6", "Scene7", "Scene8")
-SCENE_NAME = list_scene[6]
-# SCENE_NAME = " ".join(list_scene)
+              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11")
+# SCENE_NAME = list_scene[9]
+SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -248,3 +248,92 @@ class Scene6(MyScene):
         self.play(LaggedStart(*[GrowArrow(i) for i in arrows], lag_ratio=0.5))
         self.my_play(Write(result))
         # self.add(chairs, students, card_B, card_A, result)
+
+
+class Scene7(MyScene):
+    def construct(self):
+        def create_square(i, color):
+            number = MathTex(i, color=color).scale(1.5)
+            square = Square(color=color, side_length=1).move_to(number)
+            return VGroup(number, square)
+
+        nature_raw = [str(i) for i in range(6)]
+        even_raw = [str(i) for i in range(0, 11, 2)]
+        nature_raw.append("n")
+        even_raw.append("2n")
+        nature_number = Text("Số tự nhiên:", font_size=40, font="Sans", color=GREEN).to_edge(LEFT).shift(UP * 2)
+        nature_list = VGroup(*[create_square(i, GREEN) for i in nature_raw]).arrange(RIGHT, buff=0.1).next_to(
+            nature_number, RIGHT)
+        even_list = VGroup(*[create_square(i, RED) for i in even_raw]).arrange(RIGHT, buff=0.1).next_to(nature_list,
+                                                                                                        DOWN, buff=2,
+                                                                                                        aligned_edge=LEFT)
+        even_number = Text("Số chẵn:", font_size=40, font="Sans", color=RED).next_to(even_list, LEFT)
+        nature_list[-1].shift(RIGHT)
+        even_list[-1].shift(RIGHT)
+        dots1 = MathTex(r"\dots", color=GREEN).next_to(nature_list[-2], RIGHT)
+        dots2 = MathTex(r"\dots", color=GREEN).next_to(nature_list[-1], RIGHT)
+        dots3 = MathTex(r"\dots", color=RED).next_to(even_list[-2], RIGHT)
+        dots4 = MathTex(r"\dots", color=RED).next_to(even_list[-1], RIGHT)
+        group1 = VGroup(nature_number, nature_list, dots1, dots2)
+        group2 = VGroup(even_number, even_list, dots3, dots4)
+
+        arrows = VGroup(*[Arrow(i.get_bottom(), j.get_top())
+                          for i, j in zip(nature_list, even_list)])
+        result = MathTex(r"\rightarrow ", r"n(\text{số tự nhiên})", "=", r"n(\text{số chẵn})",
+                         tex_template=myTemplate).scale(1.5).to_edge(DOWN)
+        result[1].set_color(GREEN)
+        result[3].set_color(RED)
+        # self.add(group1, group2, arrows, result)
+        self.play(Write(group1))
+        self.play(Write(group2))
+        self.my_play(LaggedStart(*[GrowArrow(i) for i in arrows], lag_ratio=0.3))
+        self.my_play(Write(result))
+
+
+class Scene8(MyScene):
+    def construct(self):
+        def create_square(i, color):
+            number = MathTex(i, color=color).scale(1.2)
+            square = Square(color=color, side_length=0.8).move_to(number)
+            return VGroup(number, square)
+
+        nature_raw = [str(i) for i in range(10)]
+        even_raw = [str(i) for i in (0, 1, -1, 2, -2, 3, -3, 4, -4, 5)]
+        nature_number = Text("Số tự nhiên:", font_size=40, font="Sans", color=GREEN).to_edge(LEFT).shift(UP * 2)
+        nature_list = VGroup(*[create_square(i, GREEN) for i in nature_raw]).arrange(RIGHT, buff=0.1).next_to(
+            nature_number, RIGHT)
+        even_list = VGroup(*[create_square(i, RED) for i in even_raw]).arrange(RIGHT, buff=0.1).next_to(nature_list,
+                                                                                                        DOWN, buff=2,
+                                                                                                        aligned_edge=LEFT)
+        even_number = Text("Số nguyên:", font_size=40, font="Sans", color=RED).next_to(even_list, LEFT)
+        dots1 = MathTex(r"\dots", color=GREEN).next_to(nature_list[-1], RIGHT)
+        dots2 = MathTex(r"\dots", color=GREEN).next_to(even_list[-1], RIGHT)
+
+        group1 = VGroup(nature_number, nature_list, dots1)
+        group2 = VGroup(even_number, even_list, dots2)
+
+        arrows = VGroup(*[Arrow(i.get_bottom(), j.get_top())
+                          for i, j in zip(nature_list, even_list)])
+        result = MathTex(r"\rightarrow ", r"n(\mathbb{N})", "=", r"n(\mathbb{Z})",
+                         tex_template=myTemplate).scale(1.5).to_edge(DOWN)
+        result[1].set_color(GREEN)
+        result[3].set_color(RED)
+        # self.add(group1, group2, arrows, result)
+        self.play(Write(group1), Write(group2))
+        self.my_play(LaggedStart(*[GrowArrow(i) for i in arrows], lag_ratio=0.3))
+        self.my_play(Write(result))
+
+
+class Scene9(MyScene):
+    def construct(self):
+        list_irra = ["\pi", "\sqrt{2}", "\sqrt{3}", "\sqrt{5}", "\sqrt{11}",
+                     r"\varphi", "\mathrm{e}", "\log_{2}3", "\pi + \sqrt{2}",
+                     "\mathrm{e}+\sqrt{3}"]
+        random.seed(12)
+        group = VGroup(*[MathTex(i, color=random_bright_color())\
+                       .scale(1.5).shift(random.uniform(-3, 3)*UP + random.uniform(-5, 5)*RIGHT)
+                       for i in list_irra])
+        group[7].to_corner(UL, buff=2).set_color(RED)
+        group[3].shift(LEFT+UP).set_color(YELLOW)
+        group[0].set_color(PINK)
+        self.play(LaggedStart(*[FadeIn(i) for i in group], lag_ratio=0.2))
