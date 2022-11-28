@@ -511,3 +511,7 @@ class Temp_Scene12(MyScene):
         self.play(FadeIn(result[0], shift=UP))
         self.my_play(FadeIn(brace, shift=UP), FadeIn(brace_t, shift=UP))
         self.my_play(FadeIn(result[-1], shift=UP), FadeIn(brace_t2, shift=UP), FadeIn(brace2, shift=UP), FadeIn(result[-2]))
+
+
+class Temp_Scene13(MyScene):
+    def construct(self):
