@@ -5,9 +5,9 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[12]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[14]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -515,3 +515,70 @@ class Temp_Scene12(MyScene):
 
 class Temp_Scene13(MyScene):
     def construct(self):
+        pi1 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=True,
+            color=BLUE
+        ).to_corner(DR)
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="plain",
+            flip_at_start=False
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 3.5,
+            "stretch_height": 2.5,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        formula2 = MathTex(r"\int {{\ln(1+x^2)^x+2011x} \over {\ln \left[ (ex^2+e)^{x^2+1} \right] } }dx").scale(1.2).shift(UP*2.5)
+        self.my_play(Write(formula2))
+        text1 = MarkupText('Công nhận, chẳng thấy\n có ứng dụng gì!', font="sans", font_size=40)
+        text2 = MarkupText('Chắc để <span foreground="yellow">tăng độ khó</span>', font="sans",
+                           font_size=40)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+        self.play(FadeIn(pi1, shift=LEFT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi1,
+                text1,
+                target_mode="plain",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Temp_Scene14(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="PiCreatures",
+            mode="wonder",
+            flip_at_start=False,
+            color=TEAL
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4.5,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        text2 = MarkupText('      Logarit\ncó ứng dụng gì?', font="sans",
+                           font_size=35)
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.my_play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
