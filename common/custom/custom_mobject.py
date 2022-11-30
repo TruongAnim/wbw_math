@@ -1,3 +1,5 @@
+import random
+
 from manim import *
 
 
@@ -41,16 +43,16 @@ class TickDecimalNumber(VGroup):
 
 class TextTranslation(VGroup):
     def __init__(self,
-                text_u: str = "text1",
-                text_d: str = "(text2)",
-                font_u: str = "Sans",
-                font_d: str = "",
-                font_size_u: float = 40,
-                font_size_d: float = 30,
-                color_u: str = YELLOW,
-                color_d: str = ORANGE,
-                buff: float = MED_SMALL_BUFF,
-                **kwargs):
+                 text_u: str = "text1",
+                 text_d: str = "(text2)",
+                 font_u: str = "Sans",
+                 font_d: str = "",
+                 font_size_u: float = 40,
+                 font_size_d: float = 30,
+                 color_u: str = YELLOW,
+                 color_d: str = ORANGE,
+                 buff: float = MED_SMALL_BUFF,
+                 **kwargs):
         super().__init__(**kwargs)
         self.add(Text(text_u, font=font_u, font_size=font_size_u, color=color_u))
         self.add(Text(text_d, font=font_d, font_size=font_size_d, color=color_d))
@@ -61,7 +63,7 @@ class TextTranslation(VGroup):
 
 
 class Explain(VGroup):
-    def __init__(self, target, text: str = "text", location=ORIGIN, shift=ORIGIN, font_size: float=35, **kwargs):
+    def __init__(self, target, text: str = "text", location=ORIGIN, shift=ORIGIN, font_size: float = 35, **kwargs):
         super().__init__(**kwargs)
         explain = Text(text, font="Sans", font_size=font_size).move_to(location).shift(shift)
         rec = Rectangle(color=YELLOW).surround(target, stretch=True, buff=SMALL_BUFF)
@@ -127,3 +129,41 @@ class SetNumber(VGroup):
         self.add(elements, text, elip)
 
 
+class Beaker(VGroup):
+    def __init__(self,
+                 file_name: str = "beaker",
+                 beaker_color: str = TEAL,
+                 solution_color: str = BLUE,
+                 solution_percent: float = 0.7,
+                 ion_number: int = 10,
+                 ion_color: str = RED,
+                 random_seed: int = 1,
+                 **kwargs):
+        super().__init__(**kwargs)
+        beaker = SVGMobject(file_name).set_color(beaker_color)
+        solution = RoundedRectangle(
+            corner_radius=0.05,
+            width=beaker.width-0.2,
+            height=beaker.height*solution_percent,
+            stroke_width=0,
+            fill_opacity=0.5,
+            fill_color=solution_color)\
+            .align_to(beaker, DR).shift(LEFT*0.05+UP*0.05)
+
+        def ion_factory():
+            circle = Circle(radius=0.07, stroke_width=2)
+            text = MathTex(r"\text{H}^+").move_to(circle).scale(0.15)
+            group = VGroup(circle, text).move_to(solution)
+            w_range = solution.width/2-0.1
+            h_range = solution.height/2-0.1
+            group.shift(RIGHT*random.uniform(-w_range*RIGHT, w_range*RIGHT))
+            group.shift(UP*random.uniform(-h_range*UP, h_range*UP))
+            return group
+        ions = VGroup(*[ion_factory() for i in range(ion_number)])
+        self.add(solution, beaker, *ions)
+
+
+class TestCustomMobject(Scene):
+    def construct(self):
+        a = Beaker("assets/beaker.svg", ion_number=50).scale(3)
+        self.add(a)
