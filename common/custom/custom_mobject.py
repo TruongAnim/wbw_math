@@ -140,7 +140,8 @@ class Beaker(VGroup):
                  random_seed: int = 1,
                  **kwargs):
         super().__init__(**kwargs)
-        beaker = SVGMobject(file_name).set_color(beaker_color)
+        random.seed(random_seed)
+        beaker = SVGMobject(file_name, fill_opacity=1).set_color(beaker_color)
         solution = RoundedRectangle(
             corner_radius=0.05,
             width=beaker.width-0.2,
@@ -160,7 +161,7 @@ class Beaker(VGroup):
             group.shift(UP*random.uniform(-h_range*UP, h_range*UP))
             return group
         ions = VGroup(*[ion_factory() for i in range(ion_number)])
-        self.add(solution, beaker, *ions)
+        self.add(beaker, solution, ions)
 
 
 class TestCustomMobject(Scene):
