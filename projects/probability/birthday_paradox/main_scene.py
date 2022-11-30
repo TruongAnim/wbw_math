@@ -6,11 +6,11 @@ from common.custom.custom_mobject import ImageAndText
 from common.custom.custom_mobject import ImageAndMathTex
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6",
-              "Scene7", "Scene8", "Scene9", "Scene10", "Scene11", "Scene12")
-SCENE_NAME = list_scene[9]
+              "Scene7", "Scene8", "Scene9", "Scene10", "Scene11", "Scene12", "Thumbnail")
+SCENE_NAME = list_scene[-1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -39,6 +39,17 @@ class MyScene(Scene):
 
 myTemplate = TexTemplate()
 myTemplate.add_to_preamble(r"\usepackage{vntex}")
+
+
+class Thumbnail(MyScene):
+    def construct(self):
+        char1 = ImageMobject("chars/char (1)").scale(1.5).to_corner(UR, buff=SMALL_BUFF)
+        char2 = ImageMobject("chars/char (2)").scale(1.5).to_corner(UL, buff=SMALL_BUFF)
+        arrow = DoubleArrow(char1.get_left(), char2.get_right(), stroke_width=10, color=RED)
+        probability = Text("Xác suất", font_size=70, font="Sans", color=RED).shift(UP)
+        same_class = Text("Cùng lớp", font_size=80, font="Sans", color=GREEN).shift(DOWN)
+        same_birthday = Text("Cùng ngày sinh", font_size=80, font="Sans", color=YELLOW).next_to(same_class, DOWN)
+        self.add(char1, char2, arrow, same_class, same_birthday, probability)
 
 
 class Scene0(MyScene):
