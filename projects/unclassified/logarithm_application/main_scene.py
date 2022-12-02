@@ -4,10 +4,10 @@ from common.custom.custom_mobject import Beaker
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4",
               "Scene5", "Scene6", "Scene7", "Scene8", "Scene9")
-# SCENE_NAME = list_scene[8]
-SCENE_NAME = " ".join(list_scene)
+SCENE_NAME = list_scene[9]
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -358,3 +358,10 @@ class Scene8(MyScene):
         self.my_play(Transform(sound_intensity, sound_intensity2),
                   Transform(min_sound, min_sound2),
                   Transform(max_sound, max_sound2))
+
+
+class Scene9(MyScene):
+    def construct(self):
+        formula2 = MathTex(r"\int {{\ln(1+x^2)^x+2011x} \over {\ln \left[ (ex^2+e)^{x^2+1} \right] } }dx", color=BLACK).scale(1.2)
+        rec = Rectangle(width=8, height=4, fill_opacity=1, fill_color=WHITE)
+        self.add(rec, formula2)
