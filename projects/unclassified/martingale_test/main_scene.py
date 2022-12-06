@@ -7,7 +7,7 @@ from common.svg.character.number_creature_anim import *
 from common.utils.mobject_utils import get_indexes
 
 list_scene = ("Scene1", "Scene2", "Scene3", "Scene4", "Scene5", "Scene6")
-SCENE_NAME = list_scene[4]
+SCENE_NAME = list_scene[1]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
@@ -333,8 +333,8 @@ class Scene4(Scene):
 
 class Scene2(Scene):
     def construct(self):
-        start_property = 1000000000
-        end_property = 1100000000
+        start_property = 10000000
+        end_property = 20000000
         start = 100000
         count = 0
         total = 0
@@ -360,7 +360,7 @@ class Scene2(Scene):
                     # print("+", bet_ * 2)
                     bet_ = start
                 else:
-                    bet_ *= 2
+                    bet_ *= 4
             # print("property:", property_)
             if match % 1000 == 0:
                 print(match)
