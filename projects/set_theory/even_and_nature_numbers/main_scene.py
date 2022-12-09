@@ -5,14 +5,15 @@ from common.custom.custom_mobject import SetNumber
 from common.custom.custom_mobject import TextTranslation
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
-              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11")
-# SCENE_NAME = list_scene[9]
-SCENE_NAME = " ".join(list_scene)
+              "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
+              "Thumbnail")
+SCENE_NAME = list_scene[-1]
+# SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
-    command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
+    command = f"manim -t -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
     print("cmd[" + command + "]")
     os.system(command)
 
@@ -39,6 +40,11 @@ class MyScene(Scene):
 myTemplate = TexTemplate()
 myTemplate.add_to_preamble(r"\usepackage{vntex}")
 
+
+class Thumbnail(Scene):
+    def construct(self):
+        infi = MathTex("\infty").scale(7)
+        self.add(infi)
 
 class Scene0(MyScene):
     def construct(self):
