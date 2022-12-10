@@ -1,13 +1,14 @@
 from common.svg.character.number_creature import *
 from common.svg.character.number_creature_anim import *
+from common.utils.mobject_utils import get_indexes
 
 PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[13]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[15]
 CONFIG_DIR = "../../../configs/"
-CONFIG = "production.cfg"
+CONFIG = "develop.cfg"
 
 if __name__ == "__main__":
     command = f"manim -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
@@ -582,3 +583,19 @@ class Temp_Scene14(MyScene):
                 bubble_kwargs=bubble_kwargs,
             )
         )
+
+
+class Temp_Scene15(MyScene):
+    def construct(self):
+        computer = NumberCreature("computer", color=RED)
+        math = MathTex("x_1,x_2", "={-b\pm \sqrt{b^2-4ac}\over 2a}").next_to(computer, UP, buff=LARGE_BUFF)
+        math[0].set_color(YELLOW)
+        math[1][2].set_color(BLUE)
+        math[1][6].set_color(BLUE)
+        math[1][10].set_color(GREEN)
+        math[1][14].set_color(GREEN)
+        math[1][11].set_color(TEAL)
+        self.add(computer, math)
+        self.play(LaggedStart(*[FadeOut(math.copy(), shift=DOWN*3)
+                                for i in range(100)], lag_ratio=0.1))
+        self.wait(0.5)
