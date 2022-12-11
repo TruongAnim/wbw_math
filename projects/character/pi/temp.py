@@ -5,8 +5,8 @@ from common.utils.mobject_utils import get_indexes
 PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
-              "Scene12", "Scene13", "Scene14", "Scene15")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[15]
+              "Scene12", "Scene13", "Scene14", "Scene15", "Scene16", "Scene17")
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[16]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -599,3 +599,33 @@ class Temp_Scene15(MyScene):
         self.play(LaggedStart(*[FadeOut(math.copy(), shift=DOWN*3)
                                 for i in range(100)], lag_ratio=0.1))
         self.wait(0.5)
+
+
+class Temp_Scene16(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="computer",
+            mode="wonder",
+            flip_at_start=False,
+            color=TEAL
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        pt = MathTex("3x^2-5x+2", color=YELLOW).scale(2).to_edge(UP)
+        text2 = MarkupText('Thích thì tự \nđi mà giải', font="sans",
+                           font_size=35)
+        self.play(Write(pt))
+        self.wait()
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
