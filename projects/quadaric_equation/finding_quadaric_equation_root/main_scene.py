@@ -11,7 +11,7 @@ list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
 SCENE_NAME = list_scene[4]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
-CONFIG = "develop.cfg"
+CONFIG = "production.cfg"
 
 if __name__ == "__main__":
     command = f"manim --disable_caching -c {CONFIG_DIR}{CONFIG} {__file__} {SCENE_NAME}"
