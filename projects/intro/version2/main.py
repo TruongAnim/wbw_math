@@ -3,7 +3,7 @@ from common.svg.character.number_creature import NumberCreature
 from common.svg.character.number_creature_anim import *
 
 list_scene = ("Intro", "TestPi", "Outro", "Logo", "Background", "ColorName")
-SCENE_NAME = list_scene[0]
+SCENE_NAME = list_scene[2]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 config.background_color = BLACK
@@ -54,21 +54,19 @@ class Outro(Scene):
         square = Square(color=logo_blue, fill_opacity=1).shift(UP)
         triangle = Triangle(color=logo_red, fill_opacity=1).shift(RIGHT)
 
-        truong_anim = Text("@TruongAnim", font_size=25).shift(DOWN * 2.5+ LEFT*4)
+        truong_anim = MarkupText("@TruongAnim", font_size=25, gradient=(BLUE, GREEN)).shift(DOWN * 2.5+ LEFT*4)
         logo = VGroup(triangle, square, circle)  # order matters
         logo.move_to(ORIGIN).shift(LEFT*4)
         self.add(logo, truong_anim)
         self.wait()
-        these_videos = MarkupText(f'''These videos are always <span fgcolor="{YELLOW}">free!</span>''')
+        these_videos = MarkupText(f'''These videos are made with <span fgcolor="{YELLOW}">passion</span>''')
         if_you_like = MarkupText(f'''If you <span fgcolor="{YELLOW}">like</span> what I do''')
         please_consider = MarkupText(f'''Please consider <span fgcolor="{YELLOW}">subscribing</span>''')
         subcribe = VGroup(these_videos, if_you_like, please_consider)\
-            .arrange(DOWN, buff=MED_LARGE_BUFF, aligned_edge=LEFT).scale(0.7).shift(RIGHT*3+UP)
-        pi = NumberCreature(file_name_prefix="PiCreatures", color=BLUE, mode="smile1") \
-            .align_to(subcribe, LEFT)
+            .arrange(DOWN, buff=MED_LARGE_BUFF, aligned_edge=LEFT).scale(0.7).shift(RIGHT*3+UP*2)
+        pi = ImageMobject("outfit1 (244)")\
+            .align_to(subcribe, LEFT).scale(1.5).shift(UP)
         pi.shift(3 * DOWN)
-        pi.generate_target().scale(1.2).shift(0.2*UP)
-        pi.target.change_mode("smile2")
         sub = Text("SUBSCRIBE", font="Arial", weight=BOLD, font_size=27, color=WHITE)\
             .next_to(pi, RIGHT).shift(UP*1.7)
         rec = Rectangle(
@@ -86,11 +84,9 @@ class Outro(Scene):
             for i in subcribe
         ], lag_ratio=0.5), run_time=2)
         self.wait(0.3)
-        self.play(FadeIn(pi), FadeIn(rec), FadeIn(sub), ApplyWave(truong_anim))
-        self.play(Blink(pi))
-        self.play(MoveToTarget(pi), run_time=0.5)
+        self.play(FadeIn(pi, shift=UP*2), FadeIn(rec), FadeIn(sub), ApplyWave(truong_anim))
         self.add_sound("click_sub.wav")
-        # self.play(MoveToTarget(rec), FadeTransform(sub, sub), run_time=0.5)
+        self.play(MoveToTarget(rec), FadeTransform(sub, sub_ed), run_time=0.5)
         self.wait()
 
 
