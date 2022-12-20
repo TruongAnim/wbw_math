@@ -11,10 +11,13 @@ import sys
 def ArctanDenom(d, ndigits):
     # Calculates arctan(1/d) = 1/d - 1/(3*d^3) + 1/(5*d^5) - 1/(7*d^7) + ...
     total = term = (10**ndigits) // d
+    print(total)
     n = 0
     while term != 0:
+        print(total)
         n += 1
         term //= -d*d
+        print(term)
         total += term // (2*n + 1)
     print('ArctanDenom({}) took {} iterations.'.format(d, n))
     return total
@@ -34,7 +37,9 @@ if __name__ == '__main__':
 
     # We calculated extra digits to compensate for roundoff error.
     # Chop off the extra digits now.
+    print(pi)
     pi //= 10**xdigits
+    print(pi)
     print("--- %s seconds ---" % (time.time() - start_time))
     # Write the result to a text file.
     with open(outFileName, 'wt') as outfile:
