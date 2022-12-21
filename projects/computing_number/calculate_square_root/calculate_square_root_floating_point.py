@@ -19,11 +19,11 @@ def repeat_compute(n, gess, loop):
 
 
 if __name__ == "__main__":
-    getcontext().prec = 7
+    getcontext().prec = 70
     import time
 
     start_time = time.time()
-    result = repeat_compute(Decimal(127), Decimal(15), 5)
+    result = repeat_compute(Decimal(2), Decimal(1.5), 6)
     print("--- %s seconds ---" % (time.time() - start_time))
     # with open('a.txt', 'r') as file:
     #     data = file.read().replace('\n', '')
