@@ -6,7 +6,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15", "Scene16", "Scene17")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[1]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[2]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -67,3 +67,13 @@ class Temp_Scene1(Scene):
         odd = Text("But how?", color=YELLOW, font_size=130).to_corner(UR)
 
         self.add(text1, text2, text3, avt, odd)
+
+
+class Temp_Scene2(Scene):
+    def construct(self):
+        formula1 = MathTex(r"\left ( \prod_{i=1}^{n} a_{i} \right )^{ {1}\over{n} }").scale(2).shift(LEFT*3+UP)
+        formula2 = MathTex(r"{1 \over n} \sum_{i=1}^{n}a_{i}").scale(2).shift(RIGHT*3+UP)
+        line = Line(DOWN*3, UP*3)
+        gm = Text("TB. Nhân", font_size=80, font="Sans", color=GREEN).next_to(formula1, DOWN, buff=LARGE_BUFF)
+        am = Text("TB. Cộng", font_size=80, font="Sans", color=BLUE).next_to(formula2, DOWN).align_to(gm, UP)
+        self.add(formula1, formula2, line, am, gm)
