@@ -6,7 +6,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15", "Scene16", "Scene17")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[16]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[17]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "production.cfg"
 
@@ -618,6 +618,38 @@ class Temp_Scene16(MyScene):
         pt = MathTex("3x^2-5x+2", color=YELLOW).scale(2).to_edge(UP)
         text2 = MarkupText('Thích thì tự \nđi mà giải', font="sans",
                            font_size=35)
+        self.play(Write(pt))
+        self.wait()
+        self.play(FadeIn(pi2, shift=RIGHT * 2))
+        self.play(
+            NumberCreatureSays(
+                pi2,
+                text2,
+                target_mode="wonder",
+                bubble_kwargs=bubble_kwargs,
+            )
+        )
+
+
+class Temp_Scene17(MyScene):
+    def construct(self):
+        pi2 = NumberCreature(
+            file_name_prefix="computer",
+            mode="wonder",
+            flip_at_start=False,
+            color=TEAL
+        ).to_corner(DL)
+        bubble_kwargs = {
+            "stretch_width": 4,
+            "stretch_height": 3,
+            "stroke_width": 2,
+            "stroke_color": WHITE
+        }
+        pt = MathTex("1,000,000,000", " \longrightarrow", "9,999,999,999").scale(1.7).to_edge(UP)
+        pt[0].set_color("#FF5733")
+        pt[2].set_color("#C70039")
+        text2 = MarkupText('Cái gì???\n <span foreground="yellow">9 tỉ</span> số đấy',
+                           font="sans", font_size=40)
         self.play(Write(pt))
         self.wait()
         self.play(FadeIn(pi2, shift=RIGHT * 2))

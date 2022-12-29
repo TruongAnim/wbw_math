@@ -5,7 +5,7 @@ import random
 
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Thumbnail")
-SCENE_NAME = list_scene[-1]
+SCENE_NAME = list_scene[2]
 # SCENE_NAME = " ".join(list_scene)
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
@@ -204,8 +204,6 @@ class Scene2(MyScene):
         tracker = ValueTracker(5)
 
         def calculate(n):
-            import time
-            start_time = time.time()
             sum = self.pi_value/4
             for i in range(self.last_frame, n):
                 if i % 2 == 0:
