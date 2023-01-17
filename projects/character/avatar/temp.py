@@ -6,7 +6,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15", "Scene16", "Scene17")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[2]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[3]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -77,3 +77,13 @@ class Temp_Scene2(Scene):
         gm = Text("TB. Nhân", font_size=80, font="Sans", color=GREEN).next_to(formula1, DOWN, buff=LARGE_BUFF)
         am = Text("TB. Cộng", font_size=80, font="Sans", color=BLUE).next_to(formula2, DOWN).align_to(gm, UP)
         self.add(formula1, formula2, line, am, gm)
+
+
+class Temp_Scene3(Scene):
+    def construct(self):
+        n = 8
+        square = [Square(side_length=0.5) for i in range(n*n)]
+        for index, i in enumerate(square):
+            if ((index // n) + (index % n))%2==0:
+                i.set_color(YELLOW)
+        self.add(VGroup(*square).arrange_in_grid(n,n))
