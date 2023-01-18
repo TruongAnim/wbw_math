@@ -126,7 +126,7 @@ class Scene1(Scene):
 
         def update_one_trace(start_angle: float):
             def update(mob, dt):
-                mob.add(Bullet(rotate_vector(RIGHT, start_angle+self.time**2)))
+                mob.add(Bullet(rotate_vector(RIGHT, start_angle + self.time ** 2)))
                 mob.set_color_by_gradient(*color_list)
                 for o in mob:
                     o.shift(v * dt * o.vector)
@@ -134,14 +134,15 @@ class Scene1(Scene):
                         mob.remove(o)
 
             return update
+
         def update_time(mob, dt):
             self.time = tracker.get_value()
             pass
 
         vg1.add_updater(update_time)
         vg1.add_updater(update_one_trace(0))
-        vg2.add_updater(update_one_trace(120*DEGREES))
-        vg3.add_updater(update_one_trace(240*DEGREES))
+        vg2.add_updater(update_one_trace(120 * DEGREES))
+        vg3.add_updater(update_one_trace(240 * DEGREES))
         self.add(vg1, vg2, vg3)
         tracker = ValueTracker(0)
         self.play(tracker.animate.increment_value(60), run_time=30, rate_func=linear)
@@ -158,7 +159,7 @@ class Scene2(Scene):
 
         def update_one_trace(start_angle: float):
             def update(mob, dt):
-                mob.add(Bullet(rotate_vector(RIGHT, start_angle+self.time**2)))
+                mob.add(Bullet(rotate_vector(RIGHT, start_angle + self.time ** 2)))
                 mob.set_color_by_gradient(*color_list)
                 for o in mob:
                     o.shift(v * dt * o.vector)
@@ -166,19 +167,21 @@ class Scene2(Scene):
                         mob.remove(o)
 
             return update
+
         def update_time(mob, dt):
             self.time = tracker.get_value()
             pass
 
         vg1.add_updater(update_time)
         vg1.add_updater(update_one_trace(0))
-        vg2.add_updater(update_one_trace(180*DEGREES))
+        vg2.add_updater(update_one_trace(180 * DEGREES))
         # vg3.add_updater(update_one_trace(240*DEGREES))
         self.add(vg1, vg2)
         tracker = ValueTracker(0)
         self.play(tracker.animate.increment_value(60), run_time=30, rate_func=linear)
         # self.play(tracker.animate.increment_value(-20), run_time=5, rate_func=linear)
         # self.play(tracker.animate.increment_value(-20), run_time=5, rate_func=linear)
+
 
 class Scene3(Scene):
     def construct(self):
@@ -189,7 +192,7 @@ class Scene3(Scene):
 
         def update_one_trace(start_angle: float):
             def update(mob, dt):
-                mob.add(Bullet(rotate_vector(RIGHT, start_angle+self.time**2)))
+                mob.add(Bullet(rotate_vector(RIGHT, start_angle + self.time ** 2)))
                 mob.set_color_by_gradient(*color_list)
                 for o in mob:
                     o.shift(v * dt * o.vector)
@@ -197,19 +200,21 @@ class Scene3(Scene):
                         mob.remove(o)
 
             return update
+
         def update_time(mob, dt):
             self.time = tracker.get_value()
             pass
 
         vg1.add_updater(update_time)
         vg1.add_updater(update_one_trace(0))
-        vg2.add_updater(update_one_trace(120*DEGREES))
-        vg3.add_updater(update_one_trace(240*DEGREES))
+        vg2.add_updater(update_one_trace(120 * DEGREES))
+        vg3.add_updater(update_one_trace(240 * DEGREES))
         self.add(vg1, vg2)
         tracker = ValueTracker(0)
         self.play(tracker.animate.increment_value(120), run_time=60, rate_func=linear)
         # self.play(tracker.animate.increment_value(-20), run_time=5, rate_func=linear)
         # self.play(tracker.animate.increment_value(-20), run_time=5, rate_func=linear)
+
 
 class Scene4(Scene):
     def construct(self):
@@ -220,7 +225,7 @@ class Scene4(Scene):
 
         def update_one_trace(start_angle: float):
             def update(mob, dt):
-                mob.add(Bullet(rotate_vector(RIGHT, start_angle+self.time**2)))
+                mob.add(Bullet(rotate_vector(RIGHT, start_angle + self.time ** 2)))
                 mob.set_color_by_gradient(*color_list)
                 for o in mob:
                     o.shift(v * dt * o.vector)
@@ -228,13 +233,14 @@ class Scene4(Scene):
                         mob.remove(o)
 
             return update
+
         def update_time(mob, dt):
             self.time = tracker.get_value()
             pass
 
         vg1.add_updater(update_time)
         vg1.add_updater(update_one_trace(0))
-        vg2.add_updater(update_one_trace(180*DEGREES))
+        vg2.add_updater(update_one_trace(180 * DEGREES))
         # vg3.add_updater(update_one_trace(240*DEGREES))
         self.add(vg1, vg2)
         tracker = ValueTracker(0)
@@ -251,7 +257,7 @@ class Scene5(Scene):
     def construct(self):
         vg = VGroup()
         self.count = 0
-        self.time=0
+        self.time = 0
 
         def update_danmaku(mob: VGroup, dt: float):
             if self.count % 15 == 0:
@@ -277,6 +283,7 @@ class Scene5(Scene):
         vg.add_updater(update_danmaku)
         self.add(vg)
         self.wait(3)
+
 
 class Scene3(Scene):
     def construct(self):
