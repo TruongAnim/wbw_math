@@ -6,7 +6,7 @@ PROJECT_NAME = "Temp"
 list_scene = ("Scene0", "Scene1", "Scene2", "Scene3", "Scene4", "Scene5",
               "Scene6", "Scene7", "Scene8", "Scene9", "Scene10", "Scene11",
               "Scene12", "Scene13", "Scene14", "Scene15", "Scene16", "Scene17")
-SCENE_NAME = PROJECT_NAME + "_" + list_scene[2]
+SCENE_NAME = PROJECT_NAME + "_" + list_scene[4]
 CONFIG_DIR = "../../../configs/"
 CONFIG = "develop.cfg"
 
@@ -54,16 +54,16 @@ class Temp_Scene0(Scene):
         text = Text("A4", color=GREEN, font_size=85).move_to(rec)
         odd = Text("Why not 30?", color=RED, font_size=80).to_corner(UR)
         arrow = Arrow(odd.get_left(), height.get_top())
-        avt = ImageMobject("outfit1 (267)").scale(2).to_corner(DR, buff=0).shift(RIGHT*0.5)
+        avt = ImageMobject("outfit1 (267)").scale(2).to_corner(DR, buff=0).shift(RIGHT * 0.5)
         self.add(rec, brace_right, brace_down, width, height, text, odd, arrow, avt)
 
 
 class Temp_Scene1(Scene):
     def construct(self):
-        text1 = MathTex("\sqrt{2}=1.4142...", color=GREEN).scale(2.5).to_corner(UL).shift(DOWN*2)
+        text1 = MathTex("\sqrt{2}=1.4142...", color=GREEN).scale(2.5).to_corner(UL).shift(DOWN * 2)
         text2 = MathTex("\sqrt{3}=1.7320...", color=BLUE).scale(2.5).next_to(text1, DOWN, aligned_edge=LEFT)
         text3 = MathTex("\sqrt{e}=1.6487...", color=RED).scale(2.5).next_to(text2, DOWN, aligned_edge=LEFT)
-        avt = ImageMobject("outfit1 (88)").scale(2).to_corner(DR, buff=0).shift(RIGHT*0.5)
+        avt = ImageMobject("outfit1 (88)").scale(2).to_corner(DR, buff=0).shift(RIGHT * 0.5)
         odd = Text("But how?", color=YELLOW, font_size=130).to_corner(UR)
 
         self.add(text1, text2, text3, avt, odd)
@@ -71,9 +71,19 @@ class Temp_Scene1(Scene):
 
 class Temp_Scene2(Scene):
     def construct(self):
-        formula1 = MathTex(r"\left ( \prod_{i=1}^{n} a_{i} \right )^{ {1}\over{n} }").scale(2).shift(LEFT*3+UP)
-        formula2 = MathTex(r"{1 \over n} \sum_{i=1}^{n}a_{i}").scale(2).shift(RIGHT*3+UP)
-        line = Line(DOWN*3, UP*3)
+        formula1 = MathTex(r"\left ( \prod_{i=1}^{n} a_{i} \right )^{ {1}\over{n} }").scale(2).shift(LEFT * 3 + UP)
+        formula2 = MathTex(r"{1 \over n} \sum_{i=1}^{n}a_{i}").scale(2).shift(RIGHT * 3 + UP)
+        line = Line(DOWN * 3, UP * 3)
         gm = Text("TB. Nhân", font_size=80, font="Sans", color=GREEN).next_to(formula1, DOWN, buff=LARGE_BUFF)
         am = Text("TB. Cộng", font_size=80, font="Sans", color=BLUE).next_to(formula2, DOWN).align_to(gm, UP)
         self.add(formula1, formula2, line, am, gm)
+
+
+class Temp_Scene3(Scene):
+    def construct(self):
+        n = 8
+        square = [Square(side_length=0.5) for i in range(n * n)]
+        for index, i in enumerate(square):
+            if ((index // n) + (index % n)) % 2 == 0:
+                i.set_color(YELLOW)
+        self.add(VGroup(*square).arrange_in_grid(n, n))
