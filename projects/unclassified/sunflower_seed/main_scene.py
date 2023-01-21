@@ -46,23 +46,24 @@ class Scene0(MyScene):
     def construct(self):
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint())
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -72,7 +73,7 @@ class Scene0(MyScene):
             self.play(value.animate.increment_value(0.01), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(137.5*DEGREES), my_radius=0.2))
+            list_point.append(self.MyPoint(my_angle=i * (137.5 * DEGREES), my_radius=0.2))
 
 
 class Scene1(MyScene):
@@ -86,24 +87,25 @@ class Scene1(MyScene):
         out_circle = Circle(radius=3.9, stroke_color=YELLOW)
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2, color=YELLOW)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN), out_circle)
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius/4.5))
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius / 4.5))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -113,7 +115,7 @@ class Scene1(MyScene):
             self.play(value.animate.increment_value(0.03), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(45*DEGREES), my_radius=0.2, color=YELLOW))
+            list_point.append(self.MyPoint(my_angle=i * (45 * DEGREES), my_radius=0.2, color=YELLOW))
 
 
 class Scene2(MyScene):
@@ -127,24 +129,25 @@ class Scene2(MyScene):
         out_circle = Circle(radius=3.9, stroke_color=YELLOW)
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2, color=YELLOW)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN), out_circle)
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius/4.5))
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius / 4.5))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -154,7 +157,7 @@ class Scene2(MyScene):
             self.play(value.animate.increment_value(0.02), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(65*DEGREES), my_radius=0.2, color=YELLOW))
+            list_point.append(self.MyPoint(my_angle=i * (65 * DEGREES), my_radius=0.2, color=YELLOW))
 
 
 class Scene3(MyScene):
@@ -168,23 +171,24 @@ class Scene3(MyScene):
         out_circle = Circle(radius=1.5, stroke_color=YELLOW)
         circle = Circle(radius=1)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=1, color=GREEN)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN))
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -196,12 +200,13 @@ class Scene3(MyScene):
             for j in list_point:
                 j.scale(1.002)
             new_point = self.MyPoint(my_angle=i * (65 * DEGREES), my_radius=1, color=GREEN).move_to(
-                circle.point_from_proportion(fix_error(i * (65 * DEGREES)/(2*PI)))
+                circle.point_from_proportion(fix_error(i * (65 * DEGREES) / (2 * PI)))
             )
-            l1 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(list_point[-1].my_angle/(2*PI))))
-            l2 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(i * (65 * DEGREES)/(2*PI))))
+            l1 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(list_point[-1].my_angle / (2 * PI))))
+            l2 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(i * (65 * DEGREES) / (2 * PI))))
             self.play(Create(l1), Create(l2),
-                      Write(m.move_to(out_circle.point_from_proportion(fix_error((i-0.5) * (65 * DEGREES)/(2*PI))))),
+                      Write(m.move_to(
+                          out_circle.point_from_proportion(fix_error((i - 0.5) * (65 * DEGREES) / (2 * PI))))),
                       FadeIn(new_point),
                       Flash(new_point))
             self.remove(l1, l2, m)
@@ -223,23 +228,24 @@ class Scene4(MyScene):
         out_circle = Circle(radius=1.5, stroke_color=YELLOW)
         circle = Circle(radius=1)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=1, color=GREEN)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN))
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -251,12 +257,13 @@ class Scene4(MyScene):
             for j in list_point:
                 j.scale(1.002)
             new_point = self.MyPoint(my_angle=i * (137.5 * DEGREES), my_radius=1, color=GREEN).move_to(
-                circle.point_from_proportion(fix_error(i * (137.5 * DEGREES)/(2*PI)))
+                circle.point_from_proportion(fix_error(i * (137.5 * DEGREES) / (2 * PI)))
             )
-            l1 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(list_point[-1].my_angle/(2*PI))))
-            l2 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(i * (137.55 * DEGREES)/(2*PI))))
+            l1 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(list_point[-1].my_angle / (2 * PI))))
+            l2 = Line(ORIGIN, out_circle.point_from_proportion(fix_error(i * (137.55 * DEGREES) / (2 * PI))))
             self.play(Create(l1), Create(l2),
-                      Write(m.move_to(out_circle.point_from_proportion(fix_error((i-0.5) * (137.55 * DEGREES)/(2*PI))))),
+                      Write(m.move_to(
+                          out_circle.point_from_proportion(fix_error((i - 0.5) * (137.55 * DEGREES) / (2 * PI))))),
                       FadeIn(new_point),
                       Flash(new_point))
             self.remove(l1, l2, m)
@@ -278,24 +285,25 @@ class Scene5(MyScene):
         out_circle = Circle(radius=3.9, stroke_color=YELLOW)
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2, color=YELLOW)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN), out_circle)
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius/4.5))
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius / 4.5))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -305,7 +313,7 @@ class Scene5(MyScene):
             self.play(value.animate.increment_value(0.03), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(136*DEGREES), my_radius=0.2, color=YELLOW))
+            list_point.append(self.MyPoint(my_angle=i * (136 * DEGREES), my_radius=0.2, color=YELLOW))
 
 
 class Scene6(MyScene):
@@ -319,24 +327,25 @@ class Scene6(MyScene):
         out_circle = Circle(radius=3.9, stroke_color=YELLOW)
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2, color=YELLOW)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN), out_circle)
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius/4.5))
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius / 4.5))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -346,7 +355,7 @@ class Scene6(MyScene):
             self.play(value.animate.increment_value(0.02), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(140*DEGREES), my_radius=0.2, color=YELLOW))
+            list_point.append(self.MyPoint(my_angle=i * (140 * DEGREES), my_radius=0.2, color=YELLOW))
 
 
 class Scene7(MyScene):
@@ -360,24 +369,25 @@ class Scene7(MyScene):
         out_circle = Circle(radius=3.9, stroke_color=YELLOW)
         circle = Circle(radius=0.2)
         dot = Dot(circle.point_from_proportion(0))
-        direction = dot.get_center()-ORIGIN
+        direction = dot.get_center() - ORIGIN
         list_point = [self.MyPoint(my_angle=0, my_radius=0.2, color=YELLOW)]
 
         value = ValueTracker(1)
         self.pevius_value = value.get_value()
         self.add(self.MyPoint(color=GREEN), out_circle)
+
         def fix_error(f):
-            if f>=1:
-                return f%1
+            if f >= 1:
+                return f % 1
             return f
 
         def make_points():
-            diff = value.get_value()-self.pevius_value
+            diff = value.get_value() - self.pevius_value
             self.pevius_value = value.get_value()
             for p in list_point:
                 p.my_radius += diff
-                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius/4.5))
-                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle/(2*PI))))
+                p.set_color(interpolate_color_range(GREEN, YELLOW, p.my_radius / 4.5))
+                p.move_to(Circle(radius=p.my_radius).point_from_proportion(fix_error(p.my_angle / (2 * PI))))
             return VGroup(*list_point)
 
         points = always_redraw(make_points)
@@ -387,7 +397,8 @@ class Scene7(MyScene):
             self.play(value.animate.increment_value(0.01), run_time=0.02, rate_func=linear)
             for j in list_point:
                 j.scale(1.002)
-            list_point.append(self.MyPoint(my_angle=i*(137.5*DEGREES), my_radius=0.2, color=YELLOW))
+            list_point.append(self.MyPoint(my_angle=i * (137.5 * DEGREES), my_radius=0.2, color=YELLOW))
+
 
 # 0.01 0.02
 # 1.002
@@ -403,8 +414,8 @@ class Scene8(MyScene):
 
 class Scene9(MyScene):
     def construct(self):
-        circle = Circle(radius=2.5, color=GREEN, stroke_width=5).rotate(PI/2).shift(UP)
-        out_circle = Circle(radius=3).shift(UP).rotate(PI/2)
+        circle = Circle(radius=2.5, color=GREEN, stroke_width=5).rotate(PI / 2).shift(UP)
+        out_circle = Circle(radius=3).shift(UP).rotate(PI / 2)
         line1 = Line(circle.get_center(), circle.point_from_proportion(0.618))
         line2 = Line(circle.get_center(), circle.point_from_proportion(0))
 
@@ -414,7 +425,7 @@ class Scene9(MyScene):
         b = MathTex("b", color=BLUE).move_to(out_circle.point_from_proportion(0.85))
         angle = Angle(line1, line2, radius=0.4, color=YELLOW)
         angle_t = MathTex("137.5^\circ", color=YELLOW).move_to(Angle(line1, line2, radius=2.2))
-        m = MathTex("{a", "\over ", "b}",  "=",  "1.61803").next_to(circle, DOWN)
+        m = MathTex("{a", "\over ", "b}", "=", "1.61803").next_to(circle, DOWN)
         m[0].set_color(RED)
         m[2].set_color(BLUE)
         m[4].set_color(YELLOW)
@@ -433,7 +444,7 @@ class Scene9(MyScene):
 class Thumbnail(MyScene):
     def construct(self):
         a = ImageMobject("thumbnail").scale(0.8)
-        d1 = MathTex("136^\circ", color=RED).scale(3).move_to(LEFT*5+DOWN*1.5)
-        d2 = MathTex("???", color=YELLOW).scale(3).move_to(DOWN*1.5)
-        d3 = MathTex("140^\circ", color=BLUE).scale(3).move_to(RIGHT*5+DOWN*1.5)
+        d1 = MathTex("136^\circ", color=RED).scale(3).move_to(LEFT * 5 + DOWN * 1.5)
+        d2 = MathTex("???", color=YELLOW).scale(3).move_to(DOWN * 1.5)
+        d3 = MathTex("140^\circ", color=BLUE).scale(3).move_to(RIGHT * 5 + DOWN * 1.5)
         self.add(a, d1, d2, d3)
