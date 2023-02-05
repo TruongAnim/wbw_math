@@ -25,7 +25,24 @@ def line_intersection_(line1, line2):
     return np.array([x, y, 0])
 
 
+def normal_vector_from_two_point(p1, p2):
+    dx = p2[0] - p1[0]
+    dy = p2[1] - p1[1]
+    return np.array([-dy, dx, 0])
+
+
+def get_nearest_point(A, B, C):
+    slop = (A[1] - B[1]) / (A[0] - B[0])
+    if slop == 0:
+        slop = 0.0001
+    perpendicular = -(1 / slop)
+    b = C[1] - perpendicular * C[0]
+
+    def get_point(x):
+        return np.array([x, x * perpendicular + b, 0])
+    return line_intersection_(Line(get_point(-2), get_point(2)), Line(A, B))
+
 if __name__ == "__main__":
     line1 = Line()
     line2 = Line().shift(UP)
-    print(line_intersection(line1, line2))
+    print(line_intersection_(line1, line2))
